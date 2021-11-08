@@ -1,0 +1,573 @@
+@font-face {
+  font-family: "modernWarfare";
+  src: url("./fonts/modernWarfare.ttf");
+}
+@font-face {
+  font-family: "leagueGothicCondensed";
+  src: url("./fonts/LeagueGothic-Regular.otf");
+}
+
+@font-face {
+  font-family: "lcd";
+  src: url("./fonts/modern_lcd-7.ttf");
+}
+
+html {
+  background: url("./Backgrounds/allBlack.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  /* we set transition to 'all' properies - but you can use it just for background image either - by default the time is set to 1 second, you can change it yourself*/
+  transition: linear background-image 2.5s;
+  /* if you don't use delay , background will disapear and transition will start from a white background - you have to set the transition-delay the same as transition time OR more , so there won't be any problems */
+  -webkit-transition-delay: 0s; /* Safari */
+  transition-delay: 0s;
+}
+
+#headerTag {
+  font-family: "modernWarfare";
+  /* text-decoration: underline; */
+  position: absolute;
+  top: 5px;
+  font-size: 45px;
+  margin: 40px auto;
+  color: rgba(255, 255, 255, 0.514);
+  border-bottom: 1px solid #79d9ff;
+  white-space: nowrap;
+}
+header {
+  position: fixed;
+  background-image: url("./black-tile.png");
+  background-size: 1.5px;
+  display: block;
+  background-color: rgba(0, 0, 0, 0.4);
+  height: 140px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.nav {
+  position: relative;
+  left: 70px;
+  width: auto;
+  margin: 0;
+}
+
+.navItem {
+  display: inline-block;
+  font-family: "leagueGothicCondensed";
+  font-variant: small-caps;
+  font-size: 24px;
+  position: relative;
+  top: 7px;
+  text-align: center;
+  width: 145px;
+  /* border: 1px solid white; */
+  color: rgba(255, 255, 255, 0.849);
+  margin: 88px 2px 0px 2px;
+  padding: 8px 10px 10px 10px;
+  transition: text-shadow 1s, border-top 1s, box-shadow 3s, color 1.5s;
+}
+
+.navItem:hover {
+  text-shadow: 0px 0px 10px #79d9ff;
+  color: #79d9ff;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.navItem:after {
+  width: 100%;
+  content: "";
+  height: 2px;
+  display: block;
+  position: absolute;
+  background-image: linear-gradient(
+    to right,
+    rgba(151, 205, 225, 0.5),
+    #79d9ff 20%,
+    #79d9ff 80%,
+    rgba(151, 205, 225, 0.5)
+  );
+  transition: all ease 0.8s;
+  transform: scaleX(0);
+  bottom: -1px;
+  left: 0;
+}
+
+.navItem:hover:after {
+  -webkit-transition: all ease 1s;
+  -moz-transition: all ease 1s;
+  -ms-transition: all ease 1s;
+  -o-transition: all ease 1s;
+  transition: all ease 1s;
+  transform: scaleX(1);
+  box-shadow: 0px 0px 10px;
+}
+
+#recordsDiv {
+  position: absolute;
+  left: 3%;
+  top: 20%;
+  width: auto;
+  z-index: -1;
+  margin: 0px 0px 40px 0px;
+}
+
+/*Accolades in Record Section*/
+#accoladesHeader {
+  font-family: "modernWarfare";
+  /* text-decoration: underline; */
+  position: relative;
+  /* top: 5px; */
+  font-size: 25px;
+  color: rgb(255, 255, 255);
+  border-bottom: 1px solid #79d9ff;
+  white-space: nowrap;
+  margin-bottom: 0;
+}
+
+#arrowsBox {
+  display: flex;
+  justify-content: space-between;
+}
+
+#accoladesBox {
+  display: flex;
+  flex-wrap: no wrap;
+  justify-content: space-between;
+  overflow: scroll;
+}
+
+#accoladesBox::-webkit-scrollbar {
+  display: none;
+}
+
+.accolade {
+  /* width: 20%; */
+  color: azure;
+  text-align: center;
+  flex: 0 0 25%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.accoladeWrapper {
+  position: relative;
+  width: 92%;
+}
+
+.accoladeImage {
+  display: block;
+  width: 100%;
+}
+.accoladeRanks {
+  visibility: visible;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 2, 0, 0.644);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  opacity: 0;
+  transition: opacity 0.3s;
+  background-image: url("./black-tile.png");
+  background-size: 1.5px;
+}
+
+.accoladeRanks:hover {
+  opacity: 1;
+}
+
+.ranksItem {
+  flex: 1 1 auto;
+}
+
+.memberImage {
+  display: block;
+  margin: 0;
+  width: 90%;
+}
+
+.accoladeRanks p {
+  font-family: "lcd";
+  font-size: 18pt;
+  color: #79d9ff;
+  text-shadow: 0px 0px 10px #79d9ff;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 0;
+  padding-left: 10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.accUsername {
+  padding-bottom: 0px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 20pt;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.accoladeHeader {
+  font-family: "modernWarfare";
+  font-size: 14px;
+  text-shadow: 0px 0px 10px #79d9ff;
+  color: #79d9ff;
+}
+
+.rankingsHeader {
+  font-family: "modernWarfare";
+  /* text-decoration: underline; */
+  position: relative;
+  /* top: 5px; */
+  font-size: 25px;
+  color: rgb(255, 255, 255);
+  border-bottom: 1px solid #79d9ff;
+  white-space: nowrap;
+}
+#rankingsBox {
+  position: relative;
+  left: 8%;
+  top: 30%;
+  width: 75%;
+  z-index: -1;
+  margin: 40px 0px 40px 0px;
+  min-width: 1000px;
+}
+#rankings {
+  min-width: 1000px;
+  color: white;
+  border-spacing: 0px 4px;
+  text-align: left;
+  font-size: 16px;
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+th {
+  transition: text-shadow 1s, border-top 1s, box-shadow 3s, color 1.5s;
+  table-layout: fixed;
+  color: white;
+  background: rgba(0, 2, 0, 0.103);
+  box-shadow: 0px;
+  font-family: "leagueGothicCondensed";
+  font-stretch: semi-expanded;
+  font-size: 20px;
+  height: 40px;
+  line-height: 40px;
+}
+
+th:hover {
+  text-shadow: 0px 0px 10px #79d9ff;
+  color: #79d9ff;
+}
+
+tr {
+  height: 30px;
+  line-height: 30px;
+  vertical-align: center;
+  border-top: 1px solid rgba(0, 2, 0, 0.055);
+  font-family: "Montserrat", Arial, sans-serif;
+  font-size: 16px;
+}
+
+.position {
+  padding-left: 12px;
+  width: 80px;
+  text-align: left;
+}
+
+.KDR,
+.winRatio,
+.wins,
+.games,
+.kills,
+.deaths,
+.downs,
+.revives,
+.top5 {
+  width: 90px;
+}
+
+.recordsRows:nth-child(odd) {
+  background: rgba(0, 2, 0, 0.486);
+}
+.recordsRows:nth-child(even) {
+  background: rgba(0, 2, 0, 0.137);
+}
+
+.recordsRows {
+  transition: text-shadow 1s, border-top 1s, box-shadow 3s, color 1.5s;
+  color: #aab5b9;
+  border-top: 1px solid rgba(0, 0, 0, 0);
+}
+
+.recordsRows:hover {
+  background-image: url("./black-tile.png");
+  background-size: 1.5px;
+  background-color: #080000e5;
+  text-shadow: 0px 0px 10px #79d9ff;
+  box-shadow: 0px -2px 3px 0px rgba(82, 219, 243, 0.63);
+  color: #79d9ff;
+  border-top: 1px solid rgb(82, 219, 243);
+}
+
+#operatorsBox {
+  display: none;
+  width: 98vw;
+  height: 100vh;
+  padding: 0;
+  margin: 0 1vw 0 1vw;
+}
+
+#operatorsBox:after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+#operatorBigImageDiv {
+  position: absolute;
+  display: none;
+  top: 3vh;
+  left: 22vw;
+  height: 93vh;
+  width: 56vw;
+  z-index: -1;
+}
+
+#operatorBigImage {
+  position: relative;
+  margin: 0 auto;
+  width: 56vw;
+  height: 93vh;
+}
+
+#operatorNameBox {
+  display: none;
+  position: absolute;
+  width: 20vw;
+  top: 28vh;
+  height: 40vh;
+  left: 15vw;
+}
+
+#operatorClanTag {
+  display: block;
+  text-align: center;
+  font-family: "leagueGothicCondensed";
+  font-size: 10vh;
+  font-weight: 800;
+  color: #028ff5;
+  height: 9vh;
+  white-space: nowrap;
+  /* text-shadow: 0px 0px 5px #028ff5; */
+}
+
+#operatorGamerTag {
+  position: relative;
+  top: 2vh;
+  display: block;
+  white-space: nowrap;
+  text-align: center;
+  font-family: "leagueGothicCondensed";
+  font-size: 8vh;
+  color: rgb(202, 200, 200);
+}
+
+#medals {
+  display: block;
+  position: relative;
+  top: 134px;
+  left: 25px;
+}
+
+#operatorInfo {
+  display: none;
+  position: absolute;
+  top: 23vh;
+  left: 68vw;
+  width: 33vh;
+  padding: 1vw;
+  background-image: url("./black-tile.png");
+  background-size: 1.5px;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.operatorHeading {
+  display: block;
+  font-family: "leagueGothicCondensed";
+  font-weight: 2;
+  font-size: 25px;
+  margin: 2px 2px 2px 3px;
+  white-space: nowrap;
+  color: #028ff5;
+}
+
+.operatorHeading:after {
+  content: "";
+  position: relative;
+  height: 2px;
+  display: block;
+  bottom: -1px;
+  left: 0;
+  background-image: linear-gradient(
+    93deg,
+    rgba(2, 143, 245, 1) 0%,
+    rgba(2, 143, 245, 0.11528361344537819) 85%
+  );
+  width: 100%;
+}
+
+.operatorData {
+  display: block;
+  font-family: "leagueGothicCondensed";
+  font-weight: 1;
+  font-size: 2.5vh;
+  margin: 12px;
+  white-space: nowrap;
+  color: rgb(202, 200, 200);
+}
+
+#top3 {
+  position: relative;
+  top: 2px;
+}
+
+#operatorEWDiv {
+  position: absolute;
+  /* display: none; */
+  top: 75vh;
+  left: 44vw;
+  width: 15vw;
+  height: 6vh;
+  background-image: url("./black-tile.png");
+  background-size: 1.5px;
+  overflow: hidden;
+}
+
+#operatorEW {
+  display: block;
+  position: relative;
+  top: 0.5vh;
+  margin: auto;
+  width: 8vw;
+  height: 5vh;
+}
+
+#operatorsScroll {
+  margin: 0 auto;
+  position: absolute;
+  top: 76vh;
+  left: 10vw;
+  width: 80vw;
+  height: 24vh;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  cursor: crosshair;
+}
+#operatorsScroll::-webkit-scrollbar {
+  width: 0px; /* Remove scrollbar space */
+  height: 0px;
+  background: transparent; /* Optional: just make scrollbar invisible */
+}
+
+.operatorthumb {
+  position: relative;
+  top: 62px;
+  left: 3px;
+  border-radius: 5%;
+  /* opacity: 0.5; */
+  filter: brightness(40%);
+  max-height: 15vh;
+  width: auto;
+  /* margin: -2px; */
+}
+
+.operatorthumb:hover {
+  opacity: 1;
+  top: 39px;
+  z-index: 1;
+  position: relative;
+  transform: scale(1.4);
+  width: auto;
+  filter: brightness(100%);
+}
+
+#chatWindow {
+  position: absolute;
+  left: 8%;
+  top: 23%;
+  height: 380px;
+  padding: 20px;
+  width: 75%;
+  margin: 0px 0 10px 2.5%;
+  border: 7px solid rgba(0, 2, 0, 0.055);
+  border-radius: 20px;
+  overflow-y: auto;
+}
+
+.entryDiv:nth-child(odd) {
+  background: rgba(0, 2, 0, 0.671);
+}
+.entryDiv:nth-child(even) {
+  background: rgba(183, 189, 183, 0.116);
+}
+
+.entryDiv {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  white-space: nowrap;
+  transition: text-shadow 1s, border-top 1s, box-shadow 3s, color 1.5s;
+  color: #aab5b9;
+  box-shadow: 0px;
+  font-size: 16px;
+  height: auto;
+}
+
+.entryDiv:hover {
+  background-image: url("./black-tile.png");
+  background-size: 1.5px;
+  background-color: #080000e5;
+  text-shadow: 0px 0px 10px #79d9ff;
+  box-shadow: 0px -2px 3px 0px rgba(82, 219, 243, 0.63);
+  color: #79d9ff;
+  border-top: 1px solid rgb(82, 219, 243);
+  cursor: crosshair;
+}
+
+.entryText {
+  margin: 0.75em;
+}
+
+#typeLine {
+  position: absolute;
+  top: 85%;
+  left: 22%;
+  width: 70%;
+}
+
+#textInput {
+  width: 50%;
+}
+
+#id {
+  width: 20%;
+}
+
+.typeLineElems {
+  margin: 0.25em;
+}
