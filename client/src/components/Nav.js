@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import StatsTable from "./StatsTable.js";
+import Chat from "./Smackboard.js";
 
 function Nav() {
   return (

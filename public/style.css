@@ -571,3 +571,9 @@ tr {
 .typeLineElems {
   margin: 0.25em;
 }
+
+#chatbox {
+  color: #79d9ff;
+  position: absolute;
+  top: 20%;
+}

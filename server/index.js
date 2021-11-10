@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+
 const API = require("call-of-duty-api")({ platform: "acti" });
 const ServerFuncs = require("./getFullStats.js");
 const ServerFuncs2 = require("./getWeeklyStats.js");
@@ -7,8 +8,15 @@ const ServerFuncs2 = require("./getWeeklyStats.js");
 const PORT = 3000;
 const app = express();
 
+const server = require("http").createServer(app);
+const io = require("socket.io")(server);
+
 app.use(express.static(path.join(__dirname, "..", "public")));
 app.use(express.json());
+
+io.on("connection", (socket) => {
+  socket.emit("welcome", "You are now connected with socket.io!");
+});
 
 app.get("/getStats", (req, res) => {
   // res.set('Access-Control-Allow-Origin', '*')
@@ -36,6 +44,6 @@ app.get("/getWeekStats", (req, res) => {
     });
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server listening at localhost: ${PORT}`);
 });
