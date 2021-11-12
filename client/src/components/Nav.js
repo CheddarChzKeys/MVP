@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import StatsTable from "./StatsTable.js";
+import Records from "./Records.js";
 import Chat from "./Smackboard.js";
 
 function Nav() {
@@ -22,7 +22,7 @@ function Nav() {
               "background-position": "center center",
               "background-attachment": "fixed",
             });
-            ReactDOM.render(<StatsTable />, document.getElementById("app"));
+            ReactDOM.render(<Records />, document.getElementById("app"));
           }}
         >
           records

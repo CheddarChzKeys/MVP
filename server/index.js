@@ -10,12 +10,39 @@ const app = express();
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
+const mongo = require("mongodb").MongoClient;
 
 app.use(express.static(path.join(__dirname, "..", "public")));
 app.use(express.json());
 
-io.on("connection", (socket) => {
-  socket.emit("welcome", "You are now connected with socket.io!");
+mongo.connect("mongodb://127.0.0.1/mongochat", function (err, client) {
+  if (err) {
+    throw err;
+  }
+  console.log("MongoDB connected...");
+  io.on("connection", (socket) => {
+    socket.emit("welcome", "You are now connected with socket.io!");
+    let db = client.db("mongochat");
+    let chat = db.collection("chats");
+
+    chat.insertOne({ name: "Jerrick", message: "Yesssir" });
+
+    sendStatus = function (s) {
+      socket.emit("status", s);
+    };
+
+    chat
+      .find()
+      .limit(100)
+      .sort({ _id: 1 })
+      .toArray(function (err, res) {
+        if (err) {
+          throw err;
+        }
+        console.log(res);
+        socket.emit("output", res);
+      });
+  });
 });
 
 app.get("/getStats", (req, res) => {

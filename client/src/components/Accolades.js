@@ -68,7 +68,7 @@ var container = React.createRef();
 
 //Accolades component
 
-let Accolades = ({ unsortedStats }) => {
+function Accolades({ unsortedStats }) {
   return (
     <div>
       <div id="arrowsBox">
@@ -141,7 +141,7 @@ let Accolades = ({ unsortedStats }) => {
       </div>
     </div>
   );
-};
+}
 
 export default Accolades;
 

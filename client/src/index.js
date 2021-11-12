@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Nav from "./components/Nav.js";
-import StatsTable from "./components/StatsTable.js";
+import Records from "./components/Records.js";
 
 ReactDOM.render(<Nav />, document.getElementById("header"));
 
