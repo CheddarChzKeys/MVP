@@ -106,7 +106,7 @@ header {
   box-shadow: 0px 0px 10px;
 }
 
-#recordsDiv {
+.mainComponent {
   position: absolute;
   left: 3%;
   top: 20%;
@@ -225,7 +225,7 @@ header {
   color: #79d9ff;
 }
 
-.rankingsHeader {
+.componentHeader {
   font-family: "modernWarfare";
   /* text-decoration: underline; */
   position: relative;
@@ -235,7 +235,7 @@ header {
   border-bottom: 1px solid #79d9ff;
   white-space: nowrap;
 }
-#rankingsBox {
+.componentBox {
   position: relative;
   left: 8%;
   top: 30%;
@@ -572,8 +572,90 @@ tr {
   margin: 0.25em;
 }
 
+/* Smack Box */
+
 #chatbox {
+  margin: 20px 0px;
+}
+
+#chat {
+  background-image: url("./black-tile.png");
+  background-size: 1.5px;
+  display: flex;
+  flex-direction: column;
+  padding: 5px 0 5px 0;
+}
+
+#chat:nth-child(even) {
+  background: rgba(0, 2, 0, 0.486);
+  background-size: 1.5px;
+}
+#chat:nth-child(odd) {
+  background: rgba(0, 2, 0, 0.137);
+  background-image: url("./black-tile.png");
+  background-size: 1.5px;
+}
+
+#chat:hover {
+  position: relative;
+  left: 13px;
+}
+
+#chatName {
   color: #79d9ff;
-  position: absolute;
-  top: 20%;
+  font-size: medium;
+  margin-right: 7px;
+}
+
+#chatDate {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  font-size: small;
+  color: rgba(255, 255, 255, 0.849);
+}
+
+#chatMessage {
+  color: #ffffff;
+  font-size: large;
+  padding-top: 2px;
+  padding-left: 10px;
+}
+
+#nameDate {
+  display: flex;
+  margin-bottom: 2px;
+  align-items: flex-end;
+}
+
+#chatUsername {
+  color: #79d9ff;
+}
+
+#typedUsername {
+  display: block;
+}
+
+#messageSubmit {
+  display: flex;
+  align-content: center;
+  justify-content: flex-start;
+}
+
+#typedMessage {
+  flex: 5;
+}
+
+#createMessage {
+  color: #ffffff;
+}
+
+#submitButton {
+  background-image: url("./black-tile.png");
+  background-size: 1.5px;
+  background: rgba(0, 2, 0, 0.137);
+  color: #ffffff;
+  font-family: "modernWarfare";
+  font-size: 15px;
+  flex: 1;
 }

@@ -25,8 +25,6 @@ mongo.connect("mongodb://127.0.0.1/mongochat", function (err, client) {
     let db = client.db("mongochat");
     let chat = db.collection("chats");
 
-    chat.insertOne({ name: "Jerrick", message: "Yesssir" });
-
     sendStatus = function (s) {
       socket.emit("status", s);
     };
@@ -42,6 +40,26 @@ mongo.connect("mongodb://127.0.0.1/mongochat", function (err, client) {
         console.log(res);
         socket.emit("output", res);
       });
+
+    socket.on("sendMessage", (message) => {
+      date = new Date().toLocaleString();
+      chat.insertOne({
+        name: message[0],
+        message: message[1],
+        date: date,
+      });
+      chat
+        .find()
+        .limit(100)
+        .sort({ _id: 1 })
+        .toArray(function (err, res) {
+          if (err) {
+            throw err;
+          }
+          console.log(res);
+          socket.emit("output", res);
+        });
+    });
   });
 });
 

@@ -62,13 +62,15 @@ class StatsTable extends React.Component {
 
   render() {
     return (
-      <div id="recordsDiv">
-        <div id="rankingsBox">
-          <h1 id="accoladesHeader">WeeklyAccolades</h1>
+      <div className="mainComponent" id="recordsDiv">
+        <div className="componentBox">
+          <h1 className="componentHeader" id="accoladesHeader">
+            WeeklyAccolades
+          </h1>
           <Accolades unsortedStats={this.unsortedStats} />
         </div>
-        <div id="rankingsBox">
-          <h1 className="rankingsHeader">Weekly Stats</h1>
+        <div className="componentBox">
+          <h1 className="componentHeader">Weekly Stats</h1>
           <table id="rankings">
             <thead id="thead">
               <th className="position" id="positionHead">
@@ -156,8 +158,8 @@ class StatsTable extends React.Component {
             </tbody>
           </table>
         </div>
-        <div id="rankingsBox">
-          <h1 className="rankingsHeader">Lifetime Stats</h1>
+        <div className="componentBox">
+          <h1 className="componentHeader">Lifetime Stats</h1>
           <table id="rankings">
             <thead id="thead">
               <th className="position" id="positionHead">
