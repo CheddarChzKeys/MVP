@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import Picker from "emoji-picker-react";
 const io = require("socket.io-client");
 
 let socket = io.connect("http://localhost:3000");
@@ -10,9 +11,26 @@ socket.on("output", (data) => {
 });
 
 function Chatbox() {
-  let [chats, updateChats] = useState([]);
-  let [typedMessage, changeMessage] = useState("");
-  let [userName, changeUser] = useState("");
+  const [chats, updateChats] = useState([]);
+  const [typedMessage, changeMessage] = useState("");
+  const [userName, changeUser] = useState("");
+  const [showEmojiModal, toggleEmojiModal] = useState(false);
+
+  const inputRef = useRef(null);
+
+  const addEmoji = () => {
+    toggleEmojiModal(!showEmojiModal);
+  };
+
+  const onEmojiClick = (event, emojiObject) => {
+    const { selectionStart, selectionEnd } = inputRef.current;
+    const newTypedMessage =
+      typedMessage.slice(0, selectionStart) +
+      emojiObject.emoji +
+      " " +
+      typedMessage.slice(selectionEnd);
+    changeMessage(newTypedMessage);
+  };
 
   const handleChange = (e, field) => {
     field(e.target.value);
@@ -60,22 +78,41 @@ function Chatbox() {
           })}
         </div>
         <form id="createMessage" onSubmit={(e) => handleSubmit(e)}>
+          <div id="messageSubmit">
+            <input
+              id="typedMessage"
+              ref={inputRef}
+              placeholder="Type your message here..."
+              value={typedMessage}
+              onChange={(e) => handleChange(e, changeMessage)}
+            ></input>
+            <button className="smackButton" type="button">
+              image
+            </button>
+            <button
+              className="smackButton"
+              type="button"
+              onMouseEnter={addEmoji}
+              onMouseLeave={addEmoji}
+            >
+              emoji
+              {showEmojiModal && (
+                <Picker id="emojiPicker" onEmojiClick={onEmojiClick} />
+              )}
+            </button>
+            <input
+              className="smackButton"
+              type="submit"
+              value="Full Send"
+            ></input>
+          </div>
+          <div id="chatUsername">Logged in as {userName}</div>
           <input
             id="typedUsername"
             placeholder="Username"
             value={userName}
             onChange={(e) => handleChange(e, changeUser)}
           ></input>
-          <div id="chatUsername">Logged in as {userName}</div>
-          <div id="messageSubmit">
-            <input
-              id="typedMessage"
-              placeholder="Type your message here..."
-              value={typedMessage}
-              onChange={(e) => handleChange(e, changeMessage)}
-            ></input>
-            <input id="submitButton" type="submit" value="Full Send"></input>
-          </div>
         </form>
       </div>
     </div>
