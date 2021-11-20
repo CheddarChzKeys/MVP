@@ -12,18 +12,21 @@ const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const mongo = require("mongodb").MongoClient;
 
+const bcrypt = require("bcrypt");
+
 app.use(express.static(path.join(__dirname, "..", "public")));
 app.use(express.json());
 
-mongo.connect("mongodb://127.0.0.1/mongochat", function (err, client) {
+mongo.connect("mongodb://127.0.0.1/warzone", function (err, client) {
   if (err) {
     throw err;
   }
   console.log("MongoDB connected...");
+  const db = client.db("warzone");
+
   io.on("connection", (socket) => {
     socket.emit("welcome", "You are now connected with socket.io!");
-    let db = client.db("mongochat");
-    let chat = db.collection("chats");
+    const chat = db.collection("chats");
 
     sendStatus = function (s) {
       socket.emit("status", s);
@@ -61,6 +64,43 @@ mongo.connect("mongodb://127.0.0.1/mongochat", function (err, client) {
         });
     });
   });
+
+  app.post("/signup", async (req, res) => {
+    const users = db.collection("users");
+    const username = req.body.username;
+    const password = req.body.password;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await users.insertOne({ username, password: hashedPassword });
+    users.find().toArray(function (err, data) {
+      if (err) {
+        throw err;
+      }
+      res.send(data);
+    });
+  });
+
+  app.post("/login", async (req, res) => {
+    const usernameAttempt = req.body.username;
+    const passwordAttempt = req.body.password;
+    const users = db.collection("users");
+    const foundUser = await users.findOne({ username: usernameAttempt });
+    if (!foundUser) {
+      res.send("Username not found");
+    } else {
+      console.log(foundUser);
+      bcrypt.compare(
+        passwordAttempt,
+        foundUser.password,
+        function (err, result) {
+          if (result == false) {
+            res.send("password does not match");
+          } else {
+            res.send(`You are now logged in ${foundUser.username}`);
+          }
+        }
+      );
+    }
+  });
 });
 
 app.get("/getStats", (req, res) => {
@@ -75,7 +115,6 @@ app.get("/getStats", (req, res) => {
       res.send("Error detected: " + error);
     });
 });
-
 app.get("/getWeekStats", (req, res) => {
   // res.set('Access-Control-Allow-Origin', '*')
   let stats = {};

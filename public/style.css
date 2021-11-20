@@ -584,6 +584,7 @@ tr {
   display: flex;
   flex-direction: column;
   padding: 5px 10px;
+  margin: 1em 0;
 }
 
 #chat:nth-child(even) {
@@ -594,11 +595,6 @@ tr {
   background: rgba(0, 2, 0, 0.137);
   background-image: url("./black-tile.png");
   background-size: 1.5px;
-}
-
-#chat:hover {
-  position: relative;
-  left: 13px;
 }
 
 #chatName {
@@ -665,7 +661,7 @@ aside.emoji-picker-react {
   display: flex;
   flex-direction: column;
   height: 320px;
-  width: 245px !important;
+  width: 235px !important;
   font-family: sans-serif;
   border: 1px solid #efefef;
   border-radius: 5px;
