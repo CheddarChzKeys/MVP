@@ -2,47 +2,51 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Records from "./Records.js";
 import Chat from "./Smackboard.js";
+import { Link } from "react-router-dom";
 
 function Nav() {
   return (
     <div>
-      <h1 id="headerTag">
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eastside
-        WARFARE
-      </h1>
+      <Link to="/">
+        <div id="navHeader">
+          <h1 id="headerTag">eastside WARFARE</h1>
+        </div>
+      </Link>
       <nav className="nav">
-        <div
-          className="navItem"
-          id="recordsButton"
-          onClick={() => {
-            $("html").css({
-              background: 'url("./Backgrounds/season6.jpg")',
-              "background-size": "cover",
-              "background-repeat": "no-repeat",
-              "background-position": "center center",
-              "background-attachment": "fixed",
-            });
-            ReactDOM.render(<Records />, document.getElementById("app"));
-          }}
-        >
-          records
-        </div>
-        <div
-          className="navItem"
-          id="operatorsButton"
-          onClick={() => {
-            $("html").css({
-              background: 'url("./Backgrounds/season1.jpg")',
-              "background-size": "cover",
-              "background-repeat": "no-repeat",
-              "background-position": "center center",
-              "background-attachment": "fixed",
-            });
-            ReactDOM.render(<Chat />, document.getElementById("app"));
-          }}
-        >
-          smackboard
-        </div>
+        <Link to="/records">
+          <div
+            className="navItem"
+            id="recordsButton"
+            onClick={() => {
+              $("html").css({
+                background: 'url("./Backgrounds/season6.jpg")',
+                "background-size": "cover",
+                "background-repeat": "no-repeat",
+                "background-position": "center center",
+                "background-attachment": "fixed",
+              });
+            }}
+          >
+            records
+          </div>
+        </Link>
+        <Link to="/smackboard">
+          <div
+            className="navItem"
+            id="operatorsButton"
+            onClick={() => {
+              $("html").css({
+                background: 'url("./Backgrounds/season1.jpg")',
+                "background-size": "cover",
+                "background-repeat": "no-repeat",
+                "background-position": "center center",
+                "background-attachment": "fixed",
+              });
+            }}
+          >
+            smackboard
+          </div>
+        </Link>
         <div className="navItem">gallery</div>
         <div className="navItem">blog</div>
       </nav>
