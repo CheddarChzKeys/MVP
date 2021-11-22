@@ -3,23 +3,27 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 const axios = require("axios").default;
 
-const Login = () => {
+const Login = (props) => {
   const [typedUsername, changeUsername] = useState("");
   const [typedPassword, changePassword] = useState("");
   const [loginMessage, changeMessage] = useState(" ");
 
   const handleLogin = (e) => {
     const loginObject = { username: typedUsername, password: typedPassword };
-    console.log("handled login");
     axios.post("/login", loginObject).then((results) => {
       changeMessage(results.data.message);
+      console.log(results);
+      if (results.data.user) {
+        props.changeSignedInUser(results.data.user.username);
+        props.toggleSignedIn(true);
+      }
     });
+    changePassword("");
     e.preventDefault();
   };
 
   const handleChange = (e, change) => {
     change(e.target.value);
-    console.log("hello");
   };
 
   return (
@@ -37,7 +41,8 @@ const Login = () => {
           className="textInput"
           id="password"
           placeholder="password"
-          type="text"
+          type="password"
+          value={typedPassword}
           onChange={(e) => handleChange(e, changePassword)}
         ></input>
         <div id="loginResponse"> {loginMessage}</div>

@@ -745,7 +745,8 @@ aside.emoji-picker-react {
   /* height: 2vh; */
   flex: 1;
   color: #79d9ff;
-  font-family: "Times New Roman", Times, serif;
+  font-family: "modernWarfare";
+  font-size: small;
   margin: 1vh 0;
 }
 

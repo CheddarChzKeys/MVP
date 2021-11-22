@@ -4,7 +4,7 @@ import Records from "./Records.js";
 import Chat from "./Smackboard.js";
 import { Link } from "react-router-dom";
 
-function Nav() {
+function Nav(props) {
   return (
     <div>
       <Link to="/">
@@ -48,7 +48,9 @@ function Nav() {
           </div>
         </Link>
         <div className="navItem">gallery</div>
-        <div className="navItem">blog</div>
+        <div className="navItem">
+          {props.signedInUser ? props.signedInUser.toLowerCase() : ""}
+        </div>
       </nav>
     </div>
   );

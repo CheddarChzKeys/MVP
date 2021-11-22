@@ -85,7 +85,7 @@ mongo.connect("mongodb://127.0.0.1/warzone", function (err, client) {
     const users = db.collection("users");
     const foundUser = await users.findOne({ username: usernameAttempt });
     if (!foundUser) {
-      res.status(200).json({ message: "Username/Password does not match" });
+      res.status(200).json({ message: "Invalid username" });
     } else {
       console.log(foundUser);
       bcrypt.compare(
@@ -93,10 +93,11 @@ mongo.connect("mongodb://127.0.0.1/warzone", function (err, client) {
         foundUser.password,
         function (err, result) {
           if (result == false) {
-            res.json({ message: "Username/Password does not match" });
+            res.json({ message: "Invalid password" });
           } else {
             res.json({
-              message: `Welcome ${foundUser.username}`,
+              message: `Welcome Soldier`,
+              user: foundUser,
             });
           }
         }
