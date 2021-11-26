@@ -10,13 +10,17 @@ socket.on("output", (data) => {
   console.log(updatedChats);
 });
 
-function Chatbox() {
+function Chatbox({ changeBackground, username }) {
   const [chats, updateChats] = useState([]);
   const [typedMessage, changeMessage] = useState("");
-  const [userName, changeUser] = useState("");
   const [showEmojiModal, toggleEmojiModal] = useState(false);
+  const [submitResponse, changeResponse] = useState("");
+
+  const userName = username;
 
   const inputRef = useRef(null);
+
+  changeBackground("../Backgrounds/season1.jpg");
 
   const addEmoji = () => {
     toggleEmojiModal(!showEmojiModal);
@@ -41,9 +45,15 @@ function Chatbox() {
   };
 
   const handleSubmit = (e) => {
-    socket.emit("sendMessage", [userName, typedMessage]);
-    changeUser("");
-    changeMessage("");
+    if (userName) {
+      socket.emit("sendMessage", [userName, typedMessage]);
+      changeMessage("");
+    } else {
+      changeResponse("Please sign in to chat");
+      const messageFlash = setTimeout(() => {
+        changeResponse("");
+      }, 2500);
+    }
     e.preventDefault();
   };
 
@@ -106,13 +116,7 @@ function Chatbox() {
               value="Full Send"
             ></input>
           </div>
-          <div id="chatUsername">Logged in as {userName}</div>
-          <input
-            id="typedUsername"
-            placeholder="Username"
-            value={userName}
-            onChange={(e) => handleChange(e, changeUser)}
-          ></input>
+          <div id="chatResponse">{submitResponse}</div>
         </form>
       </div>
     </div>

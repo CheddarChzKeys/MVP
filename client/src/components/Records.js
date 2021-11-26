@@ -14,13 +14,12 @@ class StatsTable extends React.Component {
   }
 
   componentDidMount() {
-    this.getStats();
     this.getWeeklyStats();
+    this.props.changeBackground("./Backgrounds/season6.jpg");
   }
 
   getStats() {
     axios.get("/getStats").then((results) => {
-      console.log(results.data);
       results.data = results.data.sort((a, b) =>
         a["kdRatio"] < b["kdRatio"] ? 1 : -1
       );
@@ -32,12 +31,17 @@ class StatsTable extends React.Component {
 
   getWeeklyStats() {
     axios.get("/getWeekStats").then((results) => {
-      this.unsortedStats = results.data.slice();
-      results.data = results.data.sort((a, b) =>
+      console.log("getWeekStats results:", results);
+      this.unsortedStats = results.data.weeklyStats.slice();
+      results.data.weeklyStats = results.data.weeklyStats.sort((a, b) =>
+        a["kdRatio"] < b["kdRatio"] ? 1 : -1
+      );
+      results.data.lifetimeStats = results.data.lifetimeStats.sort((a, b) =>
         a["kdRatio"] < b["kdRatio"] ? 1 : -1
       );
       this.setState({
-        weekStats: results.data,
+        weekStats: results.data.weeklyStats,
+        fullStats: results.data.lifetimeStats,
       });
     });
   }

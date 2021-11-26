@@ -2,8 +2,8 @@ const express = require("express");
 const path = require("path");
 
 const API = require("call-of-duty-api")({ platform: "acti" });
-const ServerFuncs = require("./getFullStats.js");
-const ServerFuncs2 = require("./getWeeklyStats.js");
+const getStats = require("./getStats.js");
+const verifyMember = require("./verifyMember.js");
 
 const PORT = 3000;
 const app = express();
@@ -40,7 +40,6 @@ mongo.connect("mongodb://127.0.0.1/warzone", function (err, client) {
         if (err) {
           throw err;
         }
-        console.log(res);
         socket.emit("output", res);
       });
 
@@ -59,23 +58,38 @@ mongo.connect("mongodb://127.0.0.1/warzone", function (err, client) {
           if (err) {
             throw err;
           }
-          console.log(res);
           socket.emit("output", res);
         });
     });
   });
 
-  app.post("/signup", async (req, res) => {
+  app.post("/verify", async (req, res) => {
+    const gamerTag = req.body.gamerTag;
+    const platform = req.body.platform;
+
+    const result = await verifyMember.verifyMember(gamerTag, platform);
+    res.send(result);
+  });
+
+  app.post("/signUp", async (req, res) => {
     const users = db.collection("users");
     const username = req.body.username;
     const password = req.body.password;
+    const gamerTag = req.body.gamerTag;
+    const platform = req.body.platform;
     const hashedPassword = await bcrypt.hash(password, 10);
-    await users.insertOne({ username, password: hashedPassword });
-    users.find().toArray(function (err, data) {
-      if (err) {
-        throw err;
+    users.findOne({ username: username }, async (err, data) => {
+      if (data) {
+        res.send("Username already taken");
+      } else {
+        await users.insertOne({
+          username,
+          password: hashedPassword,
+          gamerTag,
+          platform,
+        });
+        res.send("New soldier enlisted");
       }
-      res.send(data);
     });
   });
 
@@ -87,7 +101,6 @@ mongo.connect("mongodb://127.0.0.1/warzone", function (err, client) {
     if (!foundUser) {
       res.status(200).json({ message: "Invalid username" });
     } else {
-      console.log(foundUser);
       bcrypt.compare(
         passwordAttempt,
         foundUser.password,
@@ -104,31 +117,36 @@ mongo.connect("mongodb://127.0.0.1/warzone", function (err, client) {
       );
     }
   });
-});
 
-app.get("/getStats", (req, res) => {
-  // res.set('Access-Control-Allow-Origin', '*')
-  let stats = {};
-  ServerFuncs.lifetimeStats()
-    .then((data) => {
-      stats.lifetimeStats = data;
-      res.status(200).json(stats.lifetimeStats);
-    })
-    .catch((error) => {
-      res.send("Error detected: " + error);
+  app.get("/getWeekStats", (req, res) => {
+    // res.set('Access-Control-Allow-Origin', '*')
+    let stats = {};
+    const dbGameStats = db.collection("gameStats");
+    dbGameStats
+      .find()
+      .sort({ _id: -1 })
+      .limit(1)
+      .toArray(function (err, result) {
+        if (err) {
+          res.send("Error detected: " + err);
+        } else {
+          stats = result[0];
+          res.status(200).json(stats);
+        }
+      });
+  });
+
+  app.get("/*", function (req, res) {
+    res.sendFile(path.join(__dirname, "../public/index.html"), function (err) {
+      if (err) {
+        res.status(500).send(err);
+      }
     });
-});
-app.get("/getWeekStats", (req, res) => {
-  // res.set('Access-Control-Allow-Origin', '*')
-  let stats = {};
-  ServerFuncs2.weeklyStats()
-    .then((data) => {
-      stats.weeklyStats = data;
-      res.status(200).json(stats.weeklyStats);
-    })
-    .catch((error) => {
-      res.send("Error detected: " + error);
-    });
+  });
+
+  //fetch real time stats from COD API every 5 minutes and save to database.
+  // getStats(db);
+  const updateWeeklyStats = setInterval(() => getStats.getStats(db), 300000);
 });
 
 server.listen(PORT, () => {

@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import Records from "./Records.js";
 import Chat from "./Smackboard.js";
 import { Link } from "react-router-dom";
 
 function Nav(props) {
+  const toggleSignedIn = props.toggleSignedIn;
+  const [activeClicked, changeClicked] = useState("signIn");
+
   return (
     <div>
       <Link to="/">
@@ -13,43 +16,77 @@ function Nav(props) {
         </div>
       </Link>
       <nav className="nav">
-        <Link to="/records">
-          <div
-            className="navItem"
-            id="recordsButton"
-            onClick={() => {
-              $("html").css({
-                background: 'url("./Backgrounds/season6.jpg")',
-                "background-size": "cover",
-                "background-repeat": "no-repeat",
-                "background-position": "center center",
-                "background-attachment": "fixed",
-              });
-            }}
-          >
-            records
+        <div className="navMenu">
+          <div className="navItemBox">
+            <Link to="/records">
+              <div
+                className={
+                  activeClicked == "records" ? "navItemClicked" : "navItem"
+                }
+                id="recordsButton"
+                onClick={() => changeClicked("records")}
+              >
+                records
+              </div>
+            </Link>
           </div>
-        </Link>
-        <Link to="/smackboard">
-          <div
-            className="navItem"
-            id="operatorsButton"
-            onClick={() => {
-              $("html").css({
-                background: 'url("./Backgrounds/season1.jpg")',
-                "background-size": "cover",
-                "background-repeat": "no-repeat",
-                "background-position": "center center",
-                "background-attachment": "fixed",
-              });
-            }}
-          >
-            smackboard
+          <div className="navItemBox">
+            <Link to="/smackboard">
+              <div
+                className={
+                  activeClicked == "smackboard" ? "navItemClicked" : "navItem"
+                }
+                id="smackboardButton"
+                onClick={() => changeClicked("smackboard")}
+              >
+                smackboard
+              </div>
+            </Link>
           </div>
-        </Link>
-        <div className="navItem">gallery</div>
-        <div className="navItem">
-          {props.signedInUser ? props.signedInUser.toLowerCase() : ""}
+          <div className="navItemBox">
+            <div className="navItem">gallery</div>
+          </div>
+          <div className="navItemBox">
+            <div className="navItem">blog</div>
+          </div>
+        </div>
+        <div className="navWhiteSpace" />
+        <div className="userNavMenu">
+          {props.signedInUser ? (
+            <>
+              <div className="navItemBox">
+                <div className="navItem" id="userLoggedIn">
+                  {props.signedInUser.toLowerCase()}
+                </div>
+              </div>
+              <div className="navItemBox">
+                <div
+                  className="navItem"
+                  id="userSignOut"
+                  onClick={toggleSignedIn}
+                >
+                  sign out
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="navItemBox"></div>
+              <div className="navItemBox">
+                <Link to="/">
+                  <div
+                    className={
+                      activeClicked == "signIn" ? "navItemClicked" : "navItem"
+                    }
+                    id="navSignIn"
+                    onClick={() => changeClicked("signIn")}
+                  >
+                    sign in
+                  </div>
+                </Link>
+              </div>
+            </>
+          )}
         </div>
       </nav>
     </div>

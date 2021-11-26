@@ -1,12 +1,16 @@
 import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import SignUp from "./SignUp.js";
 const axios = require("axios").default;
 
-const Login = (props) => {
+const Login = ({ changeBackground, changeSignedInUser, toggleSignedIn }) => {
   const [typedUsername, changeUsername] = useState("");
   const [typedPassword, changePassword] = useState("");
   const [loginMessage, changeMessage] = useState(" ");
+  const [signUpVisible, toggleSignUp] = useState(false);
+
+  changeBackground("../Backgrounds/reaper.jpg");
 
   const handleLogin = (e) => {
     const loginObject = { username: typedUsername, password: typedPassword };
@@ -14,8 +18,8 @@ const Login = (props) => {
       changeMessage(results.data.message);
       console.log(results);
       if (results.data.user) {
-        props.changeSignedInUser(results.data.user.username);
-        props.toggleSignedIn(true);
+        changeSignedInUser(results.data.user.username);
+        toggleSignedIn(true);
       }
     });
     changePassword("");
@@ -26,7 +30,13 @@ const Login = (props) => {
     change(e.target.value);
   };
 
-  return (
+  const handleSignUp = () => {
+    toggleSignUp(!signUpVisible);
+  };
+
+  return signUpVisible ? (
+    <SignUp />
+  ) : (
     <div id="loginDiv">
       <h2>Log In</h2>
       <form onSubmit={(e) => handleLogin(e)}>
@@ -53,7 +63,9 @@ const Login = (props) => {
           type="submit"
         ></input>
       </form>
-      <h3 className="blueHover">Enlist</h3>
+      <h3 className="blueHover" onClick={() => handleSignUp()}>
+        Enlist
+      </h3>
     </div>
   );
 };

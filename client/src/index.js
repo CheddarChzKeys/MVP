@@ -13,13 +13,25 @@ const App = () => {
 
   const toggleSignedIn = () => {
     changeSignedIn(!isSignedIn);
+    if (signedInUser) {
+      changeSignedInUser(null);
+    }
     console.log("toggled Sign In");
+  };
+
+  const changeBackgroundImage = (imageURL) => {
+    const background = document.getElementById("htmlBody");
+    background.style.background = `url(${imageURL}) center center / cover no-repeat fixed`;
   };
 
   return (
     <Router>
       <div>
-        <Nav isSignedIn={isSignedIn} signedInUser={signedInUser} />
+        <Nav
+          isSignedIn={isSignedIn}
+          signedInUser={signedInUser}
+          toggleSignedIn={toggleSignedIn}
+        />
         <Routes>
           <Route
             path="/"
@@ -27,11 +39,23 @@ const App = () => {
               <Login
                 toggleSignedIn={toggleSignedIn}
                 changeSignedInUser={changeSignedInUser}
+                changeBackground={changeBackgroundImage}
               />
             }
           />
-          <Route path="/records" element={<Records />} />
-          <Route path="/smackboard" element={<Smackboard />} />
+          <Route
+            path="/records"
+            element={<Records changeBackground={changeBackgroundImage} />}
+          />
+          <Route
+            path="/smackboard"
+            element={
+              <Smackboard
+                changeBackground={changeBackgroundImage}
+                username={signedInUser}
+              />
+            }
+          />
         </Routes>
       </div>
     </Router>

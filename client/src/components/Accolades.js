@@ -1,9 +1,9 @@
 import React from "react";
 
 let accoladeList = [
-  { name: "juggernaught", stat: "kdRatio", description: "Highest KDR" },
+  { name: "alpha", stat: "kdRatio", description: "Highest KDR" },
   {
-    name: "veteran",
+    name: "war junkie",
     stat: "matchesPlayed",
     description: "Most matches played",
   },
