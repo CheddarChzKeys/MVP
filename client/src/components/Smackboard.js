@@ -1,5 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import Picker from "emoji-picker-react";
+import GifPicker from "react-giphy-picker";
+import DropzoneComponent from "./Dropbox.js";
+import ImagePopUp from "./ImagePopUp.js";
+const axios = require("axios").default;
+
 const io = require("socket.io-client");
 
 let socket = io.connect("http://localhost:3000");
@@ -14,16 +19,34 @@ function Chatbox({ changeBackground, username }) {
   const [chats, updateChats] = useState([]);
   const [typedMessage, changeMessage] = useState("");
   const [showEmojiModal, toggleEmojiModal] = useState(false);
+  const [showGifModal, toggleGifModal] = useState(false);
   const [submitResponse, changeResponse] = useState("");
+  const [qeuedImages, changeQeuedImages] = useState([]);
+  const [previewImages, changePreviewImages] = useState([]);
+  const [popUpImage, changePopUpImage] = useState(null);
+  const [showImagePopUp, toggleImagePopUp] = useState(false);
 
   const userName = username;
 
   const inputRef = useRef(null);
+  const chatBottom = useRef(null);
 
   changeBackground("../Backgrounds/season1.jpg");
 
   const addEmoji = () => {
-    toggleEmojiModal(!showEmojiModal);
+    toggleEmojiModal(true);
+  };
+
+  const hideEmoji = () => {
+    toggleEmojiModal(false);
+  };
+
+  const addGif = () => {
+    toggleGifModal(true);
+  };
+
+  const hideGif = () => {
+    toggleGifModal(false);
   };
 
   const onEmojiClick = (event, emojiObject) => {
@@ -36,6 +59,13 @@ function Chatbox({ changeBackground, username }) {
     changeMessage(newTypedMessage);
   };
 
+  const onGifClick = (gif) => {
+    if (userName) {
+      socket.emit("sendGif", [userName, gif]);
+      console.log(gif);
+    }
+  };
+
   const handleChange = (e, field) => {
     field(e.target.value);
   };
@@ -45,16 +75,55 @@ function Chatbox({ changeBackground, username }) {
   };
 
   const handleSubmit = (e) => {
+    e.preventDefault();
     if (userName) {
-      socket.emit("sendMessage", [userName, typedMessage]);
-      changeMessage("");
+      changePreviewImages([]);
+      changeResponse("creating post");
+      return Promise.all(
+        qeuedImages.map(async (image) => {
+          const imgRequestURL =
+            "https://sqv15xg515.execute-api.us-east-1.amazonaws.com/default/getPresignedImageURL";
+          const pngRequestURL =
+            "https://g8nghet20e.execute-api.us-east-1.amazonaws.com/default/getPresignedImageURLpng";
+
+          const presignedRequestUrl =
+            image.type === "image/png" ? pngRequestURL : imgRequestURL;
+          const contentType =
+            image.type === "image/png" ? "image/png" : "image/jpeg";
+
+          const PresignedUrlObject = await axios.get(presignedRequestUrl);
+
+          const response = await fetch(PresignedUrlObject.data.uploadURL, {
+            method: "PUT",
+            headers: { "Content-Type": contentType },
+            body: image,
+          });
+          return response.url.split("?")[0];
+        })
+      ).then((imageURLs) => {
+        socket.emit("sendMessage", [userName, typedMessage, imageURLs]);
+        changeMessage("");
+        changeQeuedImages(null);
+        changeResponse("post complete");
+        const messageFlash = setTimeout(() => {
+          changeResponse("");
+        }, 2500);
+      });
     } else {
       changeResponse("Please sign in to chat");
       const messageFlash = setTimeout(() => {
         changeResponse("");
       }, 2500);
     }
-    e.preventDefault();
+  };
+
+  const scrollToBottom = () => {
+    chatBottom.current.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const imageClick = (image) => {
+    changePopUpImage(image);
+    toggleImagePopUp(true);
   };
 
   useEffect(() => {
@@ -64,6 +133,14 @@ function Chatbox({ changeBackground, username }) {
     });
     updateChats(updatedChats);
   });
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [chats]);
+
+  useEffect(() => {
+    console.log("qeued image state:", qeuedImages);
+  }, [qeuedImages]);
 
   return (
     <div className="mainComponent">
@@ -83,10 +160,46 @@ function Chatbox({ changeBackground, username }) {
                   </div>
                 </div>
                 <div id="chatMessage">{chat.message}</div>
+                {chat.gif ? (
+                  <img id="chatGif" src={chat.gif.downsized.url}></img>
+                ) : (
+                  <div />
+                )}
+                {chat.image ? (
+                  <div id="chatImageWrapper">
+                    {chat.image.map((image) => {
+                      return (
+                        <img
+                          id="chatGif"
+                          src={image}
+                          onClick={() => imageClick(image)}
+                        ></img>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div />
+                )}
               </div>
             );
           })}
+          <div id="chatBottom" ref={chatBottom}></div>
+          {showEmojiModal && (
+            <div
+              id="pickerDiv"
+              onMouseEnter={addEmoji}
+              onMouseLeave={hideEmoji}
+            >
+              <Picker id="emojiPicker" onEmojiClick={onEmojiClick} />
+            </div>
+          )}
+          {showGifModal && (
+            <div id="pickerDiv" onMouseEnter={addGif} onMouseLeave={hideGif}>
+              <GifPicker id="emojiPicker" onSelected={onGifClick} />
+            </div>
+          )}
         </div>
+        <div id="chatResponse">{submitResponse}, &nbsp;</div>
         <form id="createMessage" onSubmit={(e) => handleSubmit(e)}>
           <div id="messageSubmit">
             <input
@@ -96,19 +209,21 @@ function Chatbox({ changeBackground, username }) {
               value={typedMessage}
               onChange={(e) => handleChange(e, changeMessage)}
             ></input>
-            <button className="smackButton" type="button">
-              image
+            <button
+              className="smackButton"
+              type="button"
+              onMouseEnter={addGif}
+              onMouseLeave={hideGif}
+            >
+              gif
             </button>
             <button
               className="smackButton"
               type="button"
               onMouseEnter={addEmoji}
-              onMouseLeave={addEmoji}
+              onMouseLeave={hideEmoji}
             >
               emoji
-              {showEmojiModal && (
-                <Picker id="emojiPicker" onEmojiClick={onEmojiClick} />
-              )}
             </button>
             <input
               className="smackButton"
@@ -116,8 +231,17 @@ function Chatbox({ changeBackground, username }) {
               value="Full Send"
             ></input>
           </div>
-          <div id="chatResponse">{submitResponse}</div>
         </form>
+        <DropzoneComponent
+          changeQeuedImages={changeQeuedImages}
+          previewImages={previewImages}
+          changePreviewImages={changePreviewImages}
+        />
+        <ImagePopUp
+          popUpImage={popUpImage}
+          showImagePopUp={showImagePopUp}
+          toggleImagePopUp={toggleImagePopUp}
+        />
       </div>
     </div>
   );

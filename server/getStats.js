@@ -37,7 +37,7 @@ const members = [
   { username: "fguritout2mrw", platform: "xbl" },
   { username: "booty_Thumper#5605139", platform: "acti" },
   { username: "jjuice89", platform: "psn" },
-  { username: "ﾌoeﾚ#2860330", platform: "acti" },
+  // { username: "ﾌoeﾚ#2860330", platform: "acti" },
 ];
 
 const getStats = (db) => {

@@ -18,16 +18,16 @@ class StatsTable extends React.Component {
     this.props.changeBackground("./Backgrounds/season6.jpg");
   }
 
-  getStats() {
-    axios.get("/getStats").then((results) => {
-      results.data = results.data.sort((a, b) =>
-        a["kdRatio"] < b["kdRatio"] ? 1 : -1
-      );
-      this.setState({
-        fullStats: results.data,
-      });
-    });
-  }
+  // getStats() {
+  //   axios.get("/getStats").then((results) => {
+  //     results.data = results.data.sort((a, b) =>
+  //       a["kdRatio"] < b["kdRatio"] ? 1 : -1
+  //     );
+  //     this.setState({
+  //       fullStats: results.data,
+  //     });
+  //   });
+  // }
 
   getWeeklyStats() {
     axios.get("/getWeekStats").then((results) => {
@@ -47,21 +47,23 @@ class StatsTable extends React.Component {
   }
 
   sortBy(whichStats, property) {
-    let newList;
+    let newList = [];
     if (
-      this.state[whichStats][0][property] < this.state[whichStats][1][property]
+      this.state[whichStats][0][property] <
+      this.state[whichStats][this.state[whichStats].length - 1][property]
     ) {
-      newList = this.state[whichStats].sort((a, b) =>
-        a[property] < b[property] ? 1 : -1
-      );
+      newList = this.state[whichStats]
+        .slice()
+        .sort((a, b) => (a[property] < b[property] ? 1 : -1));
     } else {
-      newList = this.state[whichStats].sort((a, b) =>
-        a[property] > b[property] ? 1 : -1
-      );
+      newList = this.state[whichStats]
+        .slice()
+        .sort((a, b) => (a[property] > b[property] ? 1 : -1));
     }
-    this.setState({
-      whichStats: newList,
-    });
+    const newState = {};
+    const key = whichStats;
+    newState[key] = newList;
+    this.setState(newState);
   }
 
   render() {
@@ -69,10 +71,13 @@ class StatsTable extends React.Component {
       <div className="mainComponent" id="recordsDiv">
         <div className="componentBox">
           <h1 className="componentHeader" id="accoladesHeader">
-            WeeklyAccolades
+            Weekly Accolades
           </h1>
           <Accolades unsortedStats={this.unsortedStats} />
         </div>
+
+        {/* Stat Tables         */}
+
         <div className="componentBox">
           <h1 className="componentHeader">Weekly Stats</h1>
           <table id="rankings">
@@ -162,6 +167,7 @@ class StatsTable extends React.Component {
             </tbody>
           </table>
         </div>
+
         <div className="componentBox">
           <h1 className="componentHeader">Lifetime Stats</h1>
           <table id="rankings">

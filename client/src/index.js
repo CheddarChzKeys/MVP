@@ -6,6 +6,7 @@ import Records from "./components/Records.js";
 import Smackboard from "./components/Smackboard.js";
 import Login from "./components/Login.js";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+const axios = require("axios").default;
 
 const App = () => {
   const [isSignedIn, changeSignedIn] = useState(false);
@@ -14,6 +15,12 @@ const App = () => {
   const toggleSignedIn = () => {
     changeSignedIn(!isSignedIn);
     if (signedInUser) {
+      localStorage.removeItem("accessToken");
+      const deadRefreshToken = localStorage.getItem("refreshToken");
+      if (deadRefreshToken) {
+        console.log("found dead refresh token");
+        axios.post("/logout", { deadRefreshToken });
+      }
       changeSignedInUser(null);
     }
     console.log("toggled Sign In");
@@ -23,6 +30,25 @@ const App = () => {
     const background = document.getElementById("htmlBody");
     background.style.background = `url(${imageURL}) center center / cover no-repeat fixed`;
   };
+
+  //Check session storage for JWT to check if user has logged in
+  const accessToken = localStorage.getItem("accessToken");
+  const refreshToken = localStorage.getItem("refreshToken");
+  if (accessToken) {
+    axios
+      .post("/verifyToken", {
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      })
+      .then((results) => {
+        console.log("token verification results:", results);
+        if (results.data.newAccessToken) {
+          localStorage.setItem("accessToken", results.data.newAccessToken);
+        }
+        changeSignedIn(true);
+        changeSignedInUser(results.data.username);
+      });
+  }
 
   return (
     <Router>
@@ -37,6 +63,7 @@ const App = () => {
             path="/"
             element={
               <Login
+                isSignedIn={isSignedIn}
                 toggleSignedIn={toggleSignedIn}
                 changeSignedInUser={changeSignedInUser}
                 changeBackground={changeBackgroundImage}

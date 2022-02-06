@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const jwt = require("jsonwebtoken");
 
 const API = require("call-of-duty-api")({ platform: "acti" });
 const getStats = require("./getStats.js");
@@ -48,6 +49,27 @@ mongo.connect("mongodb://127.0.0.1/warzone", function (err, client) {
       chat.insertOne({
         name: message[0],
         message: message[1],
+        image: message[2],
+        date: date,
+      });
+      chat
+        .find()
+        .limit(100)
+        .sort({ _id: 1 })
+        .toArray(function (err, res) {
+          if (err) {
+            throw err;
+          }
+          socket.emit("output", res);
+        });
+    });
+
+    socket.on("sendGif", (gifMessage) => {
+      console.log("heard sendGif");
+      date = new Date().toLocaleString();
+      chat.insertOne({
+        name: gifMessage[0],
+        gif: gifMessage[1],
         date: date,
       });
       chat
@@ -73,7 +95,7 @@ mongo.connect("mongodb://127.0.0.1/warzone", function (err, client) {
 
   app.post("/signUp", async (req, res) => {
     const users = db.collection("users");
-    const username = req.body.username;
+    const username = req.body.username.toLowerCase();
     const password = req.body.password;
     const gamerTag = req.body.gamerTag;
     const platform = req.body.platform;
@@ -94,9 +116,10 @@ mongo.connect("mongodb://127.0.0.1/warzone", function (err, client) {
   });
 
   app.post("/login", async (req, res) => {
-    const usernameAttempt = req.body.username;
+    const usernameAttempt = req.body.username.toLowerCase();
     const passwordAttempt = req.body.password;
     const users = db.collection("users");
+    const refreshTokens = db.collection("refreshTokens");
     const foundUser = await users.findOne({ username: usernameAttempt });
     if (!foundUser) {
       res.status(200).json({ message: "Invalid username" });
@@ -108,14 +131,83 @@ mongo.connect("mongodb://127.0.0.1/warzone", function (err, client) {
           if (result == false) {
             res.json({ message: "Invalid password" });
           } else {
+            //create jwt and send to client
+            const accessToken = jwt.sign(
+              {
+                username: foundUser.username,
+              },
+              "secret",
+              { expiresIn: "30s" }
+            );
+            const refreshToken = jwt.sign(
+              {
+                username: foundUser.username,
+              },
+              "secret",
+              { expiresIn: "1h" }
+            );
+            refreshTokens.insertOne({
+              refreshToken,
+            });
             res.json({
-              message: `Welcome Soldier`,
-              user: foundUser,
+              username: foundUser.username,
+              accessToken: accessToken,
+              refreshToken: refreshToken,
+              message: "Welcome Soldier",
             });
           }
         }
       );
     }
+  });
+
+  app.post("/logout", async (req, res) => {
+    const deadRefreshToken = req.body.deadRefreshToken;
+    const refreshTokens = db.collection("refreshTokens");
+    await refreshTokens.deleteOne({
+      refreshToken: deadRefreshToken,
+    });
+  });
+
+  app.post("/verifyToken", (req, res) => {
+    const accessToken = req.body.accessToken;
+    jwt.verify(accessToken, "secret", async (err, decoded) => {
+      if (err) {
+        const refreshToken = req.body.refreshToken;
+        if (refreshToken) {
+          const refreshTokens = db.collection("refreshTokens");
+          const foundRefreshToken = await refreshTokens.findOne({
+            refreshToken: refreshToken,
+          });
+          if (foundRefreshToken) {
+            jwt.verify(
+              foundRefreshToken.refreshToken,
+              "secret",
+              async (err, decoded) => {
+                if (err) {
+                  await refreshTokens.deleteOne({
+                    refreshToken: foundRefreshToken.refreshToken,
+                  });
+                  return res.status(401).send(err);
+                }
+                const newAccessToken = jwt.sign(
+                  {
+                    username: decoded.username,
+                  },
+                  "secret",
+                  { expiresIn: "30s" }
+                );
+                res
+                  .status(200)
+                  .json({ username: decoded.username, newAccessToken });
+              }
+            );
+          }
+        }
+        return res.status(401).send(err);
+      }
+      res.status(200).json(decoded);
+    });
   });
 
   app.get("/getWeekStats", (req, res) => {

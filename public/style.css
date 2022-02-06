@@ -19,11 +19,13 @@ html {
   background-position: center center;
   background-attachment: fixed;
   /* we set transition to 'all' properies - but you can use it just for background image either - by default the time is set to 1 second, you can change it yourself*/
-  transition: linear background-image 1.5s;
+  transition: linear background-image 1s;
   /* if you don't use delay , background will disapear and transition will start from a white background - you have to set the transition-delay the same as transition time OR more , so there won't be any problems */
-  -webkit-transition-delay: 300ms; /* Safari */
-  transition-delay: 300ms;
+  -webkit-transition-delay: 0; /* Safari */
+  transition-delay: 0;
 }
+
+/* Navigation Bar*/
 
 #headerTag {
   font-family: "modernWarfare";
@@ -81,13 +83,6 @@ html {
   flex: 1;
 }
 
-/* .navItem:hover {
-  text-shadow: 0px 0px 10px #79d9ff;
-  color: #79d9ff;
-  cursor: pointer;
-  font-weight: 700;
-} */
-
 .navWhiteSpace {
   flex: 1;
 }
@@ -95,10 +90,6 @@ html {
   flex: 1;
   display: flex;
 }
-
-/* .userNavMenu .navItem {
-  color: #79d9ff;
-} */
 
 .navItemBox {
   position: relative;
@@ -136,15 +127,33 @@ html {
   box-shadow: 0px 0px 10px;
 }
 
+/* Main app component*/
+
 .mainComponent {
-  position: absolute;
-  left: 3%;
-  top: 20%;
-  width: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
   margin: 0px 0px 40px 0px;
 }
 
-/*Accolades in Record Section*/
+.componentHeader {
+  font-family: "modernWarfare";
+  position: relative;
+  font-size: 25px;
+  color: rgb(255, 255, 255);
+  border-bottom: 1px solid #79d9ff;
+  white-space: nowrap;
+}
+.componentBox {
+  position: relative;
+  width: 80%;
+  min-width: 1000px;
+}
+/*Accolades in Records Section*/
+
 #accoladesHeader {
   font-family: "modernWarfare";
   /* text-decoration: underline; */
@@ -254,45 +263,29 @@ html {
   color: #79d9ff;
 }
 
-.componentHeader {
-  font-family: "modernWarfare";
-  /* text-decoration: underline; */
-  position: relative;
-  /* top: 5px; */
-  font-size: 25px;
-  color: rgb(255, 255, 255);
-  border-bottom: 1px solid #79d9ff;
-  white-space: nowrap;
-}
-.componentBox {
-  position: relative;
-  left: 8%;
-  top: 30%;
-  width: 75%;
-  margin: 40px 0px 40px 0px;
-  min-width: 1000px;
-}
+/*Rankings Component & Table*/
+
 #rankings {
-  min-width: 1000px;
+  width: 100%;
   color: white;
-  border-spacing: 0px 4px;
+  border-spacing: 0em 0.5em;
   text-align: left;
-  font-size: 16px;
+  font-size: 1rem;
   overflow: hidden;
   cursor: crosshair;
 }
 
 th {
-  transition: text-shadow 1s, border-top 1s, box-shadow 3s, color 1.5s;
+  transition: text-shadow 1s, box-shadow 3s, color 1.5s;
   table-layout: fixed;
   color: white;
   background: rgba(0, 2, 0, 0.103);
   box-shadow: 0px;
   font-family: "leagueGothicCondensed";
   font-stretch: semi-expanded;
-  font-size: 20px;
-  height: 40px;
-  line-height: 40px;
+  font-size: 1.4rem;
+  height: 1em;
+  line-height: 1em;
 }
 
 th:hover {
@@ -301,12 +294,12 @@ th:hover {
 }
 
 tr {
-  height: 30px;
-  line-height: 30px;
+  height: 2em;
+  line-height: 2.5em;
   vertical-align: center;
   border-top: 1px solid rgba(0, 2, 0, 0.055);
   font-family: "Montserrat", Arial, sans-serif;
-  font-size: 16px;
+  font-size: 1.1rem;
 }
 
 .position {
@@ -324,7 +317,7 @@ tr {
 .downs,
 .revives,
 .top5 {
-  width: 90px;
+  width: 7vw;
 }
 
 .recordsRows:nth-child(odd) {
@@ -335,273 +328,44 @@ tr {
 }
 
 .recordsRows {
-  transition: text-shadow 1s, border-top 1s, box-shadow 3s, color 1.5s;
+  transition: text-shadow 0.5s, box-shadow 2s, color 0.5s;
   color: #aab5b9;
-  border-top: 1px solid rgba(0, 0, 0, 0);
 }
 
 .recordsRows:hover {
-  background-image: url("./black-tile.png");
-  background-size: 1.5px;
-  background-color: #080000e5;
+  /* background-image: url("./black-tile.png");
+  background-size: 1.6px;
+  background-color: #080000e5; */
   text-shadow: 0px 0px 10px #79d9ff;
-  box-shadow: 0px -2px 3px 0px rgba(82, 219, 243, 0.63);
+  box-shadow: 0px 2px 3px 0px rgba(82, 219, 243, 0.63);
   color: #79d9ff;
-  border-top: 1px solid rgb(82, 219, 243);
-}
-
-#operatorsBox {
-  display: none;
-  width: 98vw;
-  height: 100vh;
-  padding: 0;
-  margin: 0 1vw 0 1vw;
-}
-
-#operatorsBox:after {
-  content: "";
-  clear: both;
-  display: table;
-}
-
-#operatorBigImageDiv {
-  position: absolute;
-  display: none;
-  top: 3vh;
-  left: 22vw;
-  height: 93vh;
-  width: 56vw;
-}
-
-#operatorBigImage {
-  position: relative;
-  margin: 0 auto;
-  width: 56vw;
-  height: 93vh;
-}
-
-#operatorNameBox {
-  display: none;
-  position: absolute;
-  width: 20vw;
-  top: 28vh;
-  height: 40vh;
-  left: 15vw;
-}
-
-#operatorClanTag {
-  display: block;
-  text-align: center;
-  font-family: "leagueGothicCondensed";
-  font-size: 10vh;
-  font-weight: 800;
-  color: #028ff5;
-  height: 9vh;
-  white-space: nowrap;
-  /* text-shadow: 0px 0px 5px #028ff5; */
-}
-
-#operatorGamerTag {
-  position: relative;
-  top: 2vh;
-  display: block;
-  white-space: nowrap;
-  text-align: center;
-  font-family: "leagueGothicCondensed";
-  font-size: 8vh;
-  color: rgb(202, 200, 200);
-}
-
-#medals {
-  display: block;
-  position: relative;
-  top: 134px;
-  left: 25px;
-}
-
-#operatorInfo {
-  display: none;
-  position: absolute;
-  top: 23vh;
-  left: 68vw;
-  width: 33vh;
-  padding: 1vw;
-  background-image: url("./black-tile.png");
-  background-size: 1.5px;
-  background-color: rgba(0, 0, 0, 0.4);
-}
-
-.operatorHeading {
-  display: block;
-  font-family: "leagueGothicCondensed";
-  font-weight: 2;
-  font-size: 25px;
-  margin: 2px 2px 2px 3px;
-  white-space: nowrap;
-  color: #028ff5;
-}
-
-.operatorHeading:after {
-  content: "";
-  position: relative;
-  height: 2px;
-  display: block;
-  bottom: -1px;
-  left: 0;
-  background-image: linear-gradient(
-    93deg,
-    rgba(2, 143, 245, 1) 0%,
-    rgba(2, 143, 245, 0.11528361344537819) 85%
-  );
-  width: 100%;
-}
-
-.operatorData {
-  display: block;
-  font-family: "leagueGothicCondensed";
-  font-weight: 1;
-  font-size: 2.5vh;
-  margin: 12px;
-  white-space: nowrap;
-  color: rgb(202, 200, 200);
-}
-
-#top3 {
-  position: relative;
-  top: 2px;
-}
-
-#operatorEWDiv {
-  position: absolute;
-  /* display: none; */
-  top: 75vh;
-  left: 44vw;
-  width: 15vw;
-  height: 6vh;
-  background-image: url("./black-tile.png");
-  background-size: 1.5px;
-  overflow: hidden;
-}
-
-#operatorEW {
-  display: block;
-  position: relative;
-  top: 0.5vh;
-  margin: auto;
-  width: 8vw;
-  height: 5vh;
-}
-
-#operatorsScroll {
-  margin: 0 auto;
-  position: absolute;
-  top: 76vh;
-  left: 10vw;
-  width: 80vw;
-  height: 24vh;
-  overflow-x: auto;
-  overflow-y: hidden;
-  white-space: nowrap;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-  cursor: crosshair;
-}
-#operatorsScroll::-webkit-scrollbar {
-  width: 0px; /* Remove scrollbar space */
-  height: 0px;
-  background: transparent; /* Optional: just make scrollbar invisible */
-}
-
-.operatorthumb {
-  position: relative;
-  top: 62px;
-  left: 3px;
-  border-radius: 5%;
-  /* opacity: 0.5; */
-  filter: brightness(40%);
-  max-height: 15vh;
-  width: auto;
-  /* margin: -2px; */
-}
-
-.operatorthumb:hover {
-  opacity: 1;
-  top: 39px;
-  position: relative;
-  transform: scale(1.4);
-  width: auto;
-  filter: brightness(100%);
-}
-
-#chatWindow {
-  position: absolute;
-  left: 8%;
-  top: 23%;
-  height: 380px;
-  padding: 20px;
-  width: 75%;
-  margin: 0px 0 10px 2.5%;
-  border: 7px solid rgba(0, 2, 0, 0.055);
-  border-radius: 20px;
-  overflow-y: auto;
-}
-
-.entryDiv:nth-child(odd) {
-  background: rgba(0, 2, 0, 0.671);
-}
-.entryDiv:nth-child(even) {
-  background: rgba(183, 189, 183, 0.116);
-}
-
-.entryDiv {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  white-space: nowrap;
-  transition: text-shadow 1s, border-top 1s, box-shadow 3s, color 1.5s;
-  color: #aab5b9;
-  box-shadow: 0px;
-  font-size: 16px;
-  height: auto;
-}
-
-.entryDiv:hover {
-  background-image: url("./black-tile.png");
-  background-size: 1.5px;
-  background-color: #080000e5;
-  text-shadow: 0px 0px 10px #79d9ff;
-  box-shadow: 0px -2px 3px 0px rgba(82, 219, 243, 0.63);
-  color: #79d9ff;
-  border-top: 1px solid rgb(82, 219, 243);
-  cursor: crosshair;
-}
-
-.entryText {
-  margin: 0.75em;
-}
-
-#typeLine {
-  position: absolute;
-  top: 85%;
-  left: 22%;
-  width: 70%;
-}
-
-#textInput {
-  width: 50%;
-}
-
-#id {
-  width: 20%;
-}
-
-.typeLineElems {
-  margin: 0.25em;
 }
 
 /* Smack Box */
 
 #chatbox {
-  margin: 1em 0;
+  margin-top: 1em;
+  height: 50vh;
+  overflow-y: auto;
+}
+
+div::-webkit-scrollbar {
+  width: 4px;
+  background-color: rgba(2, 2, 2, 0);
+}
+
+div::-webkit-scrollbar-track {
+  background: rgba(2, 2, 2, 0);
+}
+
+/* Handle */
+div::-webkit-scrollbar-thumb {
+  background: #79d9ff;
+}
+
+/* Handle on hover */
+div::-webkit-scrollbar-thumb:hover {
+  background: #79d9ff;
 }
 
 #chat {
@@ -644,6 +408,20 @@ tr {
   padding-left: 10px;
 }
 
+#chatGif {
+  max-width: 100%;
+  padding-top: 2px;
+  padding-left: 10px;
+}
+
+#chatImageWrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 30%);
+  /* align-items: left; */
+  gap: 1em;
+  margin: 1em 0;
+}
+
 #nameDate {
   display: flex;
   margin-bottom: 2px;
@@ -652,10 +430,6 @@ tr {
 
 #chatUsername {
   color: #79d9ff;
-}
-
-#typedUsername {
-  display: block;
 }
 
 #messageSubmit {
@@ -682,12 +456,34 @@ tr {
   color: #ffffff;
 }
 
+.EXKLM {
+  position: absolute !important;
+  right: 6em;
+  bottom: 5em;
+  width: auto;
+}
+
+.fGONoI {
+  opacity: 1;
+  -webkit-transition: opacity 300ms linear;
+  transition: opacity 300ms linear;
+  margin-top: 0 !important;
+  border: 1px solid #f1f1f1;
+  border-radius: 5px !important;
+  background: white;
+  box-shadow: none !important;
+  width: 230px !important;
+  height: 320px !important;
+  overflow-y: scroll;
+  z-index: 999 !important;
+  padding-top: 1rem;
+}
+
 aside.emoji-picker-react {
-  background: #fff;
+  background: rgba(117, 51, 51, 0);
   display: flex;
   flex-direction: column;
-  height: 320px;
-  width: 235px !important;
+  height: 320px !important;
   font-family: sans-serif;
   border: 1px solid #efefef;
   border-radius: 5px;
@@ -696,7 +492,8 @@ aside.emoji-picker-react {
   overflow: scroll !important;
   position: absolute !important;
   z-index: 999 !important;
-  bottom: 6.5em;
+  right: 0;
+  bottom: 5em;
 }
 
 .smackButton {
@@ -719,27 +516,127 @@ aside.emoji-picker-react {
   font-family: "modernWarfare";
   color: #79d9ff;
   padding: 5px 10px;
-  margin: 1em 0;
 }
 
-/*Login Splash
-*/
+#previewThumbs {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  width: 100%;
+}
+
+#previewDiv {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1em;
+}
+
+#previewImage {
+  max-width: 10em;
+  border-radius: 1em;
+}
+
+/*Full Image Pop Up*/
+
+.popUp {
+  color: #ffffff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+
+  background-color: #050505de;
+}
+
+.buttonWrapper {
+  position: absolute;
+  display: block;
+  top: 0;
+  right: 0;
+  width: 25px;
+  height: 10px;
+}
+
+.closeButton {
+  position: fixed;
+  width: 25px;
+}
+
+.fullImageWrapper {
+  min-width: 70%;
+  max-width: 75%;
+  max-height: 90%;
+  height: auto;
+  overflow-y: scroll;
+  display: flex;
+  justify-content: center;
+}
+
+.fullImageInner {
+  /* max-width: 10%; */
+  position: relative;
+  min-width: 80%;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.fullImage {
+  width: 100%;
+  height: auto;
+}
+
+/*Dropzone*/
+
+.dropzone {
+  min-height: 10em;
+  width: 100%;
+  border: 2px solid white;
+}
+
+/*Login Splash*/
+
+#logoLogin {
+  display: flex;
+  align-items: center;
+  top: 10vh;
+  position: relative;
+}
+
+#mwLogo {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+}
+
+#mwLogo img {
+  max-width: 45vw;
+}
+
+#loginWrap {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+}
 
 #loginDiv {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  justify-content: center;
   position: relative;
-  top: 13vh;
-  left: 50vw;
   width: 20vw;
+  min-height: 28rem;
   padding: 0 2em;
   color: #ffffff;
   background: rgba(70, 69, 69, 0.445);
   font-family: "modernWarfare";
-}
-
-#loginDiv:hover {
 }
 
 #loginDiv form {
@@ -750,8 +647,8 @@ aside.emoji-picker-react {
 
 #loginDiv input {
   flex: 1;
-  width: 20vw;
-  margin: 1vh 0;
+  width: 100%;
+  margin: 0.5em 0;
 }
 
 #loginDiv #submit,
@@ -762,7 +659,7 @@ aside.emoji-picker-react {
   font-family: "modernWarfare";
   font-size: large;
   text-align: start;
-  padding: 1px 0;
+  padding: 0.5em 0;
   border: none;
 }
 
@@ -780,13 +677,21 @@ aside.emoji-picker-react {
   opacity: 1;
 }
 
-#loginResponse {
+.loginResponse {
   /* height: 2vh; */
   flex: 1;
   color: #79d9ff;
   font-family: "modernWarfare";
-  font-size: small;
-  margin: 1vh 0;
+  font-size: smaller;
+}
+
+.signUpResponse {
+  /* height: 2vh; */
+  flex: 1;
+  color: #79d9ff;
+  font-family: "modernWarfare";
+  font-size: smaller;
+  margin: 0;
 }
 
 .blueHover:hover {
