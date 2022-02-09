@@ -24,6 +24,7 @@ function Chatbox({ changeBackground, username }) {
   const [qeuedImages, changeQeuedImages] = useState([]);
   const [previewImages, changePreviewImages] = useState([]);
   const [popUpImage, changePopUpImage] = useState(null);
+  const [popUpVideo, changePopUpVideo] = useState("v4y1VXGEay4");
   const [showImagePopUp, toggleImagePopUp] = useState(false);
 
   const userName = username;
@@ -118,7 +119,7 @@ function Chatbox({ changeBackground, username }) {
   };
 
   const scrollToBottom = () => {
-    chatBottom.current.scrollIntoView({ behavior: "smooth" });
+    chatBottom.current.scrollIntoView();
   };
 
   const imageClick = (image) => {
@@ -239,8 +240,11 @@ function Chatbox({ changeBackground, username }) {
         />
         <ImagePopUp
           popUpImage={popUpImage}
+          popUpVideo={popUpVideo}
           showImagePopUp={showImagePopUp}
           toggleImagePopUp={toggleImagePopUp}
+          changePopUpImage={changePopUpImage}
+          changePopUpVideo={changePopUpVideo}
         />
       </div>
     </div>
