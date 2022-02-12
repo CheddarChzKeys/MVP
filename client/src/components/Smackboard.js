@@ -12,27 +12,39 @@ let updatedChats = [];
 
 socket.on("output", (data) => {
   updatedChats = data;
-  console.log(updatedChats);
+  console.log("updatedChats: ", updatedChats);
 });
 
 function Chatbox({ changeBackground, username }) {
   const [chats, updateChats] = useState([]);
   const [typedMessage, changeMessage] = useState("");
+  const [typedVideoLink, changeTypedVideoLink] = useState("");
+  const [submittedVideo, changeSubmittedVideo] = useState(null);
+  const [showVideoModal, toggleVideoModal] = useState(false);
   const [showEmojiModal, toggleEmojiModal] = useState(false);
   const [showGifModal, toggleGifModal] = useState(false);
   const [submitResponse, changeResponse] = useState("");
   const [qeuedImages, changeQeuedImages] = useState([]);
   const [previewImages, changePreviewImages] = useState([]);
   const [popUpImage, changePopUpImage] = useState(null);
-  const [popUpVideo, changePopUpVideo] = useState("v4y1VXGEay4");
+  const [popUpVideo, changePopUpVideo] = useState(null);
   const [showImagePopUp, toggleImagePopUp] = useState(false);
 
   const userName = username;
 
   const inputRef = useRef(null);
-  const chatBottom = useRef(null);
+  const chatBoxRef = useRef();
+  const didMountRef = useRef(false);
 
   changeBackground("../Backgrounds/season1.jpg");
+
+  const addVideoInput = () => {
+    toggleVideoModal(true);
+  };
+
+  const hideVideoInput = () => {
+    toggleVideoModal(false);
+  };
 
   const addEmoji = () => {
     toggleEmojiModal(true);
@@ -102,9 +114,17 @@ function Chatbox({ changeBackground, username }) {
           return response.url.split("?")[0];
         })
       ).then((imageURLs) => {
-        socket.emit("sendMessage", [userName, typedMessage, imageURLs]);
+        if (imageURLs.length < 1) {
+          imageURLs = null;
+        }
+        socket.emit("sendMessage", [
+          userName,
+          typedMessage,
+          imageURLs,
+          submittedVideo,
+        ]);
         changeMessage("");
-        changeQeuedImages(null);
+        changeQeuedImages([]);
         changeResponse("post complete");
         const messageFlash = setTimeout(() => {
           changeResponse("");
@@ -118,8 +138,19 @@ function Chatbox({ changeBackground, username }) {
     }
   };
 
+  const handleVideoSubmit = (e) => {
+    e.preventDefault();
+    console.log("prevent dEFAULT!");
+    const videoID = typedVideoLink.split("=")[1];
+    changeSubmittedVideo(videoID);
+    hideVideoInput();
+  };
+
   const scrollToBottom = () => {
-    chatBottom.current.scrollIntoView();
+    console.log("chat count: ", chats);
+    const timeout1 = setTimeout(() => {
+      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+    }, 1000);
   };
 
   const imageClick = (image) => {
@@ -136,7 +167,9 @@ function Chatbox({ changeBackground, username }) {
   });
 
   useEffect(() => {
-    scrollToBottom();
+    if (didMountRef.current) {
+      scrollToBottom();
+    } else didMountRef.current = true;
   }, [chats]);
 
   useEffect(() => {
@@ -147,7 +180,7 @@ function Chatbox({ changeBackground, username }) {
     <div className="mainComponent">
       <div className="componentBox" id="smackboard">
         <h1 className="componentHeader">Smack Talk</h1>
-        <div id="chatbox">
+        <div id="chatbox" ref={chatBoxRef}>
           {chats.map((chat) => {
             return (
               <div id="chat">
@@ -161,48 +194,48 @@ function Chatbox({ changeBackground, username }) {
                   </div>
                 </div>
                 <div id="chatMessage">{chat.message}</div>
-                {chat.gif ? (
+                {chat.gif && (
                   <img id="chatGif" src={chat.gif.downsized.url}></img>
-                ) : (
-                  <div />
                 )}
-                {chat.image ? (
+                {chat.video && (
+                  <div id="ytPlayerWrapper">
+                    <iframe
+                      className="ytPlayer"
+                      id="player"
+                      type="text/html"
+                      width="400"
+                      height="243"
+                      src={`http://www.youtube.com/embed/${chat.video}`}
+                      frameBorder="0"
+                      allowFullScreen="allowfullscreen"
+                      mozallowfullscreen="mozallowfullscreen"
+                      msallowfullscreen="msallowfullscreen"
+                      oallowfullscreen="oallowfullscreen"
+                      webkitallowfullscreen="webkitallowfullscreen"
+                    ></iframe>
+                  </div>
+                )}
+                {chat.image && (
                   <div id="chatImageWrapper">
                     {chat.image.map((image) => {
                       return (
                         <img
-                          id="chatGif"
+                          id="chatImg"
                           src={image}
                           onClick={() => imageClick(image)}
                         ></img>
                       );
                     })}
                   </div>
-                ) : (
-                  <div />
                 )}
               </div>
             );
           })}
-          <div id="chatBottom" ref={chatBottom}></div>
-          {showEmojiModal && (
-            <div
-              id="pickerDiv"
-              onMouseEnter={addEmoji}
-              onMouseLeave={hideEmoji}
-            >
-              <Picker id="emojiPicker" onEmojiClick={onEmojiClick} />
-            </div>
-          )}
-          {showGifModal && (
-            <div id="pickerDiv" onMouseEnter={addGif} onMouseLeave={hideGif}>
-              <GifPicker id="emojiPicker" onSelected={onGifClick} />
-            </div>
-          )}
+          {/* <div id="chatBottom" ref={chatBottom}></div> */}
         </div>
         <div id="chatResponse">{submitResponse}, &nbsp;</div>
-        <form id="createMessage" onSubmit={(e) => handleSubmit(e)}>
-          <div id="messageSubmit">
+        <div id="messageSubmit">
+          <form id="createMessage" onSubmit={(e) => handleSubmit(e)}>
             <input
               id="typedMessage"
               ref={inputRef}
@@ -210,6 +243,47 @@ function Chatbox({ changeBackground, username }) {
               value={typedMessage}
               onChange={(e) => handleChange(e, changeMessage)}
             ></input>
+            <input className="smackButton" type="submit" value="Send"></input>
+          </form>
+          <div className="smackButtonWrapper">
+            <button
+              className={`smackButton ${
+                submittedVideo ? "videoSubmitted" : ""
+              }`}
+              type="button"
+              onMouseEnter={addVideoInput}
+              onMouseLeave={hideVideoInput}
+            >
+              video
+            </button>
+            {showVideoModal && (
+              <div
+                id="videoSubmitDiv"
+                onMouseEnter={addVideoInput}
+                onMouseLeave={hideVideoInput}
+              >
+                <div id="videoInput">
+                  <form
+                    id="videoForm"
+                    onSubmit={(e) => {
+                      e.stopPropagation();
+                      handleVideoSubmit(e);
+                    }}
+                  >
+                    <input
+                      id="ytLinkInput"
+                      type="text"
+                      placeholder="Insert YouTube link..."
+                      value={typedVideoLink}
+                      onChange={(e) => handleChange(e, changeTypedVideoLink)}
+                    ></input>
+                    <input id="videoSubmit" type="submit"></input>
+                  </form>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="smackButtonWrapper">
             <button
               className="smackButton"
               type="button"
@@ -218,6 +292,13 @@ function Chatbox({ changeBackground, username }) {
             >
               gif
             </button>
+            {showGifModal && (
+              <div id="pickerDiv" onMouseEnter={addGif} onMouseLeave={hideGif}>
+                <GifPicker id="emojiPicker" onSelected={onGifClick} />
+              </div>
+            )}
+          </div>
+          <div className="smackButtonWrapper">
             <button
               className="smackButton"
               type="button"
@@ -226,13 +307,17 @@ function Chatbox({ changeBackground, username }) {
             >
               emoji
             </button>
-            <input
-              className="smackButton"
-              type="submit"
-              value="Full Send"
-            ></input>
+            {showEmojiModal && (
+              <div
+                id="pickerDiv"
+                onMouseEnter={addEmoji}
+                onMouseLeave={hideEmoji}
+              >
+                <Picker id="emojiPicker" onEmojiClick={onEmojiClick} />
+              </div>
+            )}
           </div>
-        </form>
+        </div>
         <DropzoneComponent
           changeQeuedImages={changeQeuedImages}
           previewImages={previewImages}

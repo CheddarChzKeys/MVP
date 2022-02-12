@@ -50,6 +50,7 @@ mongo.connect("mongodb://127.0.0.1/warzone", function (err, client) {
         name: message[0],
         message: message[1],
         image: message[2],
+        video: message[3],
         date: date,
       });
       chat

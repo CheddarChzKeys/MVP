@@ -344,6 +344,7 @@ tr {
 /* Smack Box */
 
 #chatbox {
+  position: relative;
   margin-top: 1em;
   height: 50vh;
   overflow-y: auto;
@@ -398,7 +399,7 @@ div::-webkit-scrollbar-thumb:hover {
   flex-direction: column;
   justify-content: flex-end;
   font-size: small;
-  color: rgba(255, 255, 255, 0.849);
+  color: rgb(151, 147, 147);
 }
 
 #chatMessage {
@@ -408,8 +409,28 @@ div::-webkit-scrollbar-thumb:hover {
   padding-left: 10px;
 }
 
-#chatGif {
+#ytPlayerWrapper {
+  display: block;
+  overflow: visible;
+  position: relative;
+  width: 30%;
+  margin: 1em 0;
+}
+
+.ytPlayer {
+  padding-top: 2px;
+  padding-left: 10px;
+  width: 100%;
+}
+
+#chatImg {
   max-width: 100%;
+  padding-top: 2px;
+  padding-left: 10px;
+}
+
+#chatGif {
+  max-width: 30%;
   padding-top: 2px;
   padding-left: 10px;
 }
@@ -434,6 +455,7 @@ div::-webkit-scrollbar-thumb:hover {
 
 #messageSubmit {
   display: flex;
+  position: relative;
   align-content: center;
   justify-content: flex-start;
   padding: 10px;
@@ -442,7 +464,7 @@ div::-webkit-scrollbar-thumb:hover {
 }
 
 #typedMessage {
-  flex: 7;
+  flex: 4;
   border: none;
   background-image: url("./black-tile.png");
   background-size: 1.5px;
@@ -453,14 +475,57 @@ div::-webkit-scrollbar-thumb:hover {
 }
 
 #createMessage {
+  display: flex;
   color: #ffffff;
+  flex: 10;
+}
+
+#videoInput {
+  position: absolute;
+  right: 0;
+  bottom: 2.5em;
+  width: 400px;
+  color: rgb(0, 0, 0);
+  background-color: rgba(3, 3, 3, 0.205);
+  border-radius: 5px;
+  padding: 3px;
+  border: 2px solid rgb(121, 217, 255);
+}
+
+#videoForm {
+  display: flex;
+}
+
+#ytLinkInput {
+  display: inline-block;
+  border-radius: 5px;
+  flex: 3;
+  height: 30px;
+}
+
+#videoSubmit {
+  display: inline-block;
+  border-radius: 5px;
+  font-family: "modernWarfare";
+  flex: 1;
+  background-color: rgba(70, 69, 69, 0.445);
+  color: white;
+}
+
+#videoSubmit:hover {
+  text-shadow: 0px 0px 10px #79d9ff;
+  color: #79d9ff;
 }
 
 .EXKLM {
   position: absolute !important;
-  right: 6em;
-  bottom: 5em;
+  bottom: 2.5em;
+  right: 0;
   width: auto;
+}
+
+.dftVQk {
+  width: 60% !important;
 }
 
 .fGONoI {
@@ -470,11 +535,12 @@ div::-webkit-scrollbar-thumb:hover {
   margin-top: 0 !important;
   border: 1px solid #f1f1f1;
   border-radius: 5px !important;
-  background: white;
+  background: rgb(255, 255, 255) !important;
   box-shadow: none !important;
   width: 230px !important;
   height: 320px !important;
   overflow-y: scroll;
+  overflow-x: visible !important;
   z-index: 999 !important;
   padding-top: 1rem;
 }
@@ -493,7 +559,15 @@ aside.emoji-picker-react {
   position: absolute !important;
   z-index: 999 !important;
   right: 0;
-  bottom: 5em;
+  bottom: 2.5em;
+}
+
+.smackButtonWrapper {
+  position: relative;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  flex: 1;
 }
 
 .smackButton {
@@ -503,11 +577,16 @@ aside.emoji-picker-react {
   color: #ffffff;
   font-family: "modernWarfare";
   font-size: 15px;
-  flex: 1;
   border: none;
+  flex: 1;
 }
 
 .smackButton:hover {
+  text-shadow: 0px 0px 10px #79d9ff;
+  color: #79d9ff;
+}
+
+.videoSubmitted {
   text-shadow: 0px 0px 10px #79d9ff;
   color: #79d9ff;
 }
