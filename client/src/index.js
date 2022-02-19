@@ -4,6 +4,7 @@ import ReactDOM from "react-dom";
 import Nav from "./components/Nav.js";
 import Records from "./components/Records.js";
 import Smackboard from "./components/Smackboard.js";
+import News from "./components/News.js";
 import Login from "./components/Login.js";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 const axios = require("axios").default;
@@ -83,6 +84,7 @@ const App = () => {
               />
             }
           />
+          <Route path="/news" element={<News />} />
         </Routes>
       </div>
     </Router>

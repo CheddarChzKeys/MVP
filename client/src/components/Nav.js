@@ -47,7 +47,9 @@ function Nav(props) {
             <div className="navItem">gallery</div>
           </div>
           <div className="navItemBox">
-            <div className="navItem">blog</div>
+            <Link to="/news">
+              <div className="navItem">news</div>
+            </Link>
           </div>
         </div>
         <div className="navWhiteSpace" />

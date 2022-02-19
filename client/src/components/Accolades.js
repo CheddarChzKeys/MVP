@@ -17,21 +17,21 @@ let accoladeList = [
     stat: "avgLifeTime",
     description: "Lowest average lifetime",
   },
-  { name: "juggernaught", stat: "kdRatio", description: "Highest KDR" },
+  { name: "point guard", stat: "assists", description: "Most assists" },
   {
-    name: "veteran",
-    stat: "matchesPlayed",
-    description: "Most matches played",
+    name: "executioner",
+    stat: "executions",
+    description: "Most finishing moves",
   },
   {
-    name: "headhunter",
-    stat: "headshotPercentage",
-    description: "Highest headshot percentage",
+    name: "warden",
+    stat: "gulagKills",
+    description: "Most gulag kills",
   },
   {
-    name: "deadweight",
-    stat: "avgLifeTime",
-    description: "Lowest average lifetime",
+    name: "tourist",
+    stat: "distanceTraveled",
+    description: "Longest distance traveled",
   },
 ];
 

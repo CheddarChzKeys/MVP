@@ -126,9 +126,9 @@ class StatsTable extends React.Component {
               <th
                 className="downs"
                 id="downsHead"
-                onClick={() => this.sortBy("weekStats", "objectiveTeamWiped")}
+                onClick={() => this.sortBy("weekStats", "assists")}
               >
-                Teams Wiped
+                Assists
               </th>
               <th
                 className="revives"
@@ -158,7 +158,7 @@ class StatsTable extends React.Component {
                     <td className="games">{member.matchesPlayed}</td>
                     <td className="kills">{member.kills}</td>
                     <td className="deaths">{member.deaths}</td>
-                    <td className="downs">{member.objectiveTeamWiped}</td>
+                    <td className="downs">{member.assists}</td>
                     <td className="revives">{member.gulagKills}</td>
                     <td className="top5">{member.gulagDeaths}</td>
                   </tr>

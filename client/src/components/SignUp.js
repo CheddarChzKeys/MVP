@@ -189,6 +189,7 @@ const SignUp = ({ toggleSignUp }) => {
                 className="blueHover"
                 id="submit"
                 type="submit"
+                value="submit"
                 onClick={(e) => handleSignUp(e)}
               ></input>
             )

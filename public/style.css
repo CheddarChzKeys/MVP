@@ -42,6 +42,7 @@ html {
 .nav {
   position: relative;
   width: auto;
+  padding: 0% 10%;
   margin: 0;
   background-image: url("./black-tile.png");
   background-size: 1.5px;
@@ -147,6 +148,7 @@ html {
   border-bottom: 1px solid #79d9ff;
   white-space: nowrap;
 }
+
 .componentBox {
   position: relative;
   width: 80%;
@@ -793,4 +795,91 @@ aside.emoji-picker-react {
 
 #platformDiv input {
   margin: auto 0 auto 0;
+}
+
+/* news Component */
+
+.articleLink {
+  text-decoration: none;
+}
+
+.article {
+  width: 70%;
+  /* border: solid 1px white; */
+  padding: 12px;
+  margin: 0 0 15px 0;
+  overflow: visible;
+  background: rgba(0, 2, 0, 0.137);
+  background-image: url("./black-tile.png");
+  background-size: 1.5px;
+}
+
+.articleTop {
+  display: flex;
+  justify-content: space-between;
+}
+
+.article:hover {
+  border-color: #79d9ff;
+}
+
+.articleTextWrapper {
+  color: white;
+  overflow: visible;
+  margin: 0 1em 0 0;
+  width: 100%;
+}
+
+.sourceDateWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.title {
+  font-size: 1.8vw;
+  color: white;
+  text-decoration: none;
+}
+
+.content {
+  font-size: 1.25vw;
+  color: white;
+}
+
+/* .title:hover {
+  color: #79d9ff;
+} */
+
+.sourceDate {
+  font-size: 1.3vw;
+  color: rgb(151, 147, 147);
+
+  margin-bottom: 2px;
+}
+
+#source {
+  color: #79d9ff;
+  flex-basis: 30%;
+}
+
+.date {
+  font-size: 1.5vw;
+  color: rgb(151, 147, 147);
+  /* margin: 18px 0 0 0; */
+}
+
+.articleImageWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 25%;
+}
+
+.articleImage {
+  width: 100%;
+}
+
+.contentWrapper {
+  display: block;
 }

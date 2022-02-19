@@ -83,8 +83,8 @@ const Login = ({
                 <input
                   className="blueHover"
                   id="submit"
-                  placeholder="password"
                   type="submit"
+                  value="submit"
                 ></input>
               )}
             </form>

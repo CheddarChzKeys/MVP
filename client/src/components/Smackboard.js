@@ -277,7 +277,11 @@ function Chatbox({ changeBackground, username }) {
                       value={typedVideoLink}
                       onChange={(e) => handleChange(e, changeTypedVideoLink)}
                     ></input>
-                    <input id="videoSubmit" type="submit"></input>
+                    <input
+                      id="videoSubmit"
+                      type="submit"
+                      value="submit"
+                    ></input>
                   </form>
                 </div>
               </div>
