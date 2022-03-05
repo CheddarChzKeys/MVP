@@ -5,9 +5,10 @@ import Nav from "./components/Nav.js";
 import Records from "./components/Records.js";
 import Smackboard from "./components/Smackboard.js";
 import News from "./components/News.js";
+import Gallery from "./components/Gallery.js";
 import Login from "./components/Login.js";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-const axios = require("axios").default;
+import axios from "axios";
 
 const App = () => {
   const [isSignedIn, changeSignedIn] = useState(false);
@@ -85,6 +86,7 @@ const App = () => {
             }
           />
           <Route path="/news" element={<News />} />
+          <Route path="/gallery" element={<Gallery />} />
         </Routes>
       </div>
     </Router>

@@ -10,11 +10,10 @@ const baseStyle = {
   padding: "20px",
   borderWidth: 2,
   margin: "1em 0",
-  borderColor: "#79d9ff",
   borderStyle: "solid",
   backgroundColor: "rgba(70, 69, 69, 0.445)",
-  color: "#bdbdbd",
-  transition: "border .3s ease-in-out",
+  // color: "#bdbdbd",
+  // transition: "border .3s ease-in-out",
   fontFamily: "modernWarfare",
 };
 
@@ -80,7 +79,7 @@ function DropzoneComponent(props) {
 
   return (
     <div>
-      <div {...getRootProps({ style })}>
+      <div className="dropzone" {...getRootProps({ style })}>
         <div id="previewThumbs">{thumbs}</div>
         <input {...getInputProps()} />
         <div>drop images here.</div>

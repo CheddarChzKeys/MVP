@@ -212,6 +212,18 @@ mongo.connect("mongodb://127.0.0.1/warzone", function (err, client) {
     });
   });
 
+  app.post("/newGalleryContent", (req, res) => {
+    const newContentItem = req.body;
+    const dbGallery = db.collection("gallery");
+    dbGallery.insertOne(newContentItem).then((response, err) => {
+      if (err) {
+        res.send({ message: "Error uploading to gallery:" }, err);
+      } else {
+        res.send({ message: "Successfully uploaded to gallery" });
+      }
+    });
+  });
+
   app.get("/getWeekStats", (req, res) => {
     // res.set('Access-Control-Allow-Origin', '*')
     let stats = {};
@@ -231,7 +243,7 @@ mongo.connect("mongodb://127.0.0.1/warzone", function (err, client) {
   });
 
   app.get("/getNews", (req, res) => {
-    newsDB = db.collection("news");
+    const newsDB = db.collection("news");
     newsDB
       .find()
       .sort({ publishedAt: -1 })
@@ -239,6 +251,20 @@ mongo.connect("mongodb://127.0.0.1/warzone", function (err, client) {
       .toArray((err, result) => {
         if (err) {
           res.send("Error detected: " + err);
+        } else {
+          res.send(result);
+        }
+      });
+  });
+
+  app.get("/getGalleryContent", (req, res) => {
+    const galleryDB = db.collection("gallery");
+    galleryDB
+      .find()
+      .sort({ _id: -1 })
+      .toArray((err, result) => {
+        if (err) {
+          res.send("Database Error Detected:", err);
         } else {
           res.send(result);
         }

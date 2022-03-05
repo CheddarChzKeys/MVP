@@ -23,7 +23,6 @@ function Nav(props) {
                 className={
                   activeClicked == "records" ? "navItemClicked" : "navItem"
                 }
-                id="recordsButton"
                 onClick={() => changeClicked("records")}
               >
                 records
@@ -36,7 +35,6 @@ function Nav(props) {
                 className={
                   activeClicked == "smackboard" ? "navItemClicked" : "navItem"
                 }
-                id="smackboardButton"
                 onClick={() => changeClicked("smackboard")}
               >
                 smackboard
@@ -44,11 +42,27 @@ function Nav(props) {
             </Link>
           </div>
           <div className="navItemBox">
-            <div className="navItem">gallery</div>
+            <Link to="/gallery">
+              <div
+                className={
+                  activeClicked === "gallery" ? "navItemClicked" : "navItem"
+                }
+                onClick={() => changeClicked("gallery")}
+              >
+                gallery
+              </div>
+            </Link>
           </div>
           <div className="navItemBox">
             <Link to="/news">
-              <div className="navItem">news</div>
+              <div
+                className={
+                  activeClicked === "news" ? "navItemClicked" : "navItem"
+                }
+                onClick={() => changeClicked("news")}
+              >
+                news
+              </div>
             </Link>
           </div>
         </div>

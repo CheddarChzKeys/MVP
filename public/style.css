@@ -12,6 +12,11 @@
   src: url("./fonts/modern_lcd-7.ttf");
 }
 
+@font-face {
+  font-family: "bebas";
+  src: url("./fonts/BebasNeue-Regular.ttf");
+}
+
 html {
   background: url("./Backgrounds/allBlack.jpg");
   background-size: cover;
@@ -37,6 +42,11 @@ html {
   color: rgba(255, 255, 255, 0.514);
   border-bottom: 1px solid #79d9ff;
   white-space: nowrap;
+}
+
+.generalHover:hover {
+  border: 1px solid #79d9ff;
+  cursor: pointer;
 }
 
 .nav {
@@ -147,6 +157,7 @@ html {
   color: rgb(255, 255, 255);
   border-bottom: 1px solid #79d9ff;
   white-space: nowrap;
+  margin-bottom: 0;
 }
 
 .componentBox {
@@ -345,10 +356,45 @@ tr {
 
 /* Smack Box */
 
+#smackboardComponent {
+  width: 80%;
+}
+
+.headerWrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.smackNewsHeader {
+  flex: 4;
+  margin-right: 10px;
+}
+
+.smackNewsHeaderSpacer {
+  flex: 1;
+}
+
+.smackNewsMain {
+  display: flex;
+  justify-content: space-between;
+}
+
+.smackNewsMain {
+  height: 60vh;
+}
+
+.smackboardWrapper {
+  flex: 4;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-right: 10px;
+}
+
 #chatbox {
   position: relative;
-  margin-top: 1em;
-  height: 50vh;
+
+  height: 83%;
   overflow-y: auto;
 }
 
@@ -377,10 +423,10 @@ div::-webkit-scrollbar-thumb:hover {
   display: flex;
   flex-direction: column;
   padding: 5px 10px;
-  margin: 1em 0;
+  margin: 0 0 1em 0;
 }
 
-#chat:nth-child(even) {
+/* #chat:nth-child(even) {
   background: rgba(0, 2, 0, 0.486);
   background-size: 1.5px;
 }
@@ -388,6 +434,15 @@ div::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 2, 0, 0.137);
   background-image: url("./black-tile.png");
   background-size: 1.5px;
+} */
+
+.chatItem {
+  border: 1px solid rgba(0, 0, 0, 0);
+}
+
+.chatItem:hover {
+  border: 1px solid #79d9ff;
+  cursor: pointer;
 }
 
 #chatName {
@@ -404,37 +459,30 @@ div::-webkit-scrollbar-thumb:hover {
   color: rgb(151, 147, 147);
 }
 
+.chatContent {
+  padding: 0 0 0 10px;
+}
+
 #chatMessage {
   color: #ffffff;
   font-size: large;
   padding-top: 2px;
-  padding-left: 10px;
 }
 
 #ytPlayerWrapper {
-  display: block;
+  display: inline-block;
   overflow: visible;
   position: relative;
-  width: 30%;
   margin: 1em 0;
-}
-
-.ytPlayer {
-  padding-top: 2px;
-  padding-left: 10px;
-  width: 100%;
 }
 
 #chatImg {
   max-width: 100%;
-  padding-top: 2px;
-  padding-left: 10px;
 }
 
 #chatGif {
   max-width: 30%;
   padding-top: 2px;
-  padding-left: 10px;
 }
 
 #chatImageWrapper {
@@ -532,8 +580,8 @@ div::-webkit-scrollbar-thumb:hover {
 
 .fGONoI {
   opacity: 1;
-  -webkit-transition: opacity 300ms linear;
-  transition: opacity 300ms linear;
+  /* -webkit-transition: opacity 300ms linear;
+  transition: opacity 300ms linear; */
   margin-top: 0 !important;
   border: 1px solid #f1f1f1;
   border-radius: 5px !important;
@@ -586,6 +634,7 @@ aside.emoji-picker-react {
 .smackButton:hover {
   text-shadow: 0px 0px 10px #79d9ff;
   color: #79d9ff;
+  cursor: pointer;
 }
 
 .videoSubmitted {
@@ -615,7 +664,47 @@ aside.emoji-picker-react {
 
 #previewImage {
   max-width: 10em;
-  border-radius: 1em;
+}
+
+.bannerWrapper {
+  flex: 1;
+  display: flex;
+  position: relative;
+  cursor: pointer;
+}
+
+.bannerImage {
+  height: 100%;
+  background-image: url("./black-tile.png");
+  background-size: 1.5px;
+}
+
+.bannerMask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.788);
+  background-image: url("./black-tile.png");
+  background-size: 1.5px;
+  opacity: 0;
+  display: flex;
+}
+
+.bannerMask:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.maskImageWrapper {
+  width: 60%;
+  height: auto;
+}
+
+.maskImage {
+  width: 100%;
+  height: 100%;
 }
 
 /*Full Image Pop Up*/
@@ -680,11 +769,14 @@ aside.emoji-picker-react {
 }
 
 /*Dropzone*/
-
 .dropzone {
-  min-height: 10em;
-  width: 100%;
-  border: 2px solid white;
+  color: #bdbdbd;
+  border: 2px solid #79d9ff;
+}
+
+.dropzone:hover {
+  cursor: pointer;
+  color: #79d9ff;
 }
 
 /*Login Splash*/
@@ -799,81 +891,97 @@ aside.emoji-picker-react {
 
 /* news Component */
 
+#newsComponent {
+  width: 80%;
+}
+
+.articleListWrapper {
+  flex: 4;
+  margin-right: 10px;
+  overflow-y: scroll;
+}
+
+.bannerImage {
+  width: 100%;
+}
+
 .articleLink {
   text-decoration: none;
 }
 
 .article {
-  width: 70%;
   /* border: solid 1px white; */
-  padding: 12px;
+
+  padding: 20px 20px 5px 20px;
   margin: 0 0 15px 0;
-  overflow: visible;
+  /* overflow: visible; */
   background: rgba(0, 2, 0, 0.137);
   background-image: url("./black-tile.png");
   background-size: 1.5px;
+  border: 1px solid rgba(0, 0, 0, 0);
 }
 
 .articleTop {
   display: flex;
-  justify-content: space-between;
 }
 
 .article:hover {
-  border-color: #79d9ff;
+  border: 1px solid #79d9ff;
 }
 
 .articleTextWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   color: white;
   overflow: visible;
   margin: 0 1em 0 0;
-  width: 100%;
+  flex: 2;
 }
 
 .sourceDateWrapper {
   width: 100%;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
 }
 
 .title {
   font-size: 1.8vw;
   color: white;
   text-decoration: none;
+  font-family: "bebas";
 }
 
 .content {
-  font-size: 1.25vw;
+  font-size: 1vw;
   color: white;
 }
 
-/* .title:hover {
-  color: #79d9ff;
-} */
-
 .sourceDate {
-  font-size: 1.3vw;
+  font-size: 1.1vw;
   color: rgb(151, 147, 147);
-
+  flex-basis: 33%;
   margin-bottom: 2px;
 }
 
 #source {
   color: #79d9ff;
-  flex-basis: 30%;
 }
 
 .date {
-  font-size: 1.5vw;
   color: rgb(151, 147, 147);
   /* margin: 18px 0 0 0; */
 }
 
+.seeFullArticle {
+  text-align: center;
+  color: #79d9ff;
+}
+
 .articleImageWrapper {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  max-width: 25%;
+  align-items: flex-start;
+  flex: 1;
 }
 
 .articleImage {
@@ -882,4 +990,240 @@ aside.emoji-picker-react {
 
 .contentWrapper {
   display: block;
+}
+
+/*Gallery*/
+.gallery {
+  width: 80%;
+}
+
+#galleryHeaderWrapper {
+  border-bottom: 1px solid #79d9ff;
+}
+
+.galleryHeader {
+  font-family: "modernWarfare";
+  position: relative;
+  font-size: 25px;
+  color: rgb(255, 255, 255);
+  white-space: nowrap;
+  margin-bottom: 0;
+  flex: 1;
+}
+
+#addContentButton {
+  flex: 1;
+  text-align: right;
+}
+
+.galleryMain {
+  display: flex;
+  justify-content: space-between;
+  gap: 1vw;
+
+  margin-top: 15px;
+}
+
+.galleryListWrapper {
+  flex: 2;
+}
+
+.galleryList {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 10px;
+}
+
+.galleryItem {
+  overflow-y: hidden;
+  overflow-x: hidden;
+  border: 1px solid white;
+  border-radius: 2px;
+  aspect-ratio: 1/1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.galleryItem:hover {
+  border: 2px solid #79d9ff;
+  cursor: pointer;
+}
+
+.galleryItemWrapper,
+.galleryVideoWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.galleryImage {
+  width: 150%;
+}
+
+.itemViewComponentWrapper {
+  flex: 1;
+}
+
+.itemViewComponent {
+  color: white;
+  border: 1px solid white;
+  border-radius: 2px;
+  padding: 10px;
+}
+
+.imageViewWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.videoViewWrapper {
+  position: relative;
+  padding-top: 56.25%;
+}
+
+#galleryYTPlayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.viewPortImage {
+  width: 100%;
+}
+
+.itemDetails {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
+  justify-items: center;
+}
+
+.usernameDate {
+  font-size: 1.1vw;
+  color: #ffffff;
+}
+
+.detailsDescription {
+  grid-column: 1 / -1;
+
+  font-size: 1.5vw;
+  color: white;
+  /* text-decoration: none; */
+  font-family: "bebas";
+
+  text-align: center;
+}
+
+/*Add Gallery Content Component */
+.addBackdrop {
+  background-color: #000000d3;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.addGalleryContent {
+  color: #ffffff;
+  width: 35vw;
+  font-family: modernWarfare;
+  background-color: black;
+  padding: 10px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.addContentMain {
+  display: flex;
+}
+
+#addContentFormWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+}
+
+.addContentForm {
+  /* display: flex;
+  flex-direction: column;
+  justify-content: space-between; */
+
+  height: 100%;
+}
+
+.inputWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.contentInputLabel {
+  font-family: "modernWarfare";
+  font-size: 15px;
+  background-color: rgba(0, 2, 0, 0.575);
+}
+
+.addContentInput {
+  display: block;
+  background-image: url("./black-tile.png");
+  background-size: 1.5px;
+  background-color: rgba(0, 2, 0, 0.575);
+  color: #ffffff;
+  font-family: "bebas";
+  font-size: 1em;
+  border: 1px solid rgba(0, 0, 0, 0);
+  height: 5vh;
+}
+
+.addContentInput:focus {
+  outline: none !important;
+  border: 1px solid #79d9ff;
+}
+
+#descriptionField {
+  height: 100px;
+}
+
+#galleryContentSubmit {
+  margin-top: 15px;
+  margin-left: auto;
+  margin-right: auto;
+
+  font-family: "modernWarfare";
+  font-size: 18px;
+}
+
+#galleryContentSubmit:hover {
+  color: #79d9ff;
+}
+.galleryDropzoneWrapper {
+  flex: 1;
+}
+
+#galleryDropzone {
+  display: block;
+  max-height: 30vh;
+  overflow-y: scroll;
+}
+
+#galleryPreviewThumbs {
+  /* display: flex;
+  justify-content: center; */
+  width: 100%;
+}
+
+#galleryPreviewImage {
+  max-width: 100%;
+}
+
+#galleryPreviewDiv {
+  display: flex;
+  justify-content: center;
 }

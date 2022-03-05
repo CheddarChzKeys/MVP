@@ -3,7 +3,7 @@ import axios from "axios";
 
 const News = () => {
   const [articles, updateArticles] = useState([]);
-  // const [showContent, toggleShowContent] = useState(null);
+  const [highlightArticle, toggleHighlightArticle] = useState(null);
 
   let counter = 0;
 
@@ -12,13 +12,13 @@ const News = () => {
     console.log("counter:", counter);
   };
 
-  // const handleMouseEnter = (articleNum) => {
-  //   toggleShowContent(articleNum);
-  // };
+  const handleMouseEnter = (articleNum) => {
+    toggleHighlightArticle(articleNum);
+  };
 
-  // const handleMouseLeave = () => {
-  //   toggleShowContent(null);
-  // };
+  const handleMouseLeave = () => {
+    toggleHighlightArticle(null);
+  };
 
   const getNewArticles = () => {
     const newArticles = axios.get("/getNews").then((results) => {
@@ -42,45 +42,67 @@ const News = () => {
 
   return (
     <div className="mainComponent">
-      <div className="componentBox" id="newsComponent">
-        <h1 className="componentHeader">Latest News</h1>
-        {articles.map((article) => {
-          const articleNumber = counter;
-          return (
-            <a className="articleLink" href={article.url}>
-              <div
-                key={article._id}
-                className="article"
-                onMouseEnter={() => handleMouseEnter(articleNumber)}
-                onMouseLeave={() => handleMouseLeave()}
-              >
-                <div className="articleTop">
-                  <div className="articleTextWrapper">
-                    <div className="title">{article.title}</div>
-                    <div className="sourceDateWrapper">
-                      <p className="sourceDate" id="source">
-                        {article.source.name}
-                      </p>
-                      <p className="sourceDate">
-                        {parseISOString(article.publishedAt)}
-                      </p>
+      <div id="newsComponent">
+        <div className="headerWrapper">
+          <h1 className="componentHeader smackNewsHeader">Latest News</h1>
+          <div className="smackNewsHeaderSpacer" />
+        </div>
+        <div className="smackNewsMain">
+          <div className="articleListWrapper">
+            {articles.map((article) => {
+              const articleNumber = counter;
+              return (
+                <a className="articleLink" href={article.url}>
+                  <div
+                    key={article._id}
+                    className="article"
+                    onMouseEnter={() => handleMouseEnter(articleNumber)}
+                    onMouseLeave={() => handleMouseLeave()}
+                  >
+                    <div className="articleTop">
+                      <div className="articleTextWrapper">
+                        <div className="title">{article.title}</div>
+                        <div className="sourceDateWrapper">
+                          <p className="sourceDate" id="source">
+                            {article.source.name}
+                          </p>
+                          <p className="sourceDate">
+                            {parseISOString(article.publishedAt)}
+                          </p>
+                          {highlightArticle == articleNumber ? (
+                            <p className="sourceDate seeFullArticle">
+                              Read full article
+                            </p>
+                          ) : (
+                            <p className="sourceDate" />
+                          )}
+                        </div>
+                        <div className="contentWrapper">
+                          <p className="content">
+                            {article.content.split("[")[0]}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="articleImageWrapper">
+                        <img
+                          className="articleImage"
+                          src={article.urlToImage}
+                        ></img>
+                      </div>
                     </div>
+                    {increaseCounter()}
                   </div>
-                  <div className="articleImageWrapper">
-                    <img
-                      className="articleImage"
-                      src={article.urlToImage}
-                    ></img>
-                  </div>
-                </div>
-                <div className="contentWrapper">
-                  <p className="content">{article.content.split("[")[0]}</p>
-                </div>
-                {increaseCounter()}
-              </div>
-            </a>
-          );
-        })}
+                </a>
+              );
+            })}
+          </div>
+          <div className="bannerWrapper">
+            <img
+              className="bannerImage"
+              src="./Images/officialNewsBanner3.png"
+            ></img>
+          </div>
+        </div>
       </div>
     </div>
   );
