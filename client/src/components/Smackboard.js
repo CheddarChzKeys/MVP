@@ -257,6 +257,7 @@ function Chatbox({ changeBackground, username }) {
                 ></input>
                 <input
                   className="smackButton"
+                  id="messageSubmitButton"
                   type="submit"
                   value="Send"
                 ></input>
@@ -346,13 +347,16 @@ function Chatbox({ changeBackground, username }) {
             </div>
           </div>
           <div className="bannerWrapper">
-            <img className="bannerImage" src="./Images/wzDiscordMask.png"></img>
+            <img
+              className="bannerImage"
+              src="./Images/wzDiscordDraft1.png"
+            ></img>
             <a href="https://discord.gg/2X6Y45Zt">
               <div className="bannerMask">
                 {/* <div className="maskImageWrapper"> */}
                 <img
                   className="maskImage"
-                  src="./Images/wzDiscordDraft1.png"
+                  src="./Images/wzDiscordMask.png"
                 ></img>
                 {/* </div> */}
               </div>

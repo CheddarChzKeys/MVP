@@ -171,6 +171,7 @@ const Gallery = (props) => {
         </div>
         {showAddContent && (
           <AddContentModal
+            signedInUser={props.signedInUser}
             getGalleryContent={getGalleryContent}
             toggleAddContent={toggleAddContent}
           />

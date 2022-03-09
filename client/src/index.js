@@ -88,7 +88,7 @@ const App = () => {
           <Route path="/news" element={<News />} />
           <Route
             path="/gallery"
-            element={<Gallery username={signedInUser} />}
+            element={<Gallery signedInUser={signedInUser} />}
           />
         </Routes>
       </div>

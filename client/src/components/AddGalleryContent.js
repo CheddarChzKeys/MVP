@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import axios from "axios";
 import DropzoneComponent from "./galleryDropbox.js";
 
-const AddGalleryContent = ({ getGalleryContent, toggleAddContent }) => {
+const AddGalleryContent = ({
+  getGalleryContent,
+  toggleAddContent,
+  signedInUser,
+}) => {
   const [imageField, changeImageField] = useState("");
   const [videoField, changeVideoField] = useState("");
   const [descriptionField, changeDescriptionField] = useState("");
@@ -74,7 +78,7 @@ const AddGalleryContent = ({ getGalleryContent, toggleAddContent }) => {
       const newTimestamp = new Date().toLocaleString().split(",")[0];
 
       const newItemObject = {
-        userName: "JRICKROSS",
+        userName: signedInUser,
         uploadDate: newTimestamp,
         image: imageURL,
         video: uploadedVideo,

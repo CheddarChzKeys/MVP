@@ -533,7 +533,7 @@ div::-webkit-scrollbar-thumb:hover {
 }
 
 #typedMessage {
-  flex: 4;
+  flex: 6;
   border: none;
   background-image: url("./black-tile.png");
   background-size: 1.5px;
@@ -548,6 +548,10 @@ div::-webkit-scrollbar-thumb:hover {
   color: #ffffff;
   flex: 10;
 }
+
+/* #messageSubmitButton {
+  text-align: right;
+} */
 
 #videoInput {
   position: absolute;
@@ -1246,7 +1250,6 @@ aside.emoji-picker-react {
   background-size: 1.5px;
   background-color: rgba(0, 2, 0, 0.575);
   color: #ffffff;
-  font-family: "bebas";
   font-size: 1em;
   border: 1px solid rgba(0, 0, 0, 0);
   height: 5vh;
@@ -1259,6 +1262,7 @@ aside.emoji-picker-react {
 
 #descriptionField {
   height: 100px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 #galleryContentSubmit {
