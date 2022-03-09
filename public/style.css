@@ -17,6 +17,11 @@
   src: url("./fonts/BebasNeue-Regular.ttf");
 }
 
+@font-face {
+  font-family: "orbitron";
+  src: url("./fonts/Orbitron-VariableFont_wght.ttf");
+}
+
 html {
   background: url("./Backgrounds/allBlack.jpg");
   background-size: cover;
@@ -47,6 +52,20 @@ html {
 .generalHover:hover {
   border: 1px solid #79d9ff;
   cursor: pointer;
+}
+
+.pointerHover:hover {
+  cursor: pointer;
+}
+
+.colorHover:hover {
+  color: #79d9ff;
+}
+
+.gridBackground {
+  background-image: url("./black-tile.png");
+  background-size: 1.5px;
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .nav {
@@ -731,13 +750,16 @@ aside.emoji-picker-react {
   display: block;
   top: 0;
   right: 0;
-  width: 25px;
-  height: 10px;
+  width: 35px;
+  /* height: 10px; */
 }
 
 .closeButton {
   position: fixed;
   width: 25px;
+  z-index: 3;
+  color: white;
+  background-color: #030303;
 }
 
 .fullImageWrapper {
@@ -752,11 +774,14 @@ aside.emoji-picker-react {
 
 .fullImageInner {
   /* max-width: 10%; */
-  position: relative;
-  min-width: 90%;
-  max-width: 100%;
+  /* min-width: 90%;
+  max- */
+  width: 100%;
   max-height: 100%;
   text-align: center;
+
+  position: relative;
+  padding-top: 56.25%;
 }
 
 .ytPlayer {
@@ -766,6 +791,13 @@ aside.emoji-picker-react {
 .fullImage {
   width: 100%;
   height: auto;
+
+  position: absolute;
+
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 /*Dropzone*/
@@ -1025,7 +1057,7 @@ aside.emoji-picker-react {
 }
 
 .galleryListWrapper {
-  flex: 2;
+  flex: 1.3;
 }
 
 .galleryList {
@@ -1037,6 +1069,7 @@ aside.emoji-picker-react {
 .galleryItem {
   overflow-y: hidden;
   overflow-x: hidden;
+  background-color: #030303;
   border: 1px solid white;
   border-radius: 2px;
   aspect-ratio: 1/1;
@@ -1059,6 +1092,15 @@ aside.emoji-picker-react {
 
 .galleryImage {
   width: 150%;
+}
+
+.galleryLoadMoreWrapper {
+  font-family: "modernWarfare";
+  color: #efefef;
+}
+
+.galleryLoadMore {
+  font-size: 1.2vw;
 }
 
 .itemViewComponentWrapper {
@@ -1093,31 +1135,59 @@ aside.emoji-picker-react {
   height: 100%;
 }
 
+#popUpYTPlayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .viewPortImage {
   width: 100%;
 }
 
-.itemDetails {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-
-  justify-items: center;
+.expand {
+  color: #efefef;
+  font-family: "modernWarfare";
+  font-size: 1.2vw;
+  margin: 0.5em auto 1em auto;
+  text-align: center;
 }
 
+.itemDetails {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+/* .itemDetails p {
+  margin: 5px 5px auto;
+} */
+
 .usernameDate {
-  font-size: 1.1vw;
+  font-size: 1.5vw;
   color: #ffffff;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.detailsDate {
+  font-family: "orbitron";
+  font-size: 1vw;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .detailsDescription {
-  grid-column: 1 / -1;
-
-  font-size: 1.5vw;
+  font-size: 1.3vw;
   color: white;
+  margin-top: 1em;
   /* text-decoration: none; */
-  font-family: "bebas";
 
-  text-align: center;
+  /* text-align: left; */
 }
 
 /*Add Gallery Content Component */

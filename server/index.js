@@ -13,6 +13,7 @@ const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const mongo = require("mongodb").MongoClient;
+const { ObjectId } = require("mongodb");
 
 const bcrypt = require("bcrypt");
 
@@ -46,7 +47,7 @@ mongo.connect("mongodb://127.0.0.1/warzone", function (err, client) {
       });
 
     socket.on("sendMessage", (message) => {
-      date = new Date().toLocaleString();
+      const date = new Date().toLocaleString();
       chat.insertOne({
         name: message[0],
         message: message[1],
@@ -247,10 +248,28 @@ mongo.connect("mongodb://127.0.0.1/warzone", function (err, client) {
     newsDB
       .find()
       .sort({ publishedAt: -1 })
-      .limit(10)
+      .limit(5)
       .toArray((err, result) => {
         if (err) {
           res.send("Error detected: " + err);
+        } else {
+          res.send(result);
+        }
+      });
+  });
+
+  app.get("/getOlderArticles", (req, res) => {
+    const lastArticleDate = req.query.last
+      ? req.query.last
+      : "2022-03-00T00:00:01Z";
+    const newsDB = db.collection("news");
+    newsDB
+      .find({ publishedAt: { $lt: lastArticleDate } })
+      .sort({ publishedAt: -1 })
+      .limit(5)
+      .toArray((err, result) => {
+        if (err) {
+          res.send("Database Error Detected:", err);
         } else {
           res.send(result);
         }
@@ -262,6 +281,23 @@ mongo.connect("mongodb://127.0.0.1/warzone", function (err, client) {
     galleryDB
       .find()
       .sort({ _id: -1 })
+      .limit(16)
+      .toArray((err, result) => {
+        if (err) {
+          res.send("Database Error Detected:", err);
+        } else {
+          res.send(result);
+        }
+      });
+  });
+
+  app.get("/getOlderGalleryContent", (req, res) => {
+    const lastID = req.query.last ? req.query.last : "999999999999999999999999";
+    const galleryDB = db.collection("gallery");
+    galleryDB
+      .find({ _id: { $lt: ObjectId(lastID) } })
+      .sort({ _id: -1 })
+      .limit(8)
       .toArray((err, result) => {
         if (err) {
           res.send("Database Error Detected:", err);
@@ -283,7 +319,7 @@ mongo.connect("mongodb://127.0.0.1/warzone", function (err, client) {
   // getStats(db);
   const updateWeeklyStats = setInterval(() => getStats.getStats(db), 300000);
 
-  // getNews.getNews(db);
+  getNews.getNews(db);
 });
 
 server.listen(PORT, () => {

@@ -4,6 +4,7 @@ import axios from "axios";
 const News = () => {
   const [articles, updateArticles] = useState([]);
   const [highlightArticle, toggleHighlightArticle] = useState(null);
+  const [oldestArticle, changeOldestArticle] = useState(null);
 
   let counter = 0;
 
@@ -21,9 +22,26 @@ const News = () => {
   };
 
   const getNewArticles = () => {
-    const newArticles = axios.get("/getNews").then((results) => {
-      updateArticles(results.data);
+    axios.get("/getNews").then((results) => {
+      const newArticles = results.data;
+      changeOldestArticle(newArticles[newArticles.length - 1].publishedAt);
+      updateArticles(newArticles);
     });
+  };
+
+  const getOlderArticles = () => {
+    axios
+      .get("/getOlderArticles", { params: { last: oldestArticle } })
+      .then((results) => {
+        const olderArticles = results.data;
+        changeOldestArticle(
+          olderArticles[olderArticles.length - 1].publishedAt
+        );
+        const newArticleList = articles.slice();
+        newArticleList.push(...olderArticles);
+        updateArticles(newArticleList);
+        return;
+      });
   };
 
   const parseISOString = (s) => {
@@ -95,6 +113,12 @@ const News = () => {
                 </a>
               );
             })}
+            <div
+              className="galleryLoadMoreWrapper colorHover pointerHover"
+              onClick={getOlderArticles}
+            >
+              <p className="galleryLoadMore">Load More</p>
+            </div>
           </div>
           <div className="bannerWrapper">
             <img

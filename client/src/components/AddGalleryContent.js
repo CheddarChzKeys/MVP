@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import DropzoneComponent from "./galleryDropbox.js";
 
-const AddGalleryContent = ({ fetchGalleryContent, toggleAddContent }) => {
+const AddGalleryContent = ({ getGalleryContent, toggleAddContent }) => {
   const [imageField, changeImageField] = useState("");
   const [videoField, changeVideoField] = useState("");
   const [descriptionField, changeDescriptionField] = useState("");
@@ -13,10 +13,10 @@ const AddGalleryContent = ({ fetchGalleryContent, toggleAddContent }) => {
 
   const addGalleryItem = (newItem) => {
     return axios.post("/newGalleryContent", newItem).then((results) => {
-      fetchGalleryContent();
-      const resultsMessage = results.data.message;
-      console.log("addItemMessage:", resultsMessage);
-      return resultsMessage;
+      getGalleryContent();
+      const message = results.data.message;
+      console.log("addItemMessage:", message);
+      return message;
     });
   };
 
@@ -71,18 +71,21 @@ const AddGalleryContent = ({ fetchGalleryContent, toggleAddContent }) => {
         uploadedVideo = videoField.split("=")[1];
       }
 
+      const newTimestamp = new Date().toLocaleString().split(",")[0];
+
       const newItemObject = {
         userName: "JRICKROSS",
-        uploadDate: "2/27/2022",
+        uploadDate: newTimestamp,
         image: imageURL,
         video: uploadedVideo,
         description: descriptionField,
       };
 
-      addGalleryItem(newItemObject).then((message) =>
-        changeResultsMessage(message)
-      );
-      changeQeuedImages([]);
+      addGalleryItem(newItemObject).then((message) => {
+        changeResultsMessage(message);
+        changeQeuedImages([]);
+        toggleAddContent();
+      });
       // changeResponse("post complete");
       // const messageFlash = setTimeout(() => {
       //   changeResponse("");

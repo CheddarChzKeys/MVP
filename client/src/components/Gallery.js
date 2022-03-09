@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import AddContentModal from "./AddGalleryContent.js";
+import ImagePopUp from "./ImagePopUp.js";
 
 const Gallery = (props) => {
   const [contentList, changeContentList] = useState([]);
@@ -9,17 +10,39 @@ const Gallery = (props) => {
 
   const [showAddContent, changeAddContent] = useState(false);
 
+  const [popUpImage, changePopUpImage] = useState(null);
+
+  const [showImagePopUp, toggleImagePopUp] = useState(false);
+
+  const [popUpVideo, changePopUpVideo] = useState(null);
+
+  const [oldestGalleryItem, changeOldestGalleryItem] = useState(null);
+
   const toggleAddContent = () => {
     changeAddContent(!showAddContent);
   };
 
-  const fetchGalleryContent = () => {
+  const getGalleryContent = () => {
     axios.get("/getGalleryContent").then((results) => {
       const newContent = results.data;
-      console.log("Gallery fetch results:", results);
+      changeOldestGalleryItem(newContent[newContent.length - 1]._id);
       changeContentList(newContent);
+      changeSelectedItem(newContent[0]);
       return;
     });
+  };
+
+  const getOlderGalleryContent = () => {
+    axios
+      .get("/getOlderGalleryContent", { params: { last: oldestGalleryItem } })
+      .then((results) => {
+        const newContent = results.data;
+        changeOldestGalleryItem(newContent[newContent.length - 1]._id);
+        const newContentList = contentList.slice();
+        newContentList.push(...newContent);
+        changeContentList(newContentList);
+        return;
+      });
   };
 
   const handleItemSelect = (clickedItem) => {
@@ -27,13 +50,22 @@ const Gallery = (props) => {
     return;
   };
 
-  useEffect(() => {
-    fetchGalleryContent();
-  }, []);
+  const imageClick = (item) => {
+    if (item.image) {
+      changePopUpImage(item.image);
+    } else {
+      changePopUpVideo(item.video);
+    }
+    toggleImagePopUp(true);
+  };
 
   useEffect(() => {
-    changeSelectedItem(contentList[0]);
-  }, [contentList]);
+    getGalleryContent();
+  }, []);
+
+  // useEffect(() => {
+  //   changeSelectedItem(contentList[0]);
+  // }, [contentList]);
 
   return (
     <div className="mainComponent">
@@ -42,7 +74,7 @@ const Gallery = (props) => {
           <h1 className="galleryHeader">Gallery</h1>
           <h1
             id="addContentButton"
-            className="galleryHeader"
+            className="galleryHeader pointerHover colorHover"
             onClick={() => toggleAddContent(true)}
           >
             add Content
@@ -69,24 +101,30 @@ const Gallery = (props) => {
                     )}
                     {item.image && (
                       <div className="galleryImageWrapper">
-                        <img
-                          className="galleryImage"
-                          src={item.image}
-                          // onClick={() => imageClick(image)}
-                        ></img>
+                        <img className="galleryImage" src={item.image}></img>
                       </div>
                     )}
                   </div>
                 );
               })}
             </div>
+            <div
+              className="galleryLoadMoreWrapper colorHover pointerHover"
+              onClick={getOlderGalleryContent}
+            >
+              <p className="galleryLoadMore">Load More</p>
+            </div>
           </div>
           {selectedItem && (
             <div className="itemViewComponentWrapper">
-              <div className="itemViewComponent">
+              <div className="itemViewComponent gridBackground">
                 {selectedItem.image && (
-                  <div className="imageViewWrapper">
-                    <img className="viewPortImage" src={selectedItem.image} />
+                  <div className="imageViewWrapper pointerHover">
+                    <img
+                      className="viewPortImage"
+                      onClick={() => imageClick(selectedItem)}
+                      src={selectedItem.image}
+                    />
                   </div>
                 )}
                 {selectedItem.video && (
@@ -97,24 +135,35 @@ const Gallery = (props) => {
                       type="text/html"
                       // width="400"
                       // height="243"
-                      src={`http://www.youtube.com/embed/${selectedItem.video}`}
+                      src={`http://www.youtube.com/embed/${selectedItem.video}?autoplay=1&enablejsapi=1`}
+                      allow="autoplay *"
                       frameBorder="0"
                       allowFullScreen="allowfullscreen"
                       mozallowfullscreen="mozallowfullscreen"
                       msallowfullscreen="msallowfullscreen"
                       oallowfullscreen="oallowfullscreen"
                       webkitallowfullscreen="webkitallowfullscreen"
-                    />
+                    ></iframe>
                   </div>
                 )}
                 <div className="itemDetails">
+                  <p
+                    className="expand pointerHover colorHover"
+                    onClick={() => imageClick(selectedItem)}
+                  >
+                    expand
+                  </p>
                   <p id="source" className="usernameDate">
                     {selectedItem.userName}
                   </p>
-                  <p className="usernameDate">{selectedItem.uploadDate}</p>
-                  <p className="detailsDescription">
-                    {selectedItem.description}
+                  <p id="date" className="detailsDate">
+                    {selectedItem.uploadDate}
                   </p>
+                  {selectedItem.description && (
+                    <p className="detailsDescription">
+                      {selectedItem.description}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -122,8 +171,18 @@ const Gallery = (props) => {
         </div>
         {showAddContent && (
           <AddContentModal
-            fetchGalleryContent={fetchGalleryContent}
+            getGalleryContent={getGalleryContent}
             toggleAddContent={toggleAddContent}
+          />
+        )}
+        {showImagePopUp && (
+          <ImagePopUp
+            popUpImage={popUpImage}
+            popUpVideo={popUpVideo}
+            showImagePopUp={showImagePopUp}
+            toggleImagePopUp={toggleImagePopUp}
+            changePopUpImage={changePopUpImage}
+            changePopUpVideo={changePopUpVideo}
           />
         )}
       </div>
