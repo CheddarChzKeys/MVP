@@ -91,6 +91,9 @@ const getStats = (db) => {
           weeklyStats: allMembersWeeklyStats,
           lifetimeStats: allMembersLifetimeStats,
           date: new Date(),
+        },
+        {
+          upsert: true,
         }
       );
     })
