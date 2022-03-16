@@ -526,7 +526,7 @@ div::-webkit-scrollbar-thumb:hover {
   display: flex;
   position: relative;
   align-content: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   padding: 10px;
   height: 3em;
   background: rgba(70, 69, 69, 0.445);
@@ -546,7 +546,7 @@ div::-webkit-scrollbar-thumb:hover {
 #createMessage {
   display: flex;
   color: #ffffff;
-  flex: 10;
+  flex: 5;
 }
 
 /* #messageSubmitButton {
@@ -635,12 +635,30 @@ aside.emoji-picker-react {
   bottom: 2.5em;
 }
 
+.formDiv {
+  width: 70%;
+  display: flex;
+}
+
+.buttonsWrapper {
+  width: 20%;
+  justify-content: flex-end;
+  display: flex;
+}
+
 .smackButtonWrapper {
   position: relative;
   display: flex;
   align-content: center;
   justify-content: center;
-  flex: 1;
+}
+
+.iconWrapper {
+  border-bottom: 1px solid #f8f9fa00;
+}
+
+.iconWrapper:hover {
+  border-bottom: 1px solid #f8f9fa;
 }
 
 .smackButton {
@@ -650,8 +668,13 @@ aside.emoji-picker-react {
   color: #ffffff;
   font-family: "modernWarfare";
   font-size: 15px;
-  border: none;
-  flex: 1;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+
+.messageIcon {
+  width: 75%;
 }
 
 .smackButton:hover {
