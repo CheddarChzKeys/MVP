@@ -7,7 +7,7 @@ const axios = require("axios").default;
 
 const io = require("socket.io-client");
 
-let socket = io.connect("http://localhost:3000");
+let socket = io();
 let updatedChats = [];
 
 socket.on("output", (data) => {
@@ -247,102 +247,120 @@ function Chatbox({ changeBackground, username }) {
             </div>
             <div id="chatResponse">{submitResponse}, &nbsp;</div>
             <div id="messageSubmit">
-              <form id="createMessage" onSubmit={(e) => handleSubmit(e)}>
-                <input
-                  id="typedMessage"
-                  ref={inputRef}
-                  placeholder="Type your message here..."
-                  value={typedMessage}
-                  onChange={(e) => handleChange(e, changeMessage)}
-                ></input>
-                <input
-                  className="smackButton"
-                  id="messageSubmitButton"
-                  type="submit"
-                  value="Send"
-                ></input>
-              </form>
-              <div className="smackButtonWrapper">
-                <button
-                  className={`smackButton ${
-                    submittedVideo ? "videoSubmitted" : ""
-                  }`}
-                  type="button"
-                  onMouseEnter={addVideoInput}
-                  onMouseLeave={hideVideoInput}
-                >
-                  video
-                </button>
-                {showVideoModal && (
-                  <div
-                    id="videoSubmitDiv"
+              <div className="formDiv">
+                <form id="createMessage" onSubmit={(e) => handleSubmit(e)}>
+                  <input
+                    id="typedMessage"
+                    ref={inputRef}
+                    placeholder="Type your message here..."
+                    value={typedMessage}
+                    onChange={(e) => handleChange(e, changeMessage)}
+                  ></input>
+                  {/* <input
+                    className="smackButton"
+                    id="messageSubmitButton"
+                    type="submit"
+                    value="Send"
+                  ></input> */}
+                </form>
+              </div>
+              <div className="buttonsWrapper">
+                <div className="smackButtonWrapper">
+                  <button
+                    className="smackButton iconWrapper"
+                    // ${
+                    //   submittedVideo ? "videoSubmitted" : ""
+                    // }`}
+                    type="button"
                     onMouseEnter={addVideoInput}
                     onMouseLeave={hideVideoInput}
                   >
-                    <div id="videoInput">
-                      <form
-                        id="videoForm"
-                        onSubmit={(e) => {
-                          e.stopPropagation();
-                          handleVideoSubmit(e);
-                        }}
-                      >
-                        <input
-                          id="ytLinkInput"
-                          type="text"
-                          placeholder="Insert YouTube link..."
-                          value={typedVideoLink}
-                          onChange={(e) =>
-                            handleChange(e, changeTypedVideoLink)
-                          }
-                        ></input>
-                        <input
-                          id="videoSubmit"
-                          type="submit"
-                          value="submit"
-                        ></input>
-                      </form>
+                    <img className="messageIcon" src="./icons/linkIcon.png" />
+                  </button>
+                </div>
+
+                <div className="smackButtonWrapper">
+                  <button
+                    className={`smackButton iconWrapper ${
+                      submittedVideo ? "videoSubmitted" : ""
+                    }`}
+                    type="button"
+                    onMouseEnter={addVideoInput}
+                    onMouseLeave={hideVideoInput}
+                  >
+                    <img className="messageIcon" src="./icons/videoIcon.png" />
+                  </button>
+                  {showVideoModal && (
+                    <div
+                      id="videoSubmitDiv"
+                      onMouseEnter={addVideoInput}
+                      onMouseLeave={hideVideoInput}
+                    >
+                      <div id="videoInput">
+                        <form
+                          id="videoForm"
+                          onSubmit={(e) => {
+                            e.stopPropagation();
+                            handleVideoSubmit(e);
+                          }}
+                        >
+                          <input
+                            id="ytLinkInput"
+                            type="text"
+                            placeholder="Insert YouTube link..."
+                            value={typedVideoLink}
+                            onChange={(e) =>
+                              handleChange(e, changeTypedVideoLink)
+                            }
+                          ></input>
+                          <input
+                            id="videoSubmit"
+                            type="submit"
+                            value="submit"
+                          ></input>
+                        </form>
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
-              <div className="smackButtonWrapper">
-                <button
-                  className="smackButton"
-                  type="button"
-                  onMouseEnter={addGif}
-                  onMouseLeave={hideGif}
-                >
-                  gif
-                </button>
-                {showGifModal && (
-                  <div
-                    id="pickerDiv"
+                  )}
+                </div>
+                <div className="smackButtonWrapper">
+                  <button
+                    className="smackButton iconWrapper"
+                    type="button"
                     onMouseEnter={addGif}
                     onMouseLeave={hideGif}
                   >
-                    <GifPicker id="emojiPicker" onSelected={onGifClick} />
-                  </div>
-                )}
-              </div>
-              <div className="smackButtonWrapper">
-                <button
-                  className="smackButton"
-                  type="button"
-                  onMouseEnter={addEmoji}
-                  onMouseLeave={hideEmoji}
-                >
-                  emoji
-                </button>
-                {showEmojiModal && (
-                  <div
-                    id="pickerDiv"
+                    <img className="messageIcon" src="./icons/gifIcon.png" />
+                  </button>
+                  {showGifModal && (
+                    <div
+                      id="pickerDiv"
+                      onMouseEnter={addGif}
+                      onMouseLeave={hideGif}
+                    >
+                      <GifPicker id="emojiPicker" onSelected={onGifClick} />
+                    </div>
+                  )}
+                </div>
+                <div className="smackButtonWrapper">
+                  <button
+                    className="smackButton iconWrapper"
+                    type="button"
                     onMouseEnter={addEmoji}
                     onMouseLeave={hideEmoji}
                   >
-                    <Picker id="emojiPicker" onEmojiClick={onEmojiClick} />
-                  </div>
-                )}
+                    <img className="messageIcon" src="./icons/emojiIcon.png" />
+                  </button>
+                  {showEmojiModal && (
+                    <div
+                      id="pickerDiv"
+                      onMouseEnter={addEmoji}
+                      onMouseLeave={hideEmoji}
+                    >
+                      <Picker id="emojiPicker" onEmojiClick={onEmojiClick} />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>

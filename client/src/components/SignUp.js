@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 const axios = require("axios").default;
+import "regenerator-runtime/runtime";
 
 const SignUp = ({ toggleSignUp }) => {
   const [typedUsername, changeUsername] = useState("");

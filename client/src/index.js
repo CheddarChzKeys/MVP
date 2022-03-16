@@ -9,6 +9,8 @@ import Gallery from "./components/Gallery.js";
 import Login from "./components/Login.js";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import axios from "axios";
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 
 const App = () => {
   const [isSignedIn, changeSignedIn] = useState(false);

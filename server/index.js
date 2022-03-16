@@ -7,7 +7,7 @@ const getStats = require("./getStats.js");
 const verifyMember = require("./verifyMember.js");
 const getNews = require("./getNews.js");
 
-const PORT = 3000;
+const PORT = 8080;
 const app = express();
 
 const server = require("http").createServer(app);
@@ -20,7 +20,7 @@ const bcrypt = require("bcrypt");
 app.use(express.static(path.join(__dirname, "..", "public")));
 app.use(express.json());
 
-mongo.connect("mongodb://127.0.0.1/warzone", function (err, client) {
+mongo.connect("mongodb://mongo:27017/warzone", function (err, client) {
   if (err) {
     throw err;
   }
