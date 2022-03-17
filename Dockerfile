@@ -11,5 +11,3 @@ COPY . .
 EXPOSE 8080
 
 CMD [ "node", "./server/index.js"]
-
-*ChangeOnCheddarChzKeysBrance
