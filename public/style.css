@@ -1324,3 +1324,40 @@ aside.emoji-picker-react {
   display: flex;
   justify-content: center;
 }
+
+.footer {
+  background-color: white;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  border-top: 1px solid #030303;
+}
+
+.footerGrid {
+  width: 10%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 10px;
+  align-items: center;
+}
+
+.modernWarfareWrap {
+  width: 100%;
+}
+
+.footerLogo {
+  width: 100%;
+}
+
+.footerName {
+  grid-column: 1/-1;
+  display: flex;
+  justify-content: center;
+}
+
+.footerName p {
+  margin-top: 0;
+  display: block;
+  text-align: center;
+}

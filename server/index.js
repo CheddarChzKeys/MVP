@@ -20,7 +20,8 @@ const bcrypt = require("bcrypt");
 app.use(express.static(path.join(__dirname, "..", "public")));
 app.use(express.json());
 
-mongo.connect("mongodb://mongo:27017/warzone", function (err, client) {
+// mongo.connect("mongodb://mongo:27017/warzone", function (err, client) {
+mongo.connect("mongodb://localhost/warzone", function (err, client) {
   if (err) {
     throw err;
   }

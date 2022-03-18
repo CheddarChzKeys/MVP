@@ -7,6 +7,7 @@ import Smackboard from "./components/Smackboard.js";
 import News from "./components/News.js";
 import Gallery from "./components/Gallery.js";
 import Login from "./components/Login.js";
+import Footer from "./components/Footer.js";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import axios from "axios";
 import "core-js/stable";
@@ -94,6 +95,7 @@ const App = () => {
           />
         </Routes>
       </div>
+      <Footer />
     </Router>
   );
 };
