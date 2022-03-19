@@ -167,6 +167,7 @@ html {
   align-items: center;
   width: 100%;
   margin: 0px 0px 40px 0px;
+  min-height: 70vh;
 }
 
 .componentHeader {
@@ -841,9 +842,9 @@ aside.emoji-picker-react {
 /*Login Splash*/
 
 #logoLogin {
+  margin-top: 45.75px;
   display: flex;
   align-items: center;
-  top: 10vh;
   position: relative;
 }
 
@@ -1326,20 +1327,26 @@ aside.emoji-picker-react {
 }
 
 .footer {
+  position: relative;
   background-color: white;
-  height: 100px;
+  height: 10%;
   display: flex;
   justify-content: center;
+  align-items: flex-start;
   gap: 15px;
   border-top: 1px solid #030303;
+
+  padding: 10px;
 }
 
 .footerGrid {
   width: 10%;
+  max-height: 100%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  column-gap: 10px;
-  align-items: center;
+  grid-template-rows: 0.5fr 1fr;
+  column-gap: 1vw;
+  align-items: flex-start;
 }
 
 .modernWarfareWrap {
@@ -1352,12 +1359,12 @@ aside.emoji-picker-react {
 
 .footerName {
   grid-column: 1/-1;
-  display: flex;
-  justify-content: center;
 }
 
 .footerName p {
-  margin-top: 0;
   display: block;
+
+  font-family: "modernWarfare";
   text-align: center;
+  font-size: 0.75vw;
 }
