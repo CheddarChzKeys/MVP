@@ -49,62 +49,64 @@ const Login = ({
   };
 
   return (
-    <div id="logoLogin">
-      <div id="mwLogo">
-        <img src="./Images/mwLogo.png"></img>
-      </div>
-      <div id="loginWrap">
-        {signUpVisible ? (
-          <SignUp toggleSignUp={handleSignUp} />
-        ) : (
-          <div id="loginDiv">
-            <h2>Log In</h2>
-            <form onSubmit={(e) => handleLogin(e)}>
-              <input
-                className="textInput"
-                id="username"
-                placeholder="username"
-                type="text"
-                onChange={(e) => handleChange(e, changeUsername)}
-              ></input>
-              <input
-                className="textInput"
-                id="password"
-                placeholder="password"
-                type="password"
-                value={typedPassword}
-                onChange={(e) => handleChange(e, changePassword)}
-              ></input>
-              <div className="loginResponse"> {loginMessage} &nbsp;</div>
-
-              {isSignedIn ? (
-                <div />
-              ) : (
+    <div className="mainComponent">
+      <div id="logoLogin">
+        <div id="mwLogo">
+          <img src="./Images/mwLogo.png"></img>
+        </div>
+        <div id="loginWrap">
+          {signUpVisible ? (
+            <SignUp toggleSignUp={handleSignUp} />
+          ) : (
+            <div id="loginDiv">
+              <h2>Log In</h2>
+              <form onSubmit={(e) => handleLogin(e)}>
                 <input
-                  className="blueHover"
-                  id="submit"
-                  type="submit"
-                  value="submit"
+                  className="textInput"
+                  id="username"
+                  placeholder="username"
+                  type="text"
+                  onChange={(e) => handleChange(e, changeUsername)}
                 ></input>
+                <input
+                  className="textInput"
+                  id="password"
+                  placeholder="password"
+                  type="password"
+                  value={typedPassword}
+                  onChange={(e) => handleChange(e, changePassword)}
+                ></input>
+                <div className="loginResponse"> {loginMessage} &nbsp;</div>
+
+                {isSignedIn ? (
+                  <div />
+                ) : (
+                  <input
+                    className="blueHover"
+                    id="submit"
+                    type="submit"
+                    value="submit"
+                  ></input>
+                )}
+              </form>
+              {isSignedIn ? (
+                <h3
+                  className="blueHover"
+                  onClick={() => {
+                    toggleSignedIn();
+                    changeMessage("");
+                  }}
+                >
+                  Sign Out
+                </h3>
+              ) : (
+                <h3 className="blueHover" onClick={() => handleSignUp()}>
+                  Enlist
+                </h3>
               )}
-            </form>
-            {isSignedIn ? (
-              <h3
-                className="blueHover"
-                onClick={() => {
-                  toggleSignedIn();
-                  changeMessage("");
-                }}
-              >
-                Sign Out
-              </h3>
-            ) : (
-              <h3 className="blueHover" onClick={() => handleSignUp()}>
-                Enlist
-              </h3>
-            )}
-          </div>
-        )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
