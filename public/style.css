@@ -166,7 +166,7 @@ html {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin: 0px 0px 40px 0px;
+  margin: 0px 0px 1vh 0px;
   min-height: 70vh;
 }
 
@@ -1328,29 +1328,38 @@ aside.emoji-picker-react {
 
 .footer {
   position: relative;
-  background-color: white;
+  background-color: rgba(2, 0, 0, 0);
   height: 10%;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   gap: 15px;
-  border-top: 1px solid #030303;
-
-  padding: 10px;
+  /* border-top: 1px solid #79d9ff; */
 }
 
 .footerGrid {
   width: 10%;
   max-height: 100%;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: 0.5fr 1fr;
-  column-gap: 1vw;
-  align-items: flex-start;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: 1.3fr 1fr;
+  column-gap: 0.75vw;
+  align-items: center;
 }
 
 .modernWarfareWrap {
   width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #05050500;
+}
+
+.footerHover:hover {
+  border-bottom: 1px solid #79d9ff;
+  cursor: pointer;
 }
 
 .footerLogo {
@@ -1359,12 +1368,14 @@ aside.emoji-picker-react {
 
 .footerName {
   grid-column: 1/-1;
+  border-bottom: 1px solid #05050500;
 }
 
 .footerName p {
   display: block;
 
-  font-family: "modernWarfare";
+  font-family: "orbitron";
   text-align: center;
-  font-size: 0.75vw;
+  font-size: 0.8vw;
+  color: #ffffff;
 }
