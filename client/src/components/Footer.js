@@ -4,17 +4,23 @@ const Footer = () => {
   return (
     <div className="footer">
       <div className="footerGrid">
-        <div className="modernWarfareWrap">
-          <img className="footerLogo" src="./icons/playstation-logotype.png" />
+        <div className="modernWarfareWrap footerHover">
+          <img className="footerLogo" src="./icons/wzWhiteLogo.png" />
         </div>
-        <div className="modernWarfareWrap">
-          <img className="footerLogo" src="./icons/xbox.png" />
+        <div className="modernWarfareWrap footerHover">
+          <img
+            className="footerLogo"
+            src="./icons/playstation-logotypeWhite.png"
+          />
         </div>
-        <div className="modernWarfareWrap">
-          <img className="footerLogo" src="./icons/windows.png" />
+        <div className="modernWarfareWrap footerHover">
+          <img className="footerLogo" src="./icons/xboxScaledWhite.png" />
         </div>
-        <div className="footerName">
-          <p>Jerrick Ravelo</p>
+        <div className="modernWarfareWrap footerHover">
+          <img className="footerLogo" src="./icons/windowsScaledWhite.png" />
+        </div>
+        <div className="footerName footerHover">
+          <p>&copy; JERRICK RAVELO</p>
         </div>
       </div>
     </div>

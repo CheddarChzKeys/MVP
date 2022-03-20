@@ -99,24 +99,29 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
 
   app.post("/signUp", async (req, res) => {
     const users = db.collection("users");
-    const username = req.body.username.toLowerCase();
+    const username = req.body.username;
+    const usernameLowerCase = req.body.username.toLowerCase();
     const password = req.body.password;
     const gamerTag = req.body.gamerTag;
     const platform = req.body.platform;
     const hashedPassword = await bcrypt.hash(password, 10);
-    users.findOne({ username: username }, async (err, data) => {
-      if (data) {
-        res.send("Username already taken");
-      } else {
-        await users.insertOne({
-          username,
-          password: hashedPassword,
-          gamerTag,
-          platform,
-        });
-        res.send("New soldier enlisted");
+    users.findOne(
+      { usernameLowerCase: usernameLowerCase },
+      async (err, data) => {
+        if (data) {
+          res.send("Username already taken");
+        } else {
+          await users.insertOne({
+            username,
+            usernameLowerCase,
+            password: hashedPassword,
+            gamerTag,
+            platform,
+          });
+          res.send("New soldier enlisted");
+        }
       }
-    });
+    );
   });
 
   app.post("/login", async (req, res) => {
@@ -124,7 +129,9 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
     const passwordAttempt = req.body.password;
     const users = db.collection("users");
     const refreshTokens = db.collection("refreshTokens");
-    const foundUser = await users.findOne({ username: usernameAttempt });
+    const foundUser = await users.findOne({
+      usernameLowerCase: usernameAttempt,
+    });
     if (!foundUser) {
       res.status(200).json({ message: "Invalid username" });
     } else {

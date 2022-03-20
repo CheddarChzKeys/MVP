@@ -62,6 +62,9 @@ const getStats = (db) => {
             data.wz.all.properties.killsPerGame = parseFloat(
               data.wz.all.properties.killsPerGame.toFixed(2)
             );
+            data.wz.all.properties.distanceTraveled = Math.floor(
+              data.wz.all.properties.distanceTraveled / 5280
+            );
             allMembersWeeklyStats.push(data.wz.all.properties);
           }
         }
