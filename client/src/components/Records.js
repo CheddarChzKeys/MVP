@@ -5,7 +5,6 @@ const axios = require("axios").default;
 class StatsTable extends React.Component {
   constructor(props) {
     super(props);
-    this.unsortedStats = [];
     this.state = {
       fullStats: [],
       weekStats: [],
@@ -32,7 +31,6 @@ class StatsTable extends React.Component {
   getWeeklyStats() {
     axios.get("/getWeekStats").then((results) => {
       console.log("getWeekStats results:", results);
-      this.unsortedStats = results.data.weeklyStats.slice();
       results.data.weeklyStats = results.data.weeklyStats.sort((a, b) =>
         a["kdRatio"] < b["kdRatio"] ? 1 : -1
       );
@@ -73,7 +71,7 @@ class StatsTable extends React.Component {
           <h1 className="componentHeader" id="accoladesHeader">
             Weekly Accolades
           </h1>
-          <Accolades unsortedStats={this.unsortedStats} />
+          <Accolades weekStats={this.state.weekStats} />
         </div>
 
         {/* Stat Tables         */}
