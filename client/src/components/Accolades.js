@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 let accoladeList = [
   { name: "alpha", stat: "kdRatio", description: "Highest KDR" },
@@ -68,7 +68,21 @@ var container = React.createRef();
 
 //Accolades component
 
-function Accolades({ unsortedStats }) {
+function Accolades({ weekStats }) {
+  const sorted = [...weekStats];
+
+  const sortStat = (accolade, stat) => {
+    if (stat === "avgLifeTime") {
+      return sorted.sort((a, b) =>
+        a[accolade.stat] > b[accolade.stat] ? 1 : -1
+      )[0];
+    } else {
+      return sorted.sort((a, b) =>
+        a[accolade.stat] < b[accolade.stat] ? 1 : -1
+      )[0];
+    }
+  };
+
   return (
     <div>
       <div id="arrowsBox">
@@ -100,38 +114,25 @@ function Accolades({ unsortedStats }) {
                   className="accoladeImage"
                   src={"./Images/" + accolade.stat + ".jpeg"}
                 ></img>
-                <div className="accoladeRanks">
-                  <div className="accUsername ranksItem">
-                    {unsortedStats[0]
-                      ? accolade.stat === "avgLifeTime"
-                        ? unsortedStats.sort((a, b) =>
-                            a[accolade.stat] > b[accolade.stat] ? 1 : -1
-                          )[0].username
-                        : unsortedStats.sort((a, b) =>
-                            a[accolade.stat] < b[accolade.stat] ? 1 : -1
-                          )[0].username
-                      : ""}
-                  </div>
-                  <p className="ranksItem">
-                    {unsortedStats[0]
-                      ? accolade.stat === "avgLifeTime"
-                        ? unsortedStats.sort((a, b) =>
-                            a[accolade.stat] > b[accolade.stat] ? 1 : -1
-                          )[0][accolade.stat]
-                        : unsortedStats.sort((a, b) =>
-                            a[accolade.stat] < b[accolade.stat] ? 1 : -1
-                          )[0][accolade.stat]
-                      : ""}
-                  </p>
-                  {unsortedStats[0] ? (
+                {sorted[0] && (
+                  <div className="accoladeRanks">
+                    <div className="accUsername ranksItem">
+                      {sortStat(accolade, accolade.stat).username}
+                    </div>
+                    <p className="ranksItem">
+                      {sortStat(accolade, accolade.stat)[accolade.stat]}
+                    </p>
                     <img
                       className="memberImage ranksItem"
-                      src={"./Images/" + unsortedStats[0].username + ".png"}
+                      src={
+                        "./Images/" +
+                        sortStat(accolade, accolade.stat).username +
+                        ".png"
+                      }
                     ></img>
-                  ) : (
                     <div></div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
               <h2 className="accoladeHeader">{accolade.name}</h2>
               <p>{accolade.description}</p>
