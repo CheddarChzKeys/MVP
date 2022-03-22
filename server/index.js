@@ -3,7 +3,7 @@ const path = require("path");
 const jwt = require("jsonwebtoken");
 
 const API = require("call-of-duty-api")({ platform: "acti" });
-const getStats = require("./getStats.js");
+const getStats = require("./getApiStats.js");
 const verifyMember = require("./verifyMember.js");
 const getNews = require("./getNews.js");
 
@@ -233,9 +233,8 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
     });
   });
 
-  app.get("/getWeekStats", (req, res) => {
-    // res.set('Access-Control-Allow-Origin', '*')
-    let stats = {};
+  app.get("/getDbStats", (req, res) => {
+    let stats;
     const dbGameStats = db.collection("gameStats");
     dbGameStats
       .find()
@@ -245,7 +244,10 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
         if (err) {
           res.send("Error detected: " + err);
         } else {
-          stats = result[0];
+          stats = {
+            weeklyStats: result[0].weeklyStats,
+            lifetimeStats: result[0].lifetimeStats,
+          };
           res.status(200).json(stats);
         }
       });
@@ -325,7 +327,7 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
 
   //fetch real time stats from COD API every 5 minutes and save to database.
   // getStats(db);
-  const updateWeeklyStats = setInterval(() => getStats.getStats(db), 300000);
+  const updateDbStats = setInterval(() => getApiStats.getApiStats(db), 300000);
 
   getNews.getNews(db);
 });

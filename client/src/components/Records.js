@@ -29,7 +29,7 @@ class StatsTable extends React.Component {
   // }
 
   getWeeklyStats() {
-    axios.get("/getWeekStats").then((results) => {
+    axios.get("/getDbStats").then((results) => {
       console.log("getWeekStats results:", results);
       results.data.weeklyStats = results.data.weeklyStats.sort((a, b) =>
         a["kdRatio"] < b["kdRatio"] ? 1 : -1
