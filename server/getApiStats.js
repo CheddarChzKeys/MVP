@@ -40,9 +40,9 @@ const members = [
   // { username: "ﾌoeﾚ#2860330", platform: "acti" },
 ];
 
-const getStats = (db) => {
-  let allMembersWeeklyStats = [];
-  let allMembersLifetimeStats = [];
+const getApiStats = (db) => {
+  const allMembersWeeklyStats = [];
+  const allMembersLifetimeStats = [];
 
   return Promise.all(
     members.map((member) => {
@@ -63,6 +63,7 @@ const getStats = (db) => {
               data.wz.all.properties.killsPerGame.toFixed(2)
             );
             data.wz.all.properties.distanceTraveled = Math.floor(
+              // feet to miles conversion
               data.wz.all.properties.distanceTraveled / 5280
             );
             allMembersWeeklyStats.push(data.wz.all.properties);
@@ -106,5 +107,5 @@ const getStats = (db) => {
 };
 
 module.exports = {
-  getStats: getStats,
+  getApiStats: getApiStats,
 };
