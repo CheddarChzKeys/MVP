@@ -19,7 +19,7 @@ const Footer = () => {
         <div className="modernWarfareWrap footerHover">
           <img className="footerLogo" src="./icons/windowsScaledWhite.png" />
         </div>
-        <div className="footerName footerHover">
+        <div className="footerName">
           <p>&copy; JERRICK RAVELO</p>
         </div>
       </div>

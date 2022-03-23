@@ -74,8 +74,16 @@ function Chatbox({ changeBackground, username }) {
 
   const onGifClick = (gif) => {
     if (userName) {
-      socket.emit("sendGif", [userName, gif]);
+      socket.emit("sendGif", {
+        userName,
+        gif,
+      });
       console.log(gif);
+    } else {
+      changeResponse("Please sign in");
+      const messageFlash = setTimeout(() => {
+        changeResponse("");
+      }, 2500);
     }
   };
 
@@ -85,6 +93,11 @@ function Chatbox({ changeBackground, username }) {
 
   const getDateStamp = (today) => {
     return today.toLocaleString();
+  };
+
+  const parseISOString = (s) => {
+    var b = s.split(/\D+/);
+    return new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6]));
   };
 
   const handleSubmit = (e) => {
@@ -117,12 +130,12 @@ function Chatbox({ changeBackground, username }) {
         if (imageURLs.length < 1) {
           imageURLs = null;
         }
-        socket.emit("sendMessage", [
+        socket.emit("sendMessage", {
           userName,
           typedMessage,
           imageURLs,
           submittedVideo,
-        ]);
+        });
         changeMessage("");
         changeQeuedImages([]);
         changeResponse("post complete");
@@ -131,7 +144,7 @@ function Chatbox({ changeBackground, username }) {
         }, 2500);
       });
     } else {
-      changeResponse("Please sign in to chat");
+      changeResponse("Please sign in");
       const messageFlash = setTimeout(() => {
         changeResponse("");
       }, 2500);
@@ -180,7 +193,7 @@ function Chatbox({ changeBackground, username }) {
     <div className="mainComponent">
       <div id="smackboardComponent">
         <div className="headerWrapper">
-          <h1 className="componentHeader smackNewsHeader">Smack Talk</h1>
+          <h1 className="componentHeader smackNewsHeader">Smackboard</h1>
           <div className="smackNewsHeaderSpacer" />
         </div>
         <div className="smackNewsMain smackMain">
@@ -193,9 +206,13 @@ function Chatbox({ changeBackground, username }) {
                       <div id="chatName">{chat.name}</div>
                       <div id="chatDate">
                         {getDateStamp(new Date()).split(", ")[0] ==
-                        chat.date.split(", ")[0]
-                          ? `Today, ${chat.date.split(", ")[1]}`
-                          : `${chat.date}`}
+                        getDateStamp(parseISOString(chat.date)).split(", ")[0]
+                          ? `Today, ${
+                              getDateStamp(parseISOString(chat.date)).split(
+                                ", "
+                              )[1]
+                            }`
+                          : `${getDateStamp(parseISOString(chat.date))}`}
                       </div>
                     </div>
                     <div className="chatContent">
@@ -205,6 +222,7 @@ function Chatbox({ changeBackground, username }) {
                           className="chatItem"
                           id="chatGif"
                           src={chat.gif.downsized.url}
+                          onClick={() => imageClick(chat.gif.original.url)}
                         ></img>
                       )}
                       {chat.video && (
@@ -243,7 +261,6 @@ function Chatbox({ changeBackground, username }) {
                   </div>
                 );
               })}
-              {/* <div id="chatBottom" ref={chatBottom}></div> */}
             </div>
             <div id="chatResponse">{submitResponse}, &nbsp;</div>
             <div id="messageSubmit">
@@ -256,21 +273,12 @@ function Chatbox({ changeBackground, username }) {
                     value={typedMessage}
                     onChange={(e) => handleChange(e, changeMessage)}
                   ></input>
-                  {/* <input
-                    className="smackButton"
-                    id="messageSubmitButton"
-                    type="submit"
-                    value="Send"
-                  ></input> */}
                 </form>
               </div>
               <div className="buttonsWrapper">
                 <div className="smackButtonWrapper">
                   <button
                     className="smackButton iconWrapper"
-                    // ${
-                    //   submittedVideo ? "videoSubmitted" : ""
-                    // }`}
                     type="button"
                     onMouseEnter={addVideoInput}
                     onMouseLeave={hideVideoInput}
