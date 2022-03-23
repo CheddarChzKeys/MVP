@@ -3,7 +3,7 @@ const path = require("path");
 const jwt = require("jsonwebtoken");
 
 const API = require("call-of-duty-api")({ platform: "acti" });
-const getStats = require("./getApiStats.js");
+const getApiStats = require("./getApiStats.js");
 const verifyMember = require("./verifyMember.js");
 const getNews = require("./getNews.js");
 
@@ -48,12 +48,12 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
       });
 
     socket.on("sendMessage", (message) => {
-      const date = new Date().toLocaleString();
+      const date = new Date();
       chat.insertOne({
-        name: message[0],
-        message: message[1],
-        image: message[2],
-        video: message[3],
+        name: message.userName,
+        message: message.typedMessage,
+        image: message.imageURLs,
+        video: message.submittedVideo,
         date: date,
       });
       chat
@@ -70,10 +70,10 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
 
     socket.on("sendGif", (gifMessage) => {
       console.log("heard sendGif");
-      date = new Date().toLocaleString();
+      const date = new Date();
       chat.insertOne({
-        name: gifMessage[0],
-        gif: gifMessage[1],
+        name: gifMessage.userName,
+        gif: gifMessage.gif,
         date: date,
       });
       chat

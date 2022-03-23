@@ -366,11 +366,7 @@ tr {
 }
 
 .recordsRows:hover {
-  /* background-image: url("./black-tile.png");
-  background-size: 1.6px;
-  background-color: #080000e5; */
   text-shadow: 0px 0px 10px #79d9ff;
-  box-shadow: 0px 2px 3px 0px rgba(82, 219, 243, 0.63);
   color: #79d9ff;
 }
 
@@ -400,7 +396,7 @@ tr {
 }
 
 .smackNewsMain {
-  height: 60vh;
+  height: 80vh;
 }
 
 .smackboardWrapper {
@@ -501,13 +497,13 @@ div::-webkit-scrollbar-thumb:hover {
 }
 
 #chatGif {
-  max-width: 30%;
+  width: 40%;
   padding-top: 2px;
 }
 
 #chatImageWrapper {
   display: grid;
-  grid-template-columns: repeat(3, 30%);
+  grid-template-columns: repeat(2, 1fr);
   /* align-items: left; */
   gap: 1em;
   margin: 1em 0;

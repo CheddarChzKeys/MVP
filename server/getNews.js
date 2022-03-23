@@ -26,9 +26,6 @@ const getNews = (db) => {
         }
       });
       return response;
-    })
-    .then((response) => {
-      console.log("newsAPI Response:", response);
     });
 };
 

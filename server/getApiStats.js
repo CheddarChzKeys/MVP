@@ -8,7 +8,7 @@ const getPlayerInfo = async (gamertag, platform, whichStats) => {
     let loginMessage = await API.loginWithSSO(SSOtoken);
     return getData(gamertag, platform, whichStats);
   } catch (Error) {
-    console.log(Error);
+    // console.log(Error);
   }
 };
 
@@ -65,6 +65,9 @@ const getApiStats = (db) => {
             data.wz.all.properties.distanceTraveled = Math.floor(
               // feet to miles conversion
               data.wz.all.properties.distanceTraveled / 5280
+            );
+            data.wz.all.properties.avgLifeTime = Math.floor(
+              data.wz.all.properties.avgLifeTime
             );
             allMembersWeeklyStats.push(data.wz.all.properties);
           }
