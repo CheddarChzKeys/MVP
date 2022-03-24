@@ -4,16 +4,11 @@ import Records from "./Records.js";
 import Chat from "./Smackboard.js";
 import { Link } from "react-router-dom";
 
-function Nav(props) {
-  const toggleSignedIn = props.toggleSignedIn;
-  const [activeClicked, changeClicked] = useState("signIn");
-
+function Nav({ toggleSignedIn, signedInUser, activeClicked, changeClicked }) {
   return (
-    <div>
+    <div className="gridBackground">
       <Link to="/">
-        <div id="navHeader">
-          <h1 id="headerTag">eastside WARFARE</h1>
-        </div>
+        <p id="headerTag">eastside WARFARE</p>
       </Link>
       <nav className="nav">
         <div className="navMenu">
@@ -23,9 +18,8 @@ function Nav(props) {
                 className={
                   activeClicked == "records" ? "navItemClicked" : "navItem"
                 }
-                onClick={() => changeClicked("records")}
               >
-                records
+                RECORDS
               </div>
             </Link>
           </div>
@@ -35,9 +29,8 @@ function Nav(props) {
                 className={
                   activeClicked == "smackboard" ? "navItemClicked" : "navItem"
                 }
-                onClick={() => changeClicked("smackboard")}
               >
-                smackboard
+                SMACKBOARD
               </div>
             </Link>
           </div>
@@ -47,9 +40,8 @@ function Nav(props) {
                 className={
                   activeClicked === "gallery" ? "navItemClicked" : "navItem"
                 }
-                onClick={() => changeClicked("gallery")}
               >
-                gallery
+                GALLERY
               </div>
             </Link>
           </div>
@@ -59,29 +51,28 @@ function Nav(props) {
                 className={
                   activeClicked === "news" ? "navItemClicked" : "navItem"
                 }
-                onClick={() => changeClicked("news")}
               >
-                news
+                NEWS
               </div>
             </Link>
           </div>
         </div>
         <div className="navWhiteSpace" />
         <div className="userNavMenu">
-          {props.signedInUser ? (
+          {signedInUser ? (
             <>
               <div className="navItemBox">
-                <div className="navItem" id="userLoggedIn">
-                  {props.signedInUser.toLowerCase()}
+                <div className="navItemNoHover" id="noHover">
+                  {signedInUser}
                 </div>
               </div>
               <div className="navItemBox">
                 <div
-                  className="navItem"
+                  className="navItem pointerHover"
                   id="userSignOut"
                   onClick={toggleSignedIn}
                 >
-                  sign out
+                  SIGN OUT
                 </div>
               </div>
             </>
@@ -95,9 +86,8 @@ function Nav(props) {
                       activeClicked == "signIn" ? "navItemClicked" : "navItem"
                     }
                     id="navSignIn"
-                    onClick={() => changeClicked("signIn")}
                   >
-                    sign in
+                    SIGN IN
                   </div>
                 </Link>
               </div>

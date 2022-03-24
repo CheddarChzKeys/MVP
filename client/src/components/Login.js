@@ -5,6 +5,7 @@ import SignUp from "./SignUp.js";
 const axios = require("axios").default;
 
 const Login = ({
+  changeClicked,
   changeBackground,
   changeSignedInUser,
   toggleSignedIn,
@@ -15,6 +16,7 @@ const Login = ({
   const [loginMessage, changeMessage] = useState(" ");
   const [signUpVisible, toggleSignUp] = useState(false);
 
+  changeClicked("signIn");
   changeBackground("../Backgrounds/reaper.jpg");
 
   const navigate = useNavigate();

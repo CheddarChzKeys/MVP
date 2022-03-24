@@ -1,14 +1,12 @@
-const credents = require("../hidden/UPW.js");
 const API = require("call-of-duty-api")({ platform: "acti" });
-const SSOtoken =
-  "NjgyNzg2MDk4MzAyNDcwODAxODoxNjM2Njc0NjkyNTk0OmE0OTlhMWI1ZTUwMDliZTE5NjBmMWFiMjU3OWM2NWQ5";
+const SSOtoken = require("../hidden/ssoToken.js");
 
 const getPlayerInfo = async (gamertag, platform, whichStats) => {
   try {
-    let loginMessage = await API.loginWithSSO(SSOtoken);
+    let loginMessage = await API.loginWithSSO(SSOtoken.token);
     return getData(gamertag, platform, whichStats);
   } catch (Error) {
-    // console.log(Error);
+    console.log(Error);
   }
 };
 

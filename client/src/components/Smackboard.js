@@ -15,7 +15,10 @@ socket.on("output", (data) => {
   console.log("updatedChats: ", updatedChats);
 });
 
-function Chatbox({ changeBackground, username }) {
+function Chatbox({ changeClicked, changeBackground, username }) {
+  changeClicked("smackboard");
+  changeBackground("./Backgrounds/season1.jpg");
+
   const [chats, updateChats] = useState([]);
   const [typedMessage, changeMessage] = useState("");
   const [typedVideoLink, changeTypedVideoLink] = useState("");
@@ -35,8 +38,6 @@ function Chatbox({ changeBackground, username }) {
   const inputRef = useRef(null);
   const chatBoxRef = useRef();
   const didMountRef = useRef(false);
-
-  changeBackground("../Backgrounds/season1.jpg");
 
   const addVideoInput = () => {
     toggleVideoModal(true);

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const News = () => {
+const News = ({ changeClicked }) => {
+  changeClicked("news");
+
   const [articles, updateArticles] = useState([]);
   const [highlightArticle, toggleHighlightArticle] = useState(null);
   const [oldestArticle, changeOldestArticle] = useState(null);

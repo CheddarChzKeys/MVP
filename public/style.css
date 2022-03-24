@@ -37,16 +37,20 @@ html {
 
 /* Navigation Bar*/
 
+.gridBackground {
+  background-image: url("./black-tile.png");
+  background-size: 1.5px;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
 #headerTag {
-  font-family: "modernWarfare";
-  /* text-decoration: underline; */
-  position: absolute;
-  top: 5px;
-  font-size: 45px;
-  margin: 40px auto;
-  color: rgba(255, 255, 255, 0.514);
+  display: inline-block;
+  margin: 2.2vh 0 0 0;
+
+  color: #ffffff;
   border-bottom: 1px solid #79d9ff;
-  white-space: nowrap;
+  font-family: "modernWarfare";
+  font-size: 3vw;
 }
 
 .generalHover:hover {
@@ -62,51 +66,45 @@ html {
   color: #79d9ff;
 }
 
-.gridBackground {
-  background-image: url("./black-tile.png");
-  background-size: 1.5px;
-  background-color: rgba(0, 0, 0, 0.4);
-}
-
 .nav {
   position: relative;
-  width: auto;
-  padding: 0% 10%;
-  margin: 0;
-  background-image: url("./black-tile.png");
-  background-size: 1.5px;
   display: flex;
-  background-color: rgba(0, 0, 0, 0.4);
-  height: 140px;
-  overflow: hidden;
+  height: 25%;
   z-index: 1;
+
+  padding: 0% 10%;
 }
 
 .navMenu {
+  position: relative;
   display: flex;
   flex: 2;
-  position: relative;
-  /* margin: 88px 2px 0px 2px;
-  padding: 8px 10px 10px 10px; */
 }
 
 .navItem,
+.navItemNoHover,
 .navItemClicked {
+  display: flex;
   flex: 1;
   font-family: "leagueGothicCondensed";
   font-variant: small-caps;
-  font-size: 24px;
-  top: 7px;
-  text-align: center;
+  font-size: 1.2vw;
+  justify-content: center;
   align-items: center;
-  width: 145px;
-  /* border: 1px solid white; */
-  color: rgba(255, 255, 255, 0.849);
-  transition: text-shadow 1s, border-top 1s box-shadow 3s, color 1.5s;
-  margin: 88px 2px 0px 2px;
-  padding: 8px 10px 10px 10px;
+  color: rgba(151, 147, 147);
+  transition: text-shadow 1s, border-top 1s, box-shadow 3s, color 1s;
+  margin: 7px 2px 7px 2px;
 }
 
+.navItem:hover,
+.navItemClicked {
+  color: #ffffff;
+}
+
+#noHover {
+  color: #ffffff;
+  cursor: default;
+}
 .navItemBox a {
   text-decoration: none;
   display: flex;
@@ -1344,13 +1342,43 @@ aside.emoji-picker-react {
 }
 
 .modernWarfareWrap {
+  position: relative;
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-bottom: 1px solid #05050500;
+  /* transition: text-shadow 1s, border-top 1s box-shadow 3s, color 1.5s; */
+  /* border-bottom: 1px solid #05050500; */
+}
+
+.modernWarfareWrap:after {
+  width: 100%;
+  content: "";
+  height: 1px;
+  position: absolute;
+  background-image: linear-gradient(
+    to right,
+    rgba(151, 205, 225, 0.5),
+    #79d9ff 20%,
+    #79d9ff 80%,
+    rgba(151, 205, 225, 0.5)
+  );
+  transition: all ease 0.5s;
+  transform: scaleX(0);
+  bottom: -1px;
+  left: 0;
+}
+
+.modernWarfareWrap:hover:after {
+  -webkit-transition: all ease 0.5s;
+  -moz-transition: all ease 0.5s;
+  -ms-transition: all ease 0.5s;
+  -o-transition: all ease 0.5s;
+  transition: all ease 0.5s;
+  transform: scaleX(1);
+  box-shadow: 0px 0px 10px;
 }
 
 .footerHover:hover {

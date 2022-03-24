@@ -10,6 +10,7 @@ class StatsTable extends React.Component {
       weekStats: [],
       sort: null,
     };
+    this.props.changeClicked("records");
   }
 
   componentDidMount() {
