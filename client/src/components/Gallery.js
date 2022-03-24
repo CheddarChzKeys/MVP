@@ -3,7 +3,9 @@ import axios from "axios";
 import AddContentModal from "./AddGalleryContent.js";
 import ImagePopUp from "./ImagePopUp.js";
 
-const Gallery = (props) => {
+const Gallery = ({ signedInUser, changeClicked }) => {
+  changeClicked("gallery");
+
   const [contentList, changeContentList] = useState([]);
 
   const [selectedItem, changeSelectedItem] = useState(null);
@@ -171,7 +173,7 @@ const Gallery = (props) => {
         </div>
         {showAddContent && (
           <AddContentModal
-            signedInUser={props.signedInUser}
+            signedInUser={signedInUser}
             getGalleryContent={getGalleryContent}
             toggleAddContent={toggleAddContent}
           />

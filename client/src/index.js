@@ -16,6 +16,7 @@ import "regenerator-runtime/runtime";
 const App = () => {
   const [isSignedIn, changeSignedIn] = useState(false);
   const [signedInUser, changeSignedInUser] = useState(null);
+  const [activeClicked, changeClicked] = useState(null);
 
   const toggleSignedIn = () => {
     changeSignedIn(!isSignedIn);
@@ -62,6 +63,8 @@ const App = () => {
           isSignedIn={isSignedIn}
           signedInUser={signedInUser}
           toggleSignedIn={toggleSignedIn}
+          activeClicked={activeClicked}
+          changeClicked={changeClicked}
         />
         <Routes>
           <Route
@@ -72,12 +75,18 @@ const App = () => {
                 toggleSignedIn={toggleSignedIn}
                 changeSignedInUser={changeSignedInUser}
                 changeBackground={changeBackgroundImage}
+                changeClicked={changeClicked}
               />
             }
           />
           <Route
             path="/records"
-            element={<Records changeBackground={changeBackgroundImage} />}
+            element={
+              <Records
+                changeBackground={changeBackgroundImage}
+                changeClicked={changeClicked}
+              />
+            }
           />
           <Route
             path="/smackboard"
@@ -85,13 +94,22 @@ const App = () => {
               <Smackboard
                 changeBackground={changeBackgroundImage}
                 username={signedInUser}
+                changeClicked={changeClicked}
               />
             }
           />
-          <Route path="/news" element={<News />} />
+          <Route
+            path="/news"
+            element={<News changeClicked={changeClicked} />}
+          />
           <Route
             path="/gallery"
-            element={<Gallery signedInUser={signedInUser} />}
+            element={
+              <Gallery
+                signedInUser={signedInUser}
+                changeClicked={changeClicked}
+              />
+            }
           />
         </Routes>
       </div>

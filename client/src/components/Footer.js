@@ -4,20 +4,37 @@ const Footer = () => {
   return (
     <div className="footer">
       <div className="footerGrid">
-        <div className="modernWarfareWrap footerHover">
-          <img className="footerLogo" src="./icons/wzWhiteLogo.png" />
+        <div className="modernWarfareWrap">
+          <a href="https://www.callofduty.com/warzone" target="_blank">
+            <img className="footerLogo" src="./icons/wzWhiteLogo.png" />
+          </a>
         </div>
-        <div className="modernWarfareWrap footerHover">
-          <img
-            className="footerLogo"
-            src="./icons/playstation-logotypeWhite.png"
-          />
+        <div className="modernWarfareWrap">
+          <a
+            href="https://store.playstation.com/en-us/product/UP0002-CUSA08829_00-CODWARZONE000001"
+            target="_blank"
+          >
+            <img
+              className="footerLogo"
+              src="./icons/playstation-logotypeWhite.png"
+            />
+          </a>
         </div>
-        <div className="modernWarfareWrap footerHover">
-          <img className="footerLogo" src="./icons/xboxScaledWhite.png" />
+        <div className="modernWarfareWrap">
+          <a
+            href="https://www.xbox.com/en-US/games/call-of-duty-warzone"
+            target="_blank"
+          >
+            <img className="footerLogo" src="./icons/xboxScaledWhite.png" />
+          </a>
         </div>
-        <div className="modernWarfareWrap footerHover">
-          <img className="footerLogo" src="./icons/windowsScaledWhite.png" />
+        <div className="modernWarfareWrap">
+          <a
+            href="https://us.shop.battle.net/en-us/product/call-of-duty-warzone"
+            target="_blank"
+          >
+            <img className="footerLogo" src="./icons/windowsScaledWhite.png" />
+          </a>
         </div>
         <div className="footerName">
           <p>&copy; JERRICK RAVELO</p>
