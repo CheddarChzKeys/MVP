@@ -52,7 +52,11 @@ function ImagePopUp(props) {
     <div className="addBackdrop" onClick={onClose}>
       <div className="popUp">
         <div className="fullImageWrapper" onClick={(e) => e.stopPropagation()}>
-          <div className="fullImageInner">
+          <div
+            className={
+              props.popUpImage ? "inner fullImageInner" : "inner fullVideoInner"
+            }
+          >
             <div className="buttonWrapper">
               <button
                 className="closeButton pointerHover"
