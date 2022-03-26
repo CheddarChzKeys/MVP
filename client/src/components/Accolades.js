@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Carousel from "react-elastic-carousel";
 
 let accoladeList = [
   { name: "alpha", stat: "kdRatio", description: "Highest KDR" },
@@ -85,7 +86,7 @@ function Accolades({ weekStats }) {
 
   return (
     <div>
-      <div id="arrowsBox">
+      {/* <div id="arrowsBox">
         <div className="arrows">
           <img
             id="arrowsBack"
@@ -104,8 +105,9 @@ function Accolades({ weekStats }) {
             }
           ></img>
         </div>
-      </div>
-      <div id="accoladesBox" ref={container}>
+      </div> */}
+      {/* <div id="accoladesBox" ref={container}> */}
+      <Carousel itemsToShow={4}>
         {accoladeList.map((accolade) => {
           return (
             <div className="accolade">
@@ -115,7 +117,7 @@ function Accolades({ weekStats }) {
                   src={"./Images/" + accolade.stat + ".jpeg"}
                 ></img>
                 {sorted[0] && (
-                  <div className="accoladeRanks">
+                  <div className="accoladeRanks gridBackground">
                     <div className="accUsername ranksItem">
                       {sortStat(accolade, accolade.stat).username}
                     </div>
@@ -135,11 +137,12 @@ function Accolades({ weekStats }) {
                 )}
               </div>
               <h2 className="accoladeHeader">{accolade.name}</h2>
-              <p>{accolade.description}</p>
+              <p className="accDescription">{accolade.description}</p>
             </div>
           );
         })}
-      </div>
+      </Carousel>
+      {/* </div> */}
     </div>
   );
 }

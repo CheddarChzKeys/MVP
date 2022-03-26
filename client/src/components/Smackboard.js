@@ -343,7 +343,7 @@ function Chatbox({ changeClicked, changeBackground, username }) {
                   </button>
                   {showGifModal && (
                     <div
-                      id="pickerDiv"
+                      id="gifPicker"
                       onMouseEnter={addGif}
                       onMouseLeave={hideGif}
                     >

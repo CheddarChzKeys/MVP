@@ -35,6 +35,19 @@ html {
   transition-delay: 0;
 }
 
+.generalHover:hover {
+  border: 1px solid #79d9ff;
+  cursor: pointer;
+}
+
+.pointerHover:hover {
+  cursor: pointer;
+}
+
+.colorHover:hover {
+  color: #79d9ff;
+}
+
 /* Navigation Bar*/
 
 .gridBackground {
@@ -51,19 +64,6 @@ html {
   border-bottom: 1px solid #79d9ff;
   font-family: "modernWarfare";
   font-size: 3vw;
-}
-
-.generalHover:hover {
-  border: 1px solid #79d9ff;
-  cursor: pointer;
-}
-
-.pointerHover:hover {
-  cursor: pointer;
-}
-
-.colorHover:hover {
-  color: #79d9ff;
 }
 
 .nav {
@@ -181,7 +181,6 @@ html {
 .componentBox {
   position: relative;
   width: 80%;
-  min-width: 1000px;
 }
 /*Accolades in Records Section*/
 
@@ -190,16 +189,11 @@ html {
   /* text-decoration: underline; */
   position: relative;
   /* top: 5px; */
-  font-size: 25px;
+  font-size: 2.5vw;
   color: rgb(255, 255, 255);
   border-bottom: 1px solid #79d9ff;
   white-space: nowrap;
   margin-bottom: 0;
-}
-
-#arrowsBox {
-  display: flex;
-  justify-content: space-between;
 }
 
 #accoladesBox {
@@ -214,10 +208,9 @@ html {
 }
 
 .accolade {
-  /* width: 20%; */
+  width: 100%;
   color: azure;
   text-align: center;
-  flex: 0 0 25%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -226,6 +219,40 @@ html {
 .accoladeWrapper {
   position: relative;
   width: 92%;
+}
+
+.rec.rec-carousel {
+  margin-top: 15px;
+}
+
+.rec.rec-arrow,
+.rec.rec-arrow:focus,
+.rec.rec-arrow:focus:enabled {
+  border-radius: 0;
+  color: #ffffff;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.rec.rec-arrow:hover,
+.rec.rec-arrow:hover:enabled {
+  background-color: #79d9ff;
+}
+
+.rec.rec-dot {
+  background-color: #ffffff;
+  box-shadow: none;
+  width: 0.75vw;
+  height: 0.75vw;
+}
+
+.rec.rec-dot:hover,
+.rec.rec-dot:focus {
+  box-shadow: none;
+}
+
+.rec.rec-dot_active {
+  background-color: #79d9ff;
+  box-shadow: none;
 }
 
 .accoladeImage {
@@ -239,15 +266,12 @@ html {
   left: 0;
   height: 100%;
   width: 100%;
-  background: rgba(0, 2, 0, 0.644);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
   opacity: 0;
   transition: opacity 0.3s;
-  background-image: url("./black-tile.png");
-  background-size: 1.5px;
 }
 
 .accoladeRanks:hover {
@@ -266,7 +290,7 @@ html {
 
 .accoladeRanks p {
   font-family: "lcd";
-  font-size: 18pt;
+  font-size: 1.8vw;
   color: #79d9ff;
   text-shadow: 0px 0px 10px #79d9ff;
   margin-top: 0;
@@ -280,8 +304,8 @@ html {
 
 .accUsername {
   padding-bottom: 0px;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: 20pt;
+  font-family: "orbitron";
+  font-size: 2vw;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -289,21 +313,25 @@ html {
 
 .accoladeHeader {
   font-family: "modernWarfare";
-  font-size: 14px;
+  font-size: 1vw;
   text-shadow: 0px 0px 10px #79d9ff;
   color: #79d9ff;
 }
 
+.accDescription {
+  font-size: 1.2vw;
+}
 /*Rankings Component & Table*/
 
 #rankings {
   width: 100%;
   color: white;
-  border-spacing: 0em 0.5em;
+  border-spacing: 0 1vw;
   text-align: left;
   font-size: 1rem;
   overflow: hidden;
   cursor: crosshair;
+  padding-left: 2vw;
 }
 
 th {
@@ -314,9 +342,8 @@ th {
   box-shadow: 0px;
   font-family: "leagueGothicCondensed";
   font-stretch: semi-expanded;
-  font-size: 1.4rem;
-  height: 1em;
-  line-height: 1em;
+  font-size: 1.5vw;
+  height: 4vh;
 }
 
 th:hover {
@@ -325,18 +352,20 @@ th:hover {
 }
 
 tr {
-  height: 2em;
-  line-height: 2.5em;
+  height: 4vh;
+  line-height: 3;
   vertical-align: center;
-  border-top: 1px solid rgba(0, 2, 0, 0.055);
   font-family: "Montserrat", Arial, sans-serif;
-  font-size: 1.1rem;
+  font-size: 1.5vw;
 }
 
 .position {
-  padding-left: 12px;
-  width: 80px;
+  width: 5vw;
   text-align: left;
+}
+
+.gamerTag {
+  width: 15vw;
 }
 
 .KDR,
@@ -585,7 +614,7 @@ div::-webkit-scrollbar-thumb:hover {
   color: #79d9ff;
 }
 
-.EXKLM {
+.sc-htoDjs {
   position: absolute !important;
   bottom: 2.5em;
   right: 0;
@@ -709,13 +738,11 @@ aside.emoji-picker-react {
 
 .bannerWrapper {
   flex: 1;
-  display: flex;
   position: relative;
   cursor: pointer;
 }
 
 .bannerImage {
-  height: 100%;
   background-image: url("./black-tile.png");
   background-size: 1.5px;
 }
@@ -725,7 +752,6 @@ aside.emoji-picker-react {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
   background-color: rgba(0, 0, 0, 0.788);
   background-image: url("./black-tile.png");
   background-size: 1.5px;
@@ -745,7 +771,6 @@ aside.emoji-picker-react {
 
 .maskImage {
   width: 100%;
-  height: 100%;
 }
 
 /*Full Image Pop Up*/
@@ -794,16 +819,25 @@ aside.emoji-picker-react {
   justify-content: center;
 }
 
-.fullImageInner {
+.inner {
   /* max-width: 10%; */
   /* min-width: 90%;
   max- */
+  display: flex;
+  justify-content: center;
   width: 100%;
-  max-height: 100%;
   text-align: center;
 
   position: relative;
+}
+
+.fullImageInner {
+  min-height: 75vh;
+}
+
+.fullVideoInner {
   padding-top: 56.25%;
+  max-height: 100%;
 }
 
 .ytPlayer {
@@ -811,15 +845,8 @@ aside.emoji-picker-react {
 }
 
 .fullImage {
-  width: 100%;
-  height: auto;
-
-  position: absolute;
-
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  width: auto;
+  height: 100%;
 }
 
 /*Dropzone*/

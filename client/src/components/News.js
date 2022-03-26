@@ -72,7 +72,7 @@ const News = ({ changeClicked }) => {
             {articles.map((article) => {
               const articleNumber = counter;
               return (
-                <a className="articleLink" href={article.url}>
+                <a className="articleLink" href={article.url} target="_blank">
                   <div
                     key={article._id}
                     className="article"

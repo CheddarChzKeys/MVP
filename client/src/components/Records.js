@@ -14,22 +14,11 @@ class StatsTable extends React.Component {
   }
 
   componentDidMount() {
-    this.getWeeklyStats();
+    this.getDbStats();
     this.props.changeBackground("./Backgrounds/season6.jpg");
   }
 
-  // getStats() {
-  //   axios.get("/getStats").then((results) => {
-  //     results.data = results.data.sort((a, b) =>
-  //       a["kdRatio"] < b["kdRatio"] ? 1 : -1
-  //     );
-  //     this.setState({
-  //       fullStats: results.data,
-  //     });
-  //   });
-  // }
-
-  getWeeklyStats() {
+  getDbStats() {
     axios.get("/getDbStats").then((results) => {
       console.log("getWeekStats results:", results);
       results.data.weeklyStats = results.data.weeklyStats.sort((a, b) =>
