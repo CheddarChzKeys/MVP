@@ -9,7 +9,7 @@ const baseStyle = {
   alignItems: "center",
   padding: "20px",
   borderWidth: 2,
-  margin: "1em 0",
+  margin: "1em 0 0 0",
   borderStyle: "solid",
   backgroundColor: "rgba(70, 69, 69, 0.445)",
   // color: "#bdbdbd",
