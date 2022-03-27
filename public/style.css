@@ -738,13 +738,35 @@ aside.emoji-picker-react {
 
 .bannerWrapper {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2%;
+
   position: relative;
   cursor: pointer;
+  height: 100%;
 }
 
-.bannerImage {
+.bannerImageWrapper {
+  position: relative;
+}
+
+#bannerImageWrapper1 {
+  flex: 2;
+  display: flex;
+  overflow-y: hidden;
+}
+
+#bannerImageWrapper2 {
+  flex: 1;
+}
+
+.smackBannerImage {
   background-image: url("./black-tile.png");
   background-size: 1.5px;
+  width: 100%;
+  min-height: 100%;
 }
 
 .bannerMask {
@@ -752,6 +774,7 @@ aside.emoji-picker-react {
   top: 0;
   left: 0;
   width: 100%;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.788);
   background-image: url("./black-tile.png");
   background-size: 1.5px;
@@ -765,12 +788,12 @@ aside.emoji-picker-react {
 }
 
 .maskImageWrapper {
-  width: 60%;
-  height: auto;
+  width: 100%;
 }
 
 .maskImage {
   width: 100%;
+  height: 100%;
 }
 
 /*Full Image Pop Up*/

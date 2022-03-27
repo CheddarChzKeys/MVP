@@ -372,29 +372,43 @@ function Chatbox({ changeClicked, changeBackground, username }) {
                 </div>
               </div>
             </div>
+            <DropzoneComponent
+              changeQeuedImages={changeQeuedImages}
+              previewImages={previewImages}
+              changePreviewImages={changePreviewImages}
+            />
           </div>
           <div className="bannerWrapper">
-            <img
-              className="bannerImage"
-              src="./Images/wzDiscordDraft1.png"
-            ></img>
-            <a href="https://discord.gg/2X6Y45Zt">
-              <div className="bannerMask">
-                {/* <div className="maskImageWrapper"> */}
+            <div id="bannerImageWrapper1" className="bannerImageWrapper">
+              <img
+                className="smackBannerImage"
+                src="./Images/wzDiscordDraft1.png"
+              ></img>
+              <a href="https://discord.gg/2X6Y45Zt" target="_blank">
+                <div className="bannerMask">
+                  <div className="maskImageWrapper">
+                    <img
+                      className="maskImage"
+                      src="./Images/wzDiscordMask.png"
+                    ></img>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div id="bannerImageWrapper2" className="bannerImageWrapper">
+              <a
+                href="https://www.npmjs.com/package/call-of-duty-api"
+                target="_blank"
+              >
                 <img
-                  className="maskImage"
-                  src="./Images/wzDiscordMask.png"
+                  className="smackBannerImage"
+                  src="./Images/cod_Api_Banner.png"
                 ></img>
-                {/* </div> */}
-              </div>
-            </a>
+              </a>
+            </div>
           </div>
         </div>
-        <DropzoneComponent
-          changeQeuedImages={changeQeuedImages}
-          previewImages={previewImages}
-          changePreviewImages={changePreviewImages}
-        />
+
         <ImagePopUp
           popUpImage={popUpImage}
           popUpVideo={popUpVideo}
