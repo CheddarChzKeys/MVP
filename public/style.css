@@ -165,7 +165,6 @@ html {
   align-items: center;
   width: 100%;
   margin: 0px 0px 1vh 0px;
-  min-height: 70vh;
 }
 
 .componentHeader {
@@ -406,11 +405,11 @@ tr {
 .headerWrapper {
   display: flex;
   justify-content: space-between;
+  gap: 1%;
 }
 
 .smackNewsHeader {
   flex: 4;
-  margin-right: 10px;
 }
 
 .smackNewsHeaderSpacer {
@@ -420,6 +419,7 @@ tr {
 .smackNewsMain {
   display: flex;
   justify-content: space-between;
+  gap: 1%;
 }
 
 .smackNewsMain {
@@ -431,7 +431,6 @@ tr {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  margin-right: 10px;
 }
 
 #chatbox {
@@ -512,11 +511,17 @@ div::-webkit-scrollbar-thumb:hover {
   padding-top: 2px;
 }
 
+.ytOutterWrapper {
+  width: 50%;
+}
+
 #ytPlayerWrapper {
   display: inline-block;
   overflow: visible;
   position: relative;
   margin: 1em 0;
+  padding-top: 56.25%;
+  width: 100%;
 }
 
 #chatImg {
@@ -886,7 +891,7 @@ aside.emoji-picker-react {
 /*Login Splash*/
 
 #logoLogin {
-  margin-top: 45.75px;
+  margin: 10vh 0 15vh 0;
   display: flex;
   align-items: center;
   position: relative;
