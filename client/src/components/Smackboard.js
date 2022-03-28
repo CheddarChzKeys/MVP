@@ -227,21 +227,23 @@ function Chatbox({ changeClicked, changeBackground, username }) {
                         ></img>
                       )}
                       {chat.video && (
-                        <div id="ytPlayerWrapper" className="chatItem">
-                          <iframe
-                            className="ytPlayer"
-                            id="player"
-                            type="text/html"
-                            width="400"
-                            height="243"
-                            src={`http://www.youtube.com/embed/${chat.video}`}
-                            frameBorder="0"
-                            allowFullScreen="allowfullscreen"
-                            mozallowfullscreen="mozallowfullscreen"
-                            msallowfullscreen="msallowfullscreen"
-                            oallowfullscreen="oallowfullscreen"
-                            webkitallowfullscreen="webkitallowfullscreen"
-                          ></iframe>
+                        <div className="ytOutterWrapper">
+                          <div id="ytPlayerWrapper" className="chatItem">
+                            <iframe
+                              className="ytPlayer"
+                              id="galleryYTPlayer"
+                              type="text/html"
+                              // width="400"
+                              // height="243"
+                              src={`http://www.youtube.com/embed/${chat.video}`}
+                              frameBorder="0"
+                              allowFullScreen="allowfullscreen"
+                              mozallowfullscreen="mozallowfullscreen"
+                              msallowfullscreen="msallowfullscreen"
+                              oallowfullscreen="oallowfullscreen"
+                              webkitallowfullscreen="webkitallowfullscreen"
+                            ></iframe>
+                          </div>
                         </div>
                       )}
                       {chat.image && (
