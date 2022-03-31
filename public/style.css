@@ -230,6 +230,7 @@ html {
   border-radius: 0;
   color: #ffffff;
   background-color: rgba(0, 0, 0, 0);
+  align-self: start;
 }
 
 .rec.rec-arrow:hover,
@@ -305,6 +306,15 @@ html {
   padding-bottom: 0px;
   font-family: "orbitron";
   font-size: 2vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.accUsernameSmall {
+  padding-bottom: 0px;
+  font-family: "orbitron";
+  font-size: 1.5vw;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -578,10 +588,6 @@ div::-webkit-scrollbar-thumb:hover {
   flex: 5;
 }
 
-/* #messageSubmitButton {
-  text-align: right;
-} */
-
 #videoInput {
   position: absolute;
   right: 0;
@@ -665,7 +671,7 @@ aside.emoji-picker-react {
 }
 
 .formDiv {
-  width: 70%;
+  width: 55%;
   display: flex;
 }
 
@@ -688,6 +694,10 @@ aside.emoji-picker-react {
 
 .iconWrapper:hover {
   border-bottom: 1px solid #f8f9fa;
+}
+
+.iconWrapperBlue {
+  border-bottom: 1px solid #79d9ff;
 }
 
 .smackButton {
@@ -713,8 +723,7 @@ aside.emoji-picker-react {
 }
 
 .videoSubmitted {
-  text-shadow: 0px 0px 10px #79d9ff;
-  color: #79d9ff;
+  border-bottom: 2px solid #79d9ff;
 }
 
 #chatResponse {
@@ -891,6 +900,7 @@ aside.emoji-picker-react {
 /*Login Splash*/
 
 #logoLogin {
+  width: 60%;
   margin: 10vh 0 15vh 0;
   display: flex;
   align-items: center;
@@ -904,7 +914,7 @@ aside.emoji-picker-react {
 }
 
 #mwLogo img {
-  max-width: 45vw;
+  width: 80%;
 }
 
 #loginWrap {
@@ -918,7 +928,7 @@ aside.emoji-picker-react {
   flex-direction: column;
   justify-content: center;
   position: relative;
-  width: 20vw;
+  width: 60%;
   min-height: 28rem;
   padding: 0 2em;
   color: #ffffff;
@@ -1006,7 +1016,6 @@ aside.emoji-picker-react {
 
 .articleListWrapper {
   flex: 4;
-  margin-right: 10px;
   overflow-y: scroll;
 }
 
@@ -1128,7 +1137,7 @@ aside.emoji-picker-react {
 .galleryMain {
   display: flex;
   justify-content: space-between;
-  gap: 1vw;
+  gap: 2%;
 
   margin-top: 15px;
 }
@@ -1457,4 +1466,10 @@ aside.emoji-picker-react {
   text-align: center;
   font-size: 0.8vw;
   color: #ffffff;
+}
+
+/* spinner */
+
+.css-1qecip4 {
+  top: 0.1px !important;
 }

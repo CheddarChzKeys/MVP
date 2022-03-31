@@ -2,9 +2,12 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import AddContentModal from "./AddGalleryContent.js";
 import ImagePopUp from "./ImagePopUp.js";
+import { css } from "@emotion/react";
+import MoonLoader from "react-spinners/MoonLoader";
 
-const Gallery = ({ signedInUser, changeClicked }) => {
+const Gallery = ({ signedInUser, changeClicked, changeBackground }) => {
   changeClicked("gallery");
+  changeBackground("./Backgrounds/reaper.png");
 
   const [contentList, changeContentList] = useState([]);
 
@@ -20,6 +23,16 @@ const Gallery = ({ signedInUser, changeClicked }) => {
 
   const [oldestGalleryItem, changeOldestGalleryItem] = useState(null);
 
+  const [loading, changeLoading] = useState(true);
+
+  const override = css`
+    flex: 1;
+    display: flex;
+    justify-content: flex;
+    align-items: center;
+    margin: 20vh auto;
+  `;
+
   const toggleAddContent = () => {
     changeAddContent(!showAddContent);
   };
@@ -30,6 +43,7 @@ const Gallery = ({ signedInUser, changeClicked }) => {
       changeOldestGalleryItem(newContent[newContent.length - 1]._id);
       changeContentList(newContent);
       changeSelectedItem(newContent[0]);
+      changeLoading(false);
       return;
     });
   };
@@ -85,31 +99,40 @@ const Gallery = ({ signedInUser, changeClicked }) => {
         </div>
         <div className="galleryMain">
           <div className="galleryListWrapper">
-            <div className="galleryList">
-              {contentList.map((item) => {
-                return (
-                  <div
-                    key={item._id}
-                    className="galleryItem"
-                    onClick={() => handleItemSelect(item)}
-                  >
-                    {item.video && (
-                      <div className="galleryVideoWrapper">
-                        <img
-                          className="galleryImage"
-                          src={`https://img.youtube.com/vi/${item.video}/hqdefault.jpg`}
-                        ></img>
-                      </div>
-                    )}
-                    {item.image && (
-                      <div className="galleryImageWrapper">
-                        <img className="galleryImage" src={item.image}></img>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+            {loading ? (
+              <MoonLoader
+                color="#79d9ff"
+                loading={loading}
+                css={override}
+                size="120"
+              />
+            ) : (
+              <div className="galleryList">
+                {contentList.map((item) => {
+                  return (
+                    <div
+                      key={item._id}
+                      className="galleryItem"
+                      onClick={() => handleItemSelect(item)}
+                    >
+                      {item.video && (
+                        <div className="galleryVideoWrapper">
+                          <img
+                            className="galleryImage"
+                            src={`https://img.youtube.com/vi/${item.video}/hqdefault.jpg`}
+                          ></img>
+                        </div>
+                      )}
+                      {item.image && (
+                        <div className="galleryImageWrapper">
+                          <img className="galleryImage" src={item.image}></img>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
             <div
               className="galleryLoadMoreWrapper colorHover pointerHover"
               onClick={getOlderGalleryContent}
@@ -138,7 +161,7 @@ const Gallery = ({ signedInUser, changeClicked }) => {
                       // width="400"
                       // height="243"
                       src={`http://www.youtube.com/embed/${selectedItem.video}?autoplay=1&enablejsapi=1`}
-                      allow="autoplay *"
+                      // allow="autoplay *"
                       frameBorder="0"
                       allowFullScreen="allowfullscreen"
                       mozallowfullscreen="mozallowfullscreen"

@@ -36,16 +36,18 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
       socket.emit("status", s);
     };
 
-    chat
-      .find()
-      .limit(100)
-      .sort({ _id: 1 })
-      .toArray(function (err, res) {
-        if (err) {
-          throw err;
-        }
-        socket.emit("output", res);
-      });
+    socket.on("getChats", () => {
+      chat
+        .find()
+        .limit(100)
+        .sort({ _id: 1 })
+        .toArray(function (err, res) {
+          if (err) {
+            throw err;
+          }
+          socket.emit("output", res);
+        });
+    });
 
     socket.on("sendMessage", (message) => {
       const date = new Date();
