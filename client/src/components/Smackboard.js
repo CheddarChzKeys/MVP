@@ -3,6 +3,8 @@ import Picker from "emoji-picker-react";
 import GifPicker from "react-giphy-picker";
 import DropzoneComponent from "./smackDropbox.js";
 import ImagePopUp from "./ImagePopUp.js";
+import { css } from "@emotion/react";
+import MoonLoader from "react-spinners/MoonLoader";
 const axios = require("axios").default;
 
 const io = require("socket.io-client");
@@ -10,20 +12,21 @@ const io = require("socket.io-client");
 let socket = io();
 let updatedChats = [];
 
-socket.on("output", (data) => {
-  updatedChats = data;
-  console.log("updatedChats: ", updatedChats);
-});
+// socket.on("output", (data) => {
+//   updatedChats = data;
+//   console.log("updatedChats: ", updatedChats);
+// });
 
 function Chatbox({ changeClicked, changeBackground, username }) {
   changeClicked("smackboard");
-  changeBackground("./Backgrounds/season1.jpg");
+  changeBackground("./Backgrounds/season6.png");
 
   const [chats, updateChats] = useState([]);
   const [typedMessage, changeMessage] = useState("");
   const [typedVideoLink, changeTypedVideoLink] = useState("");
   const [submittedVideo, changeSubmittedVideo] = useState(null);
   const [showVideoModal, toggleVideoModal] = useState(false);
+  const [keepVideoModal, toggleKeepVideoModal] = useState(false);
   const [showEmojiModal, toggleEmojiModal] = useState(false);
   const [showGifModal, toggleGifModal] = useState(false);
   const [submitResponse, changeResponse] = useState("");
@@ -32,8 +35,14 @@ function Chatbox({ changeClicked, changeBackground, username }) {
   const [popUpImage, changePopUpImage] = useState(null);
   const [popUpVideo, changePopUpVideo] = useState(null);
   const [showImagePopUp, toggleImagePopUp] = useState(false);
+  const [loading, changeLoading] = useState(true);
 
   const userName = username;
+
+  const override = css`
+    align-items: center;
+    margin: auto auto;
+  `;
 
   const inputRef = useRef(null);
   const chatBoxRef = useRef();
@@ -44,6 +53,18 @@ function Chatbox({ changeClicked, changeBackground, username }) {
   };
 
   const hideVideoInput = () => {
+    if (!keepVideoModal) {
+      toggleVideoModal(false);
+    }
+  };
+
+  const onClickVideoModal = (e) => {
+    e.stopPropagation();
+    toggleKeepVideoModal(true);
+  };
+
+  const closeAllModals = () => {
+    toggleKeepVideoModal(false);
     toggleVideoModal(false);
   };
 
@@ -139,6 +160,8 @@ function Chatbox({ changeClicked, changeBackground, username }) {
         });
         changeMessage("");
         changeQeuedImages([]);
+        changeSubmittedVideo(null);
+        changeTypedVideoLink("");
         changeResponse("post complete");
         const messageFlash = setTimeout(() => {
           changeResponse("");
@@ -157,7 +180,7 @@ function Chatbox({ changeClicked, changeBackground, username }) {
     console.log("prevent dEFAULT!");
     const videoID = typedVideoLink.split("=")[1];
     changeSubmittedVideo(videoID);
-    hideVideoInput();
+    toggleVideoModal(false);
   };
 
   const scrollToBottom = () => {
@@ -176,9 +199,10 @@ function Chatbox({ changeClicked, changeBackground, username }) {
     socket.on("output", (data) => {
       updatedChats = data;
       updateChats(updatedChats);
+      changeLoading(false);
     });
-    updateChats(updatedChats);
-  });
+    socket.emit("getChats");
+  }, []);
 
   useEffect(() => {
     if (didMountRef.current) {
@@ -191,7 +215,7 @@ function Chatbox({ changeClicked, changeBackground, username }) {
   }, [qeuedImages]);
 
   return (
-    <div className="mainComponent">
+    <div className="mainComponent" onClick={closeAllModals}>
       <div id="smackboardComponent">
         <div className="headerWrapper">
           <h1 className="componentHeader smackNewsHeader">Smackboard</h1>
@@ -199,72 +223,81 @@ function Chatbox({ changeClicked, changeBackground, username }) {
         </div>
         <div className="smackNewsMain smackMain">
           <div className="smackboardWrapper">
-            <div id="chatbox" ref={chatBoxRef}>
-              {chats.map((chat) => {
-                return (
-                  <div id="chat">
-                    <div id="nameDate">
-                      <div id="chatName">{chat.name}</div>
-                      <div id="chatDate">
-                        {getDateStamp(new Date()).split(", ")[0] ==
-                        getDateStamp(parseISOString(chat.date)).split(", ")[0]
-                          ? `Today, ${
-                              getDateStamp(parseISOString(chat.date)).split(
-                                ", "
-                              )[1]
-                            }`
-                          : `${getDateStamp(parseISOString(chat.date))}`}
+            {loading ? (
+              <MoonLoader
+                color="#79d9ff"
+                loading={loading}
+                css={override}
+                size="100"
+              />
+            ) : (
+              <div id="chatbox" ref={chatBoxRef}>
+                {chats.map((chat) => {
+                  return (
+                    <div id="chat">
+                      <div id="nameDate">
+                        <div id="chatName">{chat.name}</div>
+                        <div id="chatDate">
+                          {getDateStamp(new Date()).split(", ")[0] ==
+                          getDateStamp(parseISOString(chat.date)).split(", ")[0]
+                            ? `Today, ${
+                                getDateStamp(parseISOString(chat.date)).split(
+                                  ", "
+                                )[1]
+                              }`
+                            : `${getDateStamp(parseISOString(chat.date))}`}
+                        </div>
+                      </div>
+                      <div className="chatContent">
+                        <div id="chatMessage">{chat.message}</div>
+                        {chat.gif && (
+                          <img
+                            className="chatItem"
+                            id="chatGif"
+                            src={chat.gif.downsized.url}
+                            onClick={() => imageClick(chat.gif.original.url)}
+                          ></img>
+                        )}
+                        {chat.video && (
+                          <div className="ytOutterWrapper">
+                            <div id="ytPlayerWrapper" className="chatItem">
+                              <iframe
+                                className="ytPlayer"
+                                id="galleryYTPlayer"
+                                type="text/html"
+                                // width="400"
+                                // height="243"
+                                src={`http://www.youtube.com/embed/${chat.video}`}
+                                frameBorder="0"
+                                allowFullScreen="allowfullscreen"
+                                mozallowfullscreen="mozallowfullscreen"
+                                msallowfullscreen="msallowfullscreen"
+                                oallowfullscreen="oallowfullscreen"
+                                webkitallowfullscreen="webkitallowfullscreen"
+                              ></iframe>
+                            </div>
+                          </div>
+                        )}
+                        {chat.image && (
+                          <div id="chatImageWrapper">
+                            {chat.image.map((image) => {
+                              return (
+                                <img
+                                  className="chatItem"
+                                  id="chatImg"
+                                  src={image}
+                                  onClick={() => imageClick(image)}
+                                ></img>
+                              );
+                            })}
+                          </div>
+                        )}
                       </div>
                     </div>
-                    <div className="chatContent">
-                      <div id="chatMessage">{chat.message}</div>
-                      {chat.gif && (
-                        <img
-                          className="chatItem"
-                          id="chatGif"
-                          src={chat.gif.downsized.url}
-                          onClick={() => imageClick(chat.gif.original.url)}
-                        ></img>
-                      )}
-                      {chat.video && (
-                        <div className="ytOutterWrapper">
-                          <div id="ytPlayerWrapper" className="chatItem">
-                            <iframe
-                              className="ytPlayer"
-                              id="galleryYTPlayer"
-                              type="text/html"
-                              // width="400"
-                              // height="243"
-                              src={`http://www.youtube.com/embed/${chat.video}`}
-                              frameBorder="0"
-                              allowFullScreen="allowfullscreen"
-                              mozallowfullscreen="mozallowfullscreen"
-                              msallowfullscreen="msallowfullscreen"
-                              oallowfullscreen="oallowfullscreen"
-                              webkitallowfullscreen="webkitallowfullscreen"
-                            ></iframe>
-                          </div>
-                        </div>
-                      )}
-                      {chat.image && (
-                        <div id="chatImageWrapper">
-                          {chat.image.map((image) => {
-                            return (
-                              <img
-                                className="chatItem"
-                                id="chatImg"
-                                src={image}
-                                onClick={() => imageClick(image)}
-                              ></img>
-                            );
-                          })}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            )}
             <div id="chatResponse">{submitResponse}, &nbsp;</div>
             <div id="messageSubmit">
               <div className="formDiv">
@@ -279,7 +312,7 @@ function Chatbox({ changeClicked, changeBackground, username }) {
                 </form>
               </div>
               <div className="buttonsWrapper">
-                <div className="smackButtonWrapper">
+                {/* <div className="smackButtonWrapper">
                   <button
                     className="smackButton iconWrapper"
                     type="button"
@@ -288,7 +321,7 @@ function Chatbox({ changeClicked, changeBackground, username }) {
                   >
                     <img className="messageIcon" src="./icons/linkIcon.png" />
                   </button>
-                </div>
+                </div> */}
 
                 <div className="smackButtonWrapper">
                   <button
@@ -298,6 +331,7 @@ function Chatbox({ changeClicked, changeBackground, username }) {
                     type="button"
                     onMouseEnter={addVideoInput}
                     onMouseLeave={hideVideoInput}
+                    onClick={(e) => onClickVideoModal(e)}
                   >
                     <img className="messageIcon" src="./icons/videoIcon.png" />
                   </button>
@@ -323,11 +357,13 @@ function Chatbox({ changeClicked, changeBackground, username }) {
                             onChange={(e) =>
                               handleChange(e, changeTypedVideoLink)
                             }
+                            onClick={(e) => e.stopPropagation()}
                           ></input>
                           <input
                             id="videoSubmit"
                             type="submit"
                             value="submit"
+                            onClick={(e) => e.stopPropagation()}
                           ></input>
                         </form>
                       </div>

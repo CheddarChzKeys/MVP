@@ -100,7 +100,12 @@ const App = () => {
           />
           <Route
             path="/news"
-            element={<News changeClicked={changeClicked} />}
+            element={
+              <News
+                changeClicked={changeClicked}
+                changeBackground={changeBackgroundImage}
+              />
+            }
           />
           <Route
             path="/gallery"
@@ -108,6 +113,7 @@ const App = () => {
               <Gallery
                 signedInUser={signedInUser}
                 changeClicked={changeClicked}
+                changeBackground={changeBackgroundImage}
               />
             }
           />
@@ -120,12 +126,12 @@ const App = () => {
 
 ReactDOM.render(<App />, document.getElementById("app"));
 
-$(document).ready(function () {
-  $("html").css({
-    background: 'url("./Backgrounds/reaper.jpg")',
-    "background-size": "cover",
-    "background-repeat": "no-repeat",
-    "background-position": "center center",
-    "background-attachment": "fixed",
-  });
-});
+// $(document).ready(function () {
+//   $("html").css({
+//     background: 'url("./Backgrounds/reaper.jpg")',
+//     "background-size": "cover",
+//     "background-repeat": "no-repeat",
+//     "background-position": "center center",
+//     "background-attachment": "fixed",
+//   });
+// });

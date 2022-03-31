@@ -86,27 +86,6 @@ function Accolades({ weekStats }) {
 
   return (
     <div>
-      {/* <div id="arrowsBox">
-        <div className="arrows">
-          <img
-            id="arrowsBack"
-            src="./Images/arrowsBack.png"
-            onMouseOver={() =>
-              sideScroll(container.current, "left", 25, 250, 10)
-            }
-          ></img>
-        </div>
-        <div className="arrows">
-          <img
-            id="arrowsNext"
-            src="./Images/arrowsNext.png"
-            onMouseOver={() =>
-              sideScroll(container.current, "right", 25, 250, 10)
-            }
-          ></img>
-        </div>
-      </div> */}
-      {/* <div id="accoladesBox" ref={container}> */}
       <Carousel itemsToShow={4}>
         {accoladeList.map((accolade) => {
           return (
@@ -118,7 +97,13 @@ function Accolades({ weekStats }) {
                 ></img>
                 {sorted[0] && (
                   <div className="accoladeRanks gridBackground">
-                    <div className="accUsername ranksItem">
+                    <div
+                      className={
+                        sortStat(accolade, accolade.stat).username.length > 10
+                          ? "accUsernameSmall ranksItem"
+                          : "accUsername ranksItem"
+                      }
+                    >
                       {sortStat(accolade, accolade.stat).username}
                     </div>
                     <p className="ranksItem">

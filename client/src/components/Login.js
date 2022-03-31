@@ -17,7 +17,7 @@ const Login = ({
   const [signUpVisible, toggleSignUp] = useState(false);
 
   changeClicked("signIn");
-  changeBackground("../Backgrounds/reaper.jpg");
+  changeBackground("../Backgrounds/nebulaBackground.png");
 
   const navigate = useNavigate();
 

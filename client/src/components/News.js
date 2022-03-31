@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const News = ({ changeClicked }) => {
+const News = ({ changeClicked, changeBackground }) => {
   changeClicked("news");
+  changeBackground("./Backgrounds/roze.png");
 
   const [articles, updateArticles] = useState([]);
   const [highlightArticle, toggleHighlightArticle] = useState(null);
