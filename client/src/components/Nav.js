@@ -6,9 +6,9 @@ import { Link } from "react-router-dom";
 
 function Nav({ toggleSignedIn, signedInUser, activeClicked, changeClicked }) {
   return (
-    <div className="gridBackground">
+    <div className="mainHeaderDiv gridBackground">
       <Link to="/">
-        <p id="headerTag">eastside WARFARE</p>
+        <p id="headerTag">EASTSIDE WARFARE</p>
       </Link>
       <nav className="nav">
         <div className="navMenu">

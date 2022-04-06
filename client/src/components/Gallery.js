@@ -25,6 +25,8 @@ const Gallery = ({ signedInUser, changeClicked, changeBackground }) => {
 
   const [loading, changeLoading] = useState(true);
 
+  const [loadedAll, changeLoadedAll] = useState(false);
+
   const override = css`
     flex: 1;
     display: flex;
@@ -38,8 +40,9 @@ const Gallery = ({ signedInUser, changeClicked, changeBackground }) => {
   };
 
   const getGalleryContent = () => {
-    axios.get("/getGalleryContent").then((results) => {
-      const newContent = results.data;
+    axios.get("/getGalleryContent").then((result) => {
+      const newContent = result.data.result;
+      changeLoadedAll(result.data.loadedAll);
       changeOldestGalleryItem(newContent[newContent.length - 1]._id);
       changeContentList(newContent);
       changeSelectedItem(newContent[0]);
@@ -51,9 +54,13 @@ const Gallery = ({ signedInUser, changeClicked, changeBackground }) => {
   const getOlderGalleryContent = () => {
     axios
       .get("/getOlderGalleryContent", { params: { last: oldestGalleryItem } })
-      .then((results) => {
-        const newContent = results.data;
-        changeOldestGalleryItem(newContent[newContent.length - 1]._id);
+      .then((result) => {
+        console.log("result:", result);
+        const newContent = result.data.result;
+        changeLoadedAll(result.data.loadedAll);
+        if (newContent.length > 0) {
+          changeOldestGalleryItem(newContent[newContent.length - 1]._id);
+        }
         const newContentList = contentList.slice();
         newContentList.push(...newContent);
         changeContentList(newContentList);
@@ -133,12 +140,15 @@ const Gallery = ({ signedInUser, changeClicked, changeBackground }) => {
                 })}
               </div>
             )}
-            <div
-              className="galleryLoadMoreWrapper colorHover pointerHover"
-              onClick={getOlderGalleryContent}
-            >
-              <p className="galleryLoadMore">Load More</p>
-            </div>
+
+            {!loadedAll && (
+              <div
+                className="galleryLoadMoreWrapper colorHover pointerHover"
+                onClick={getOlderGalleryContent}
+              >
+                <p className="galleryLoadMore">Load More</p>
+              </div>
+            )}
           </div>
           {selectedItem && (
             <div className="itemViewComponentWrapper">

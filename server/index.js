@@ -37,15 +37,54 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
     };
 
     socket.on("getChats", () => {
+      const collectionCount = chat.count();
       chat
         .find()
-        .limit(100)
-        .sort({ _id: 1 })
+        .limit(15)
+        .sort({ _id: -1 })
         .toArray(function (err, res) {
           if (err) {
             throw err;
           }
-          socket.emit("output", res);
+          const resultObject = {
+            result: res,
+            loadedAll: false,
+          };
+          if (res.length === collectionCount) {
+            resultObject.loadedAll = true;
+          }
+          socket.emit("output", resultObject);
+        });
+    });
+
+    socket.on("getMoreChats", (firstID) => {
+      let collectionCount;
+      const galleryDB = db.collection("gallery");
+      chat.find({ _id: { $lt: ObjectId(firstID) } }).count((err, result) => {
+        if (err) {
+          throw err;
+        } else {
+          collectionCount = result;
+        }
+      });
+      chat
+        .find({ _id: { $lt: ObjectId(firstID) } })
+        .sort({ _id: -1 })
+        .limit(10)
+        .toArray((err, result) => {
+          if (err) {
+            throw err;
+          } else {
+            const resultObject = {
+              result: result,
+              loadedAll: false,
+              collectionCount: collectionCount,
+            };
+            if (result.length === collectionCount) {
+              resultObject.loadedAll = true;
+            }
+            socket.emit("addOlderChats", resultObject);
+          }
         });
     });
 
@@ -257,15 +296,23 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
 
   app.get("/getNews", (req, res) => {
     const newsDB = db.collection("news");
+    const collectionCount = newsDB.count();
     newsDB
       .find()
       .sort({ publishedAt: -1 })
-      .limit(5)
+      .limit(10)
       .toArray((err, result) => {
         if (err) {
           res.send("Error detected: " + err);
         } else {
-          res.send(result);
+          const resultObject = {
+            result: result,
+            loadedAll: false,
+          };
+          if (result.length === collectionCount) {
+            resultObject.loadedAll = true;
+          }
+          res.send(resultObject);
         }
       });
   });
@@ -274,22 +321,40 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
     const lastArticleDate = req.query.last
       ? req.query.last
       : "2022-03-00T00:00:01Z";
+    let collectionCount;
     const newsDB = db.collection("news");
     newsDB
       .find({ publishedAt: { $lt: lastArticleDate } })
+      .count((err, result) => {
+        if (err) {
+          res.send("Database Error Detected:", err);
+        } else {
+          collectionCount = result;
+        }
+      });
+    newsDB
+      .find({ publishedAt: { $lt: lastArticleDate } })
       .sort({ publishedAt: -1 })
-      .limit(5)
+      .limit(10)
       .toArray((err, result) => {
         if (err) {
           res.send("Database Error Detected:", err);
         } else {
-          res.send(result);
+          const resultObject = {
+            result: result,
+            loadedAll: false,
+          };
+          if (result.length === collectionCount) {
+            resultObject.loadedAll = true;
+          }
+          res.send(resultObject);
         }
       });
   });
 
   app.get("/getGalleryContent", (req, res) => {
     const galleryDB = db.collection("gallery");
+    const collectionCount = galleryDB.count();
     galleryDB
       .find()
       .sort({ _id: -1 })
@@ -298,14 +363,29 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
         if (err) {
           res.send("Database Error Detected:", err);
         } else {
-          res.send(result);
+          const resultObject = {
+            result: result,
+            loadedAll: false,
+          };
+          if (result.length === collectionCount) {
+            resultObject.loadedAll = true;
+          }
+          res.send(resultObject);
         }
       });
   });
 
   app.get("/getOlderGalleryContent", (req, res) => {
     const lastID = req.query.last ? req.query.last : "999999999999999999999999";
+    let collectionCount;
     const galleryDB = db.collection("gallery");
+    galleryDB.find({ _id: { $lt: ObjectId(lastID) } }).count((err, result) => {
+      if (err) {
+        res.send("Database Error Detected:", err);
+      } else {
+        collectionCount = result;
+      }
+    });
     galleryDB
       .find({ _id: { $lt: ObjectId(lastID) } })
       .sort({ _id: -1 })
@@ -314,7 +394,15 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
         if (err) {
           res.send("Database Error Detected:", err);
         } else {
-          res.send(result);
+          const resultObject = {
+            result: result,
+            loadedAll: false,
+            collectionCount: collectionCount,
+          };
+          if (result.length === collectionCount) {
+            resultObject.loadedAll = true;
+          }
+          res.send(resultObject);
         }
       });
   });

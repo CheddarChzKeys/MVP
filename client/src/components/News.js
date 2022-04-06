@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { css } from "@emotion/react";
+import MoonLoader from "react-spinners/MoonLoader";
 
 const News = ({ changeClicked, changeBackground }) => {
   changeClicked("news");
@@ -8,6 +10,16 @@ const News = ({ changeClicked, changeBackground }) => {
   const [articles, updateArticles] = useState([]);
   const [highlightArticle, toggleHighlightArticle] = useState(null);
   const [oldestArticle, changeOldestArticle] = useState(null);
+  const [loading, changeLoading] = useState("true");
+  const [loadedAll, changeLoadedAll] = useState("false");
+
+  const override = css`
+    flex: 1;
+    display: flex;
+    justify-content: flex;
+    align-items: center;
+    margin: 20vh auto;
+  `;
 
   let counter = 0;
 
@@ -26,7 +38,8 @@ const News = ({ changeClicked, changeBackground }) => {
 
   const getNewArticles = () => {
     axios.get("/getNews").then((results) => {
-      const newArticles = results.data;
+      const newArticles = results.data.result;
+      changeLoadedAll(results.data.loadedAll);
       changeOldestArticle(newArticles[newArticles.length - 1].publishedAt);
       updateArticles(newArticles);
     });
@@ -36,7 +49,8 @@ const News = ({ changeClicked, changeBackground }) => {
     axios
       .get("/getOlderArticles", { params: { last: oldestArticle } })
       .then((results) => {
-        const olderArticles = results.data;
+        const olderArticles = results.data.result;
+        changeLoadedAll(results.data.loadedAll);
         changeOldestArticle(
           olderArticles[olderArticles.length - 1].publishedAt
         );
@@ -87,16 +101,24 @@ const News = ({ changeClicked, changeBackground }) => {
                           <p className="sourceDate" id="source">
                             {article.source.name}
                           </p>
-                          <p className="sourceDate">
+                          <p
+                            className={
+                              highlightArticle === articleNumber
+                                ? "sourceDate sourceDateHighlight"
+                                : "sourceDate"
+                            }
+                          >
                             {parseISOString(article.publishedAt)}
                           </p>
-                          {highlightArticle == articleNumber ? (
-                            <p className="sourceDate seeFullArticle">
-                              Read full article
-                            </p>
-                          ) : (
-                            <p className="sourceDate" />
-                          )}
+                          <p
+                            className={
+                              highlightArticle === articleNumber
+                                ? "seeFullArticle seeFullArticleShow"
+                                : "seeFullArticle"
+                            }
+                          >
+                            Read full article
+                          </p>
                         </div>
                         <div className="contentWrapper">
                           <p className="content">
@@ -116,12 +138,14 @@ const News = ({ changeClicked, changeBackground }) => {
                 </a>
               );
             })}
-            <div
-              className="galleryLoadMoreWrapper colorHover pointerHover"
-              onClick={getOlderArticles}
-            >
-              <p className="galleryLoadMore">Load More</p>
-            </div>
+            {!loadedAll && (
+              <div
+                className="galleryLoadMoreWrapper colorHover pointerHover"
+                onClick={getOlderArticles}
+              >
+                <p className="galleryLoadMore">Load More</p>
+              </div>
+            )}
           </div>
           <div className="bannerWrapper">
             <img
