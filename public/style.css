@@ -56,12 +56,17 @@ html {
   background-color: rgba(0, 0, 0, 0.4);
 }
 
+.mainHeaderDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 #headerTag {
   display: inline-block;
   margin: 2.2vh 0 0 0;
-
   color: #ffffff;
-  border-bottom: 1px solid #79d9ff;
+  /* border-bottom: 1px solid #79d9ff; */
   font-family: "modernWarfare";
   font-size: 3vw;
 }
@@ -71,8 +76,7 @@ html {
   display: flex;
   height: 25%;
   z-index: 1;
-
-  padding: 0% 10%;
+  width: 80%;
 }
 
 .navMenu {
@@ -87,7 +91,6 @@ html {
   display: flex;
   flex: 1;
   font-family: "leagueGothicCondensed";
-  font-variant: small-caps;
   font-size: 1.2vw;
   justify-content: center;
   align-items: center;
@@ -188,7 +191,6 @@ html {
   /* text-decoration: underline; */
   position: relative;
   /* top: 5px; */
-  font-size: 2.5vw;
   color: rgb(255, 255, 255);
   border-bottom: 1px solid #79d9ff;
   white-space: nowrap;
@@ -236,6 +238,11 @@ html {
 .rec.rec-arrow:hover,
 .rec.rec-arrow:hover:enabled {
   background-color: #79d9ff;
+}
+
+.rec.rec-arrow:disabled {
+  cursor: none;
+  visibility: hidden;
 }
 
 .rec.rec-dot {
@@ -862,6 +869,7 @@ aside.emoji-picker-react {
   max- */
   display: flex;
   justify-content: center;
+  align-items: center;
   width: 100%;
   text-align: center;
 
@@ -883,7 +891,7 @@ aside.emoji-picker-react {
 
 .fullImage {
   width: auto;
-  height: 100%;
+  height: 80%;
 }
 
 /*Dropzone*/
@@ -1037,6 +1045,8 @@ aside.emoji-picker-react {
   background-image: url("./black-tile.png");
   background-size: 1.5px;
   border: 1px solid rgba(0, 0, 0, 0);
+
+  transition: border-color ease 0.5s;
 }
 
 .articleTop {
@@ -1044,7 +1054,7 @@ aside.emoji-picker-react {
 }
 
 .article:hover {
-  border: 1px solid #79d9ff;
+  border-color: #79d9ff;
 }
 
 .articleTextWrapper {
@@ -1076,10 +1086,15 @@ aside.emoji-picker-react {
 }
 
 .sourceDate {
-  font-size: 1.1vw;
-  color: rgb(151, 147, 147);
   flex-basis: 33%;
   margin-bottom: 2px;
+  font-size: 1.1vw;
+  color: rgb(151, 147, 147);
+  transition: color ease 0.5s;
+}
+
+.sourceDateHighlight {
+  color: #ffffff;
 }
 
 #source {
@@ -1092,7 +1107,15 @@ aside.emoji-picker-react {
 }
 
 .seeFullArticle {
+  flex-basis: 33%;
+  margin-bottom: 2px;
   text-align: center;
+  font-size: 1.1vw;
+  color: rgba(0, 0, 0, 0);
+  transition: color ease 0.5s;
+}
+
+.seeFullArticleShow {
   color: #79d9ff;
 }
 

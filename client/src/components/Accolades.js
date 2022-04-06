@@ -86,7 +86,7 @@ function Accolades({ weekStats }) {
 
   return (
     <div>
-      <Carousel itemsToShow={4}>
+      <Carousel itemsToShow={4} disableArrowsOnEnd={true}>
         {accoladeList.map((accolade) => {
           return (
             <div className="accolade">

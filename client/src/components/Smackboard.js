@@ -178,8 +178,13 @@ function Chatbox({ changeClicked, changeBackground, username }) {
   const handleVideoSubmit = (e) => {
     e.preventDefault();
     console.log("prevent dEFAULT!");
-    const videoID = typedVideoLink.split("=")[1];
-    changeSubmittedVideo(videoID);
+    let videoID = typedVideoLink;
+    const re =
+      /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/i;
+
+    const newVideoID = re.exec(videoID);
+
+    changeSubmittedVideo(newVideoID[1]);
     toggleVideoModal(false);
   };
 
@@ -195,9 +200,14 @@ function Chatbox({ changeClicked, changeBackground, username }) {
     toggleImagePopUp(true);
   };
 
+  const getMoreChats = () => {
+    socket.emit("getMoreChats", chats[0]._id);
+  };
+
   useEffect(() => {
     socket.on("output", (data) => {
-      updatedChats = data;
+      updatedChats = data.result.reverse();
+      console.log("chat result:", data);
       updateChats(updatedChats);
       changeLoading(false);
     });
@@ -205,9 +215,18 @@ function Chatbox({ changeClicked, changeBackground, username }) {
   }, []);
 
   useEffect(() => {
-    if (didMountRef.current) {
-      scrollToBottom();
-    } else didMountRef.current = true;
+    // if (didMountRef.current) {
+    //   scrollToBottom();
+    // } else {
+    //   didMountRef.current = true;
+    // }
+    socket.on("addOlderChats", (data) => {
+      console.log("data.result:", data.result);
+      let reversedChats = data.result.slice().reverse();
+      console.log("data.result after reverse: ", reversedChats);
+      updatedChats = reversedChats.concat(chats);
+      updateChats(updatedChats);
+    });
   }, [chats]);
 
   useEffect(() => {
@@ -232,6 +251,12 @@ function Chatbox({ changeClicked, changeBackground, username }) {
               />
             ) : (
               <div id="chatbox" ref={chatBoxRef}>
+                <div
+                  className="galleryLoadMoreWrapper colorHover pointerHover"
+                  onClick={getMoreChats}
+                >
+                  <p className="galleryLoadMore">Load More</p>
+                </div>
                 {chats.map((chat) => {
                   return (
                     <div id="chat">
@@ -422,7 +447,7 @@ function Chatbox({ changeClicked, changeBackground, username }) {
                 className="smackBannerImage"
                 src="./Images/wzDiscordDraft1.png"
               ></img>
-              <a href="https://discord.gg/2X6Y45Zt" target="_blank">
+              <a href="https://discord.gg/CPWSbZef9D" target="_blank">
                 <div className="bannerMask">
                   <div className="maskImageWrapper">
                     <img

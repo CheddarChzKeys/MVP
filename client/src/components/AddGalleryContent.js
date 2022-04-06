@@ -70,9 +70,13 @@ const AddGalleryContent = ({
         imageURL = imageURLs[0];
       }
 
-      let uploadedVideo;
+      let newVideoID;
+
       if (videoField) {
-        uploadedVideo = videoField.split("=")[1];
+        const re =
+          /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/i;
+
+        newVideoID = re.exec(videoField);
       }
 
       const newTimestamp = new Date().toLocaleString().split(",")[0];
@@ -81,7 +85,7 @@ const AddGalleryContent = ({
         userName: signedInUser,
         uploadDate: newTimestamp,
         image: imageURL,
-        video: uploadedVideo,
+        video: newVideoID[1],
         description: descriptionField,
       };
 
