@@ -21,11 +21,14 @@ const Gallery = ({ signedInUser, changeClicked, changeBackground }) => {
 
   const [popUpVideo, changePopUpVideo] = useState(null);
 
+  const [newestGalleryItem, changeNewestGalleryItem] = useState(null);
+
   const [oldestGalleryItem, changeOldestGalleryItem] = useState(null);
 
   const [loading, changeLoading] = useState(true);
 
-  const [loadedAll, changeLoadedAll] = useState(false);
+  const [prevLoadedAll, changePrevLoadedAll] = useState(true);
+  const [nextLoadedAll, changeNextLoadedAll] = useState(false);
 
   const override = css`
     flex: 1;
@@ -42,7 +45,8 @@ const Gallery = ({ signedInUser, changeClicked, changeBackground }) => {
   const getGalleryContent = () => {
     axios.get("/getGalleryContent").then((result) => {
       const newContent = result.data.result;
-      changeLoadedAll(result.data.loadedAll);
+      changeNextLoadedAll(result.data.loadedAll);
+      changeNewestGalleryItem(newContent[0]._id);
       changeOldestGalleryItem(newContent[newContent.length - 1]._id);
       changeContentList(newContent);
       changeSelectedItem(newContent[0]);
@@ -51,21 +55,45 @@ const Gallery = ({ signedInUser, changeClicked, changeBackground }) => {
     });
   };
 
-  const getOlderGalleryContent = () => {
-    axios
-      .get("/getOlderGalleryContent", { params: { last: oldestGalleryItem } })
-      .then((result) => {
-        console.log("result:", result);
-        const newContent = result.data.result;
-        changeLoadedAll(result.data.loadedAll);
-        if (newContent.length > 0) {
-          changeOldestGalleryItem(newContent[newContent.length - 1]._id);
-        }
-        const newContentList = contentList.slice();
-        newContentList.push(...newContent);
-        changeContentList(newContentList);
-        return;
-      });
+  const getNextGalleryContent = () => {
+    !nextLoadedAll &&
+      axios
+        .get("/getNextGalleryContent", { params: { last: oldestGalleryItem } })
+        .then((result) => {
+          console.log("result:", result);
+          const newContent = result.data.result;
+          changePrevLoadedAll(false);
+          changeNextLoadedAll(result.data.loadedAll);
+          if (newContent.length > 0) {
+            changeOldestGalleryItem(newContent[newContent.length - 1]._id);
+            changeNewestGalleryItem(newContent[0]._id);
+          }
+          // const newContentList = contentList.slice();
+          // newContentList.push(...newContent);
+          changeContentList(newContent);
+          console.log("newestGalleryItem:", newestGalleryItem);
+          return;
+        });
+  };
+
+  const getPrevGalleryContent = () => {
+    !prevLoadedAll &&
+      axios
+        .get("/getPrevGalleryContent", { params: { first: newestGalleryItem } })
+        .then((result) => {
+          console.log("result:", result);
+          const newContent = result.data.result.slice().reverse();
+          changeNextLoadedAll(false);
+          changePrevLoadedAll(result.data.loadedAll);
+          if (newContent.length > 0) {
+            changeNewestGalleryItem(newContent[0]._id);
+            changeOldestGalleryItem(newContent[newContent.length - 1]._id);
+          }
+          // const newContentList = contentList.slice();
+          // newContentList.push(...newContent);
+          changeContentList(newContent);
+          return;
+        });
   };
 
   const handleItemSelect = (clickedItem) => {
@@ -111,7 +139,7 @@ const Gallery = ({ signedInUser, changeClicked, changeBackground }) => {
                 color="#79d9ff"
                 loading={loading}
                 css={override}
-                size="120"
+                size="120px"
               />
             ) : (
               <div className="galleryList">
@@ -141,14 +169,28 @@ const Gallery = ({ signedInUser, changeClicked, changeBackground }) => {
               </div>
             )}
 
-            {!loadedAll && (
-              <div
-                className="galleryLoadMoreWrapper colorHover pointerHover"
-                onClick={getOlderGalleryContent}
+            <div className="galleryLoadMoreWrapper">
+              <p
+                className={
+                  prevLoadedAll
+                    ? "galleryLoadMore defaultHover"
+                    : "galleryLoadMore colorHover pointerHover"
+                }
+                onClick={getPrevGalleryContent}
               >
-                <p className="galleryLoadMore">Load More</p>
-              </div>
-            )}
+                Prev
+              </p>
+              <p
+                className={
+                  nextLoadedAll
+                    ? "galleryLoadMore defaultHover"
+                    : "galleryLoadMore colorHover pointerHover"
+                }
+                onClick={getNextGalleryContent}
+              >
+                Next
+              </p>
+            </div>
           </div>
           {selectedItem && (
             <div className="itemViewComponentWrapper">

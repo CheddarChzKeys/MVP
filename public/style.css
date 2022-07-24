@@ -48,6 +48,10 @@ html {
   color: #79d9ff;
 }
 
+.defaultHover:hover{
+  cursor: default;
+}
+
 /* Navigation Bar*/
 
 .gridBackground {
@@ -476,7 +480,7 @@ div::-webkit-scrollbar-thumb:hover {
   background: #79d9ff;
 }
 
-#chat {
+#chat, #lastLoaded {
   background-image: url("./black-tile.png");
   background-size: 1.5px;
   display: flex;
@@ -683,7 +687,7 @@ aside.emoji-picker-react {
 }
 
 .buttonsWrapper {
-  width: 20%;
+  width: 30%;
   justify-content: flex-end;
   display: flex;
 }
@@ -720,7 +724,7 @@ aside.emoji-picker-react {
 }
 
 .messageIcon {
-  width: 75%;
+  width: 50%;
 }
 
 .smackButton:hover {
@@ -931,7 +935,7 @@ aside.emoji-picker-react {
   flex: 1;
 }
 
-#loginDiv {
+#loginDiv{
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1163,6 +1167,7 @@ aside.emoji-picker-react {
   gap: 2%;
 
   margin-top: 15px;
+  min-height: 75vh;
 }
 
 .galleryListWrapper {
@@ -1204,6 +1209,8 @@ aside.emoji-picker-react {
 }
 
 .galleryLoadMoreWrapper {
+  display: flex;
+  justify-content: space-between;
   font-family: "modernWarfare";
   color: #efefef;
 }
@@ -1240,8 +1247,8 @@ aside.emoji-picker-react {
   left: 0;
   right: 0;
   bottom: 0;
-  width: 100%;
-  height: 100%;
+  width: 99.9%;
+  height: 99.9%;
 }
 
 #popUpYTPlayer {
@@ -1495,4 +1502,60 @@ aside.emoji-picker-react {
 
 .css-1qecip4 {
   top: 0.1px !important;
+}
+
+/* soldier select screen*/
+
+#soldierSelectWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content:space-around;
+  align-items:center;
+  position: relative;
+  width: 60%;
+  min-height: 28rem;
+  padding: 0 2em;
+  color: #ffffff;
+  background: rgba(70, 69, 69, 0.445);
+  font-family: "modernWarfare";
+}
+
+.soldierList {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background-color:grey;
+  grid-gap:1px;
+  border: 1px solid grey;
+
+}
+
+.soldierImageWrap {
+  display:flex;
+  justify-content:center;
+  max-width:200px;
+  background: rgba(6, 6, 6, 0.794);
+}
+
+.soldierImageWrap:hover, .soldierImageWrapHover {
+  border:1pt solid #79d9ff;
+}
+
+.soldierImage {
+  width: 90%;
+}
+
+.signInButton {
+  color: #ffffff;
+  background: rgba(70, 69, 69, 0);
+  font-family: "modernWarfare";
+  font-size:larger;
+  text-align: start;
+  padding: 0.5em 0;
+  border: none;
+}
+
+#soldierSelectHeading {
+  text-align: center;
+  display: flex;
+  justify-content: center;
 }

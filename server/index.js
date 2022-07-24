@@ -36,11 +36,11 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
       socket.emit("status", s);
     };
 
-    socket.on("getChats", () => {
-      const collectionCount = chat.count();
+    socket.on("getAllChats", async () => {
+      const collectionCount = await chat.count();
       chat
         .find()
-        .limit(15)
+        .limit(10)
         .sort({ _id: -1 })
         .toArray(function (err, res) {
           if (err) {
@@ -50,15 +50,16 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
             result: res,
             loadedAll: false,
           };
-          if (res.length === collectionCount) {
+          if (res.length == collectionCount) {
             resultObject.loadedAll = true;
           }
-          socket.emit("output", resultObject);
+          socket.emit("allChats", resultObject);
         });
     });
 
     socket.on("getMoreChats", (firstID) => {
-      let collectionCount;
+      console.log("first chat id:", firstID);
+      let collectionCount = 0;
       const galleryDB = db.collection("gallery");
       chat.find({ _id: { $lt: ObjectId(firstID) } }).count((err, result) => {
         if (err) {
@@ -99,13 +100,18 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
       });
       chat
         .find()
-        .limit(100)
-        .sort({ _id: 1 })
+        .limit(10)
+        .sort({ _id: -1 })
         .toArray(function (err, res) {
           if (err) {
             throw err;
           }
-          socket.emit("output", res);
+          const resultObject = {
+            result: res,
+            loadedAll: false,
+          };
+          console.log("output res:", resultObject);
+          socket.emit("allChats", resultObject);
         });
     });
 
@@ -119,13 +125,18 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
       });
       chat
         .find()
-        .limit(100)
-        .sort({ _id: 1 })
+        .limit(10)
+        .sort({ _id: -1 })
         .toArray(function (err, res) {
           if (err) {
             throw err;
           }
-          socket.emit("output", res);
+          const resultObject = {
+            result: res,
+            loadedAll: false,
+          };
+          console.log("output res:", resultObject);
+          socket.emit("allChats", resultObject);
         });
     });
   });
@@ -358,7 +369,7 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
     galleryDB
       .find()
       .sort({ _id: -1 })
-      .limit(16)
+      .limit(12)
       .toArray((err, result) => {
         if (err) {
           res.send("Database Error Detected:", err);
@@ -375,7 +386,41 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
       });
   });
 
-  app.get("/getOlderGalleryContent", (req, res) => {
+  app.get("/getPrevGalleryContent", (req, res) => {
+    const firstID = req.query.first
+      ? req.query.first
+      : "999999999999999999999999";
+    let collectionCount;
+    const galleryDB = db.collection("gallery");
+    galleryDB.find({ _id: { $gt: ObjectId(firstID) } }).count((err, result) => {
+      if (err) {
+        res.send("Database Error Detected:", err);
+      } else {
+        collectionCount = result;
+      }
+    });
+    galleryDB
+      .find({ _id: { $gt: ObjectId(firstID) } })
+      .sort({ _id: 1 })
+      .limit(12)
+      .toArray((err, result) => {
+        if (err) {
+          res.send("Database Error Detected:", err);
+        } else {
+          const resultObject = {
+            result: result,
+            loadedAll: false,
+            collectionCount: collectionCount,
+          };
+          if (result.length === collectionCount) {
+            resultObject.loadedAll = true;
+          }
+          res.send(resultObject);
+        }
+      });
+  });
+
+  app.get("/getNextGalleryContent", (req, res) => {
     const lastID = req.query.last ? req.query.last : "999999999999999999999999";
     let collectionCount;
     const galleryDB = db.collection("gallery");
@@ -389,7 +434,7 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
     galleryDB
       .find({ _id: { $lt: ObjectId(lastID) } })
       .sort({ _id: -1 })
-      .limit(8)
+      .limit(12)
       .toArray((err, result) => {
         if (err) {
           res.send("Database Error Detected:", err);

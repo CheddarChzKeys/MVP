@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 const axios = require("axios").default;
 import "regenerator-runtime/runtime";
+import SoldierSelectScreen from "./SoldierSelectScreen.js";
 
 const SignUp = ({ toggleSignUp }) => {
   const [typedUsername, changeUsername] = useState("");
@@ -9,11 +10,15 @@ const SignUp = ({ toggleSignUp }) => {
   const [gamerTag, changeGamerTag] = useState("");
   const [checkedPlatform, changePlatform] = useState(null);
   const [isVerified, changeVerified] = useState(false);
+  const [soldierSelectedURL, changeSoldierSelectedURL] = useState(null);
   const [usernameRes, changeUsernameRes] = useState("");
   const [pwResponse, changePwResponse] = useState("");
-  const [verifyResponse, changeVerifiedResponse] = useState("");
+  const [verifyResponse, changeVerifiedResponse] = useState("Verify gamertag");
+  const [soldierSelectResponse, changeSoldierSelectResponse] = useState("");
   const [signUpResponse, changeSignUpResponse] = useState("");
   const [isSignedUp, toggleIsSignedUp] = useState(false);
+
+  const [showSoldierSelect, toggleSoldierSelect] = useState(false);
 
   const handleVerify = async (e, gamerTag, checkedPlatform) => {
     const verifyObject = {
@@ -74,7 +79,14 @@ const SignUp = ({ toggleSignUp }) => {
     change(e.target.value);
   };
 
-  return (
+  return showSoldierSelect ? (
+    <SoldierSelectScreen
+      toggleSoldierSelect={toggleSoldierSelect}
+      soldierSelectedURL={soldierSelectedURL}
+      changeSoldierSelectedURL={changeSoldierSelectedURL}
+      changeSoldierSelectResponse={changeSoldierSelectResponse}
+    />
+  ) : (
     <div id="loginDiv">
       <h2>Enlist for Service</h2>
       <form onSubmit={(e) => handleLogin(e)}>
@@ -129,7 +141,7 @@ const SignUp = ({ toggleSignUp }) => {
           onChange={(e) => {
             handleChange(e, changeGamerTag);
             changeVerified(false);
-            changeVerifiedResponse("");
+            // changeVerifiedResponse("");
           }}
         ></input>
         <div>
@@ -178,6 +190,7 @@ const SignUp = ({ toggleSignUp }) => {
             </div>
           </div>
           <div className="signUpResponse">{verifyResponse}, &nbsp;</div>
+          <div className="signUpResponse">{soldierSelectResponse}, &nbsp;</div>
         </div>
         <div>
           {isVerified ? (
@@ -185,23 +198,30 @@ const SignUp = ({ toggleSignUp }) => {
               <h3 className="blueHover" onClick={() => toggleSignUp()}>
                 Sign In
               </h3>
-            ) : (
+            ) : soldierSelectedURL ? (
               <input
-                className="blueHover"
+                className="blueHover pointerHover"
                 id="submit"
                 type="submit"
-                value="submit"
+                value="Enlist"
                 onClick={(e) => handleSignUp(e)}
+              ></input>
+            ) : (
+              <input
+                className="blueHover pointerHover"
+                id="submit"
+                type="button"
+                value="Next"
+                onClick={() => toggleSoldierSelect(true)}
               ></input>
             )
           ) : (
             <input
-              className="blueHover"
-              id="verify"
+              className="blueHover pointerHover"
+              id="submit"
               type="button"
               value="Verify"
               onClick={(e) => handleVerify(e, gamerTag, checkedPlatform)}
-              s
             ></input>
           )}
           <div className="signUpResponse">{signUpResponse}, &nbsp;</div>

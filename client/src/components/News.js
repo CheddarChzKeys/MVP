@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
 import { css } from "@emotion/react";
 import MoonLoader from "react-spinners/MoonLoader";
@@ -10,8 +10,39 @@ const News = ({ changeClicked, changeBackground }) => {
   const [articles, updateArticles] = useState([]);
   const [highlightArticle, toggleHighlightArticle] = useState(null);
   const [oldestArticle, changeOldestArticle] = useState(null);
-  const [loading, changeLoading] = useState("true");
+  const [loading, changeLoading] = useState(false);
   const [loadedAll, changeLoadedAll] = useState("false");
+
+  const observer = useRef();
+
+  const lastArticleRef = useCallback(
+    (node) => {
+      console.log("useCallback activated");
+      if (loading) {
+        console.log("loading is true");
+        return;
+      } else {
+        console.log("RUNNING USECALLBACK");
+        if (observer.current) {
+          console.log("Disconnecting observer.current");
+          observer.current.disconnect();
+        }
+        observer.current = new IntersectionObserver((entries) => {
+          if (entries[0].isIntersecting && !loadedAll) {
+            console.log("node is intersecting");
+            changeLoadedAll(true);
+            getOlderArticles();
+          }
+        });
+        if (node) {
+          console.log("Connecting new observer node");
+          observer.current.observe(node);
+        }
+        console.log("Here's the first chat node:", node);
+      }
+    },
+    [loading, loadedAll, articles]
+  );
 
   const override = css`
     flex: 1;
@@ -84,12 +115,13 @@ const News = ({ changeClicked, changeBackground }) => {
         </div>
         <div className="smackNewsMain">
           <div className="articleListWrapper">
-            {articles.map((article) => {
+            {articles.map((article, index) => {
               const articleNumber = counter;
               return (
                 <a className="articleLink" href={article.url} target="_blank">
                   <div
                     key={article._id}
+                    ref={index === articles.length - 1 ? lastArticleRef : null}
                     className="article"
                     onMouseEnter={() => handleMouseEnter(articleNumber)}
                     onMouseLeave={() => handleMouseLeave()}
