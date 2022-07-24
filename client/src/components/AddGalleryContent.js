@@ -76,7 +76,7 @@ const AddGalleryContent = ({
         const re =
           /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/i;
 
-        newVideoID = re.exec(videoField);
+        newVideoID = re.exec(videoField)[1];
       }
 
       const newTimestamp = new Date().toLocaleString().split(",")[0];
@@ -85,7 +85,7 @@ const AddGalleryContent = ({
         userName: signedInUser,
         uploadDate: newTimestamp,
         image: imageURL,
-        video: newVideoID[1],
+        video: newVideoID,
         description: descriptionField,
       };
 
@@ -132,7 +132,12 @@ const AddGalleryContent = ({
                   type="text"
                   placeholder="image url or upload image"
                   value={qeuedImages.length === 0 ? imageField : ""}
-                  onChange={(e) => changeImageField(e.target.value)}
+                  onChange={(e) => {
+                    if (qeuedImages.length === 0) {
+                      changeImageField(e.target.value);
+                      console.log("image field:", imageField);
+                    }
+                  }}
                 />
               </div>
               <div className="inputWrapper">
@@ -142,7 +147,11 @@ const AddGalleryContent = ({
                   type="text"
                   placeholder="youtube url"
                   value={qeuedImages.length === 0 ? videoField : ""}
-                  onChange={(e) => changeVideoField(e.target.value)}
+                  onChange={(e) => {
+                    if (qeuedImages.length === 0) {
+                      changeVideoField(e.target.value);
+                    }
+                  }}
                 />
               </div>
               <div className="inputWrapper">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Picker from "emoji-picker-react";
 import GifPicker from "react-giphy-picker";
 import DropzoneComponent from "./smackDropbox.js";
@@ -36,6 +36,8 @@ function Chatbox({ changeClicked, changeBackground, username }) {
   const [popUpVideo, changePopUpVideo] = useState(null);
   const [showImagePopUp, toggleImagePopUp] = useState(false);
   const [loading, changeLoading] = useState(true);
+  const [loadedAll, changeLoadedAll] = useState(true);
+  const [newChatsCount, changeNewChatsCount] = useState(0);
 
   const userName = username;
 
@@ -46,7 +48,41 @@ function Chatbox({ changeClicked, changeBackground, username }) {
 
   const inputRef = useRef(null);
   const chatBoxRef = useRef();
+  const observer = useRef();
   const didMountRef = useRef(false);
+  const lastLoadedChat = useRef(null);
+
+  // let getMoreChats = () => {
+  //   socket.emit("getMoreChats", chats[0]._id);
+  // };
+
+  const firstChatRef = useCallback(
+    (node) => {
+      if (loading) {
+        return;
+      } else {
+        console.log("RUNNING USECALLBACK");
+        if (observer.current) {
+          console.log("Disconnecting observer.current");
+          observer.current.disconnect();
+        }
+        observer.current = new IntersectionObserver((entries) => {
+          if (entries[0].isIntersecting && !loadedAll) {
+            console.log("node is intersecting");
+            changeLoading(true);
+            changeLoadedAll(true);
+            socket.emit("getMoreChats", chats[0]._id);
+          }
+        });
+        if (node) {
+          console.log("Connecting new observer node");
+          observer.current.observe(node);
+        }
+        console.log("Here's the first chat node:", node);
+      }
+    },
+    [loading, loadedAll, chats]
+  );
 
   const addVideoInput = () => {
     toggleVideoModal(true);
@@ -195,37 +231,56 @@ function Chatbox({ changeClicked, changeBackground, username }) {
     }, 1000);
   };
 
+  const scrollToLastLoadedChat = () => {
+    console.log("scrolling to last loaded chat");
+    const timeout1 = setTimeout(() => {
+      lastLoadedChat.current.scrollIntoView({
+        block: "center",
+        inline: "nearest",
+      });
+    }, 1);
+  };
+
   const imageClick = (image) => {
     changePopUpImage(image);
     toggleImagePopUp(true);
   };
 
-  const getMoreChats = () => {
-    socket.emit("getMoreChats", chats[0]._id);
-  };
-
   useEffect(() => {
-    socket.on("output", (data) => {
-      updatedChats = data.result.reverse();
-      console.log("chat result:", data);
-      updateChats(updatedChats);
+    socket.on("allChats", (data) => {
+      const reversedChats = data.result.slice().reverse();
+      // changeLoadedAll(data.loadedAll);
+      updateChats(reversedChats);
+      const loadedAllTimeout = setTimeout(() => {
+        changeLoadedAll(data.loadedAll);
+      }, 2000);
+      scrollToBottom();
       changeLoading(false);
     });
-    socket.emit("getChats");
+    socket.emit("getAllChats");
   }, []);
 
   useEffect(() => {
     // if (didMountRef.current) {
     //   scrollToBottom();
+    //   // didMountRef.current = false;
     // } else {
-    //   didMountRef.current = true;
+    //   // didMountRef.current = true;
     // }
     socket.on("addOlderChats", (data) => {
-      console.log("data.result:", data.result);
-      let reversedChats = data.result.slice().reverse();
+      changeLoading(true);
+      console.log("data.result:", data);
+      const reversedChats = data.result.slice().reverse();
       console.log("data.result after reverse: ", reversedChats);
+      // changeLoadedAll(true);
       updatedChats = reversedChats.concat(chats);
+      const loadedAllTimeout = setTimeout(() => {
+        changeLoadedAll(data.loadedAll);
+      }, 2000);
+      changeNewChatsCount(data.result.length);
       updateChats(updatedChats);
+      changeLoading(false);
+      scrollToLastLoadedChat();
     });
   }, [chats]);
 
@@ -247,19 +302,26 @@ function Chatbox({ changeClicked, changeBackground, username }) {
                 color="#79d9ff"
                 loading={loading}
                 css={override}
-                size="100"
+                size="100px"
               />
             ) : (
               <div id="chatbox" ref={chatBoxRef}>
-                <div
-                  className="galleryLoadMoreWrapper colorHover pointerHover"
-                  onClick={getMoreChats}
-                >
-                  <p className="galleryLoadMore">Load More</p>
-                </div>
-                {chats.map((chat) => {
+                {!loadedAll && (
+                  <div
+                    ref={firstChatRef}
+                    className="galleryLoadMoreWrapper colorHover pointerHover"
+                    // onClick={getMoreChats}
+                  >
+                    <p className="galleryLoadMore">Load More</p>
+                  </div>
+                )}
+                {chats.map((chat, index) => {
                   return (
-                    <div id="chat">
+                    <div
+                      key={chat._id}
+                      ref={index === newChatsCount ? lastLoadedChat : null}
+                      id="chat"
+                    >
                       <div id="nameDate">
                         <div id="chatName">{chat.name}</div>
                         <div id="chatDate">

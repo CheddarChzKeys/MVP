@@ -84,7 +84,7 @@ const Login = ({
                   <div />
                 ) : (
                   <input
-                    className="blueHover"
+                    className="blueHover pointerHover"
                     id="submit"
                     type="submit"
                     value="submit"
@@ -102,7 +102,10 @@ const Login = ({
                   Sign Out
                 </h3>
               ) : (
-                <h3 className="blueHover" onClick={() => handleSignUp()}>
+                <h3
+                  className="blueHover pointerHover"
+                  onClick={() => handleSignUp()}
+                >
                   Enlist
                 </h3>
               )}
