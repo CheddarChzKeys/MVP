@@ -1,4 +1,5 @@
 import React from "react";
+import Carousel from "react-elastic-carousel";
 
 const SoldierSelectScreen = ({
   toggleSoldierSelect,
@@ -11,11 +12,11 @@ const SoldierSelectScreen = ({
     "jrickross",
     "KiDKEN90",
     "mRey89",
-    "Rambo1",
-    "jrickross",
-    "KiDKEN90",
-    "mRey89",
+    "nohypejustBEAST",
     "booty_Thumper",
+    "Jigsaw1",
+    "Johan1",
+    "Mace1",
   ];
 
   const selectSoldier = (imageURL) => {
@@ -29,35 +30,69 @@ const SoldierSelectScreen = ({
     changeSoldierSelectResponse("Soldier selected");
   };
 
+  const handleBack = () => {
+    toggleSoldierSelect(false);
+  };
+
   return (
     <div id="soldierSelectWrapper">
       <h3 id="soldierSelectHeading">Soldier Select</h3>
-      <div className="soldierList">
-        {imageList.map((imageURL) => {
-          return (
-            <div
-              className={
-                soldierSelectedURL === "./Images/" + imageURL + ".png"
-                  ? "soldierImageWrap soldierImageWrapHover"
-                  : "soldierImageWrap"
-              }
-              onClick={() => selectSoldier(imageURL)}
-            >
-              <img
-                className="soldierImage"
-                src={"./Images/" + imageURL + ".png"}
-              />
-            </div>
-          );
-        })}
-      </div>
+      <Carousel itemsToShow={1} showArrows={false} disableArrowsOnEnd={false}>
+        <div className="soldierList">
+          {imageList.map((imageURL) => {
+            return (
+              <div
+                className={
+                  soldierSelectedURL === "./Images/" + imageURL + ".png"
+                    ? "soldierImageWrap soldierImageWrapHover"
+                    : "soldierImageWrap"
+                }
+                onClick={() => selectSoldier(imageURL)}
+              >
+                <img
+                  className="soldierImage"
+                  src={"./Images/" + imageURL + ".png"}
+                />
+              </div>
+            );
+          })}
+        </div>
+        <div className="soldierList">
+          {imageList.map((imageURL) => {
+            return (
+              <div
+                className={
+                  soldierSelectedURL === "./Images/" + imageURL + ".png"
+                    ? "soldierImageWrap soldierImageWrapHover"
+                    : "soldierImageWrap"
+                }
+                onClick={() => selectSoldier(imageURL)}
+              >
+                <img
+                  className="soldierImage"
+                  src={"./Images/" + imageURL + ".png"}
+                />
+              </div>
+            );
+          })}
+        </div>
+      </Carousel>
 
-      <button
-        className="signInButton blueHover pointerHover"
-        onClick={handleNext}
-      >
-        Next
-      </button>
+      {soldierSelectedURL ? (
+        <button
+          className="signInButton blueHover pointerHover"
+          onClick={handleNext}
+        >
+          Next
+        </button>
+      ) : (
+        <button
+          className="signInButton blueHover pointerHover"
+          onClick={handleBack}
+        >
+          Back
+        </button>
+      )}
     </div>
   );
 };
