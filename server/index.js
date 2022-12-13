@@ -157,6 +157,7 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
     const gamerTag = req.body.gamerTag;
     const platform = req.body.platform;
     const hashedPassword = await bcrypt.hash(password, 10);
+    const png = req.body.png;
     users.findOne(
       { usernameLowerCase: usernameLowerCase },
       async (err, data) => {
@@ -169,6 +170,7 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
             password: hashedPassword,
             gamerTag,
             platform,
+            png,
           });
           res.send("New soldier enlisted");
         }
@@ -281,6 +283,19 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
         res.send({ message: "Error uploading to gallery:" }, err);
       } else {
         res.send({ message: "Successfully uploaded to gallery" });
+      }
+    });
+  });
+
+  app.get("/getMemberList", (req, res) => {
+    let members = [];
+    const users = db.collection("users");
+    users.find({}).toArray((err, result) => {
+      if (err) {
+        console.log("db.users error: ", err);
+      } else {
+        console.log("Here's a members log:", result);
+        res.status(200).json(result);
       }
     });
   });
@@ -462,7 +477,7 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
 
   //fetch real time stats from COD API every 5 minutes and save to database.
   // getStats(db);
-  const updateDbStats = setInterval(() => getApiStats.getApiStats(db), 300000);
+  const updateDbStats = setInterval(() => getApiStats.getApiStats(db), 150000);
 
   getNews.getNews(db);
 });

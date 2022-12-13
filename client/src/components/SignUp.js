@@ -2,20 +2,20 @@ import React, { useState } from "react";
 const axios = require("axios").default;
 import "regenerator-runtime/runtime";
 import SoldierSelectScreen from "./SoldierSelectScreen.js";
+import { CSSTransition } from "react-transition-group";
 
-const SignUp = ({ toggleSignUp }) => {
+const SignUp = ({ toggleSignUp, toggleSlideTrans }) => {
   const [typedUsername, changeUsername] = useState("");
   const [typedPassword, changePassword] = useState("");
   const [typedPassword2, changePassword2] = useState("");
   const [gamerTag, changeGamerTag] = useState("");
   const [checkedPlatform, changePlatform] = useState(null);
-  const [isVerified, changeVerified] = useState(false);
+  const [isVerified, changeVerified] = useState(true);
   const [soldierSelectedURL, changeSoldierSelectedURL] = useState(null);
-  const [usernameRes, changeUsernameRes] = useState("");
+  const [usernameResponse, changeUsernameResponse] = useState("");
   const [pwResponse, changePwResponse] = useState("");
   const [verifyResponse, changeVerifiedResponse] = useState("Verify gamertag");
   const [soldierSelectResponse, changeSoldierSelectResponse] = useState("");
-  const [signUpResponse, changeSignUpResponse] = useState("");
   const [isSignedUp, toggleIsSignedUp] = useState(false);
 
   const [showSoldierSelect, toggleSoldierSelect] = useState(false);
@@ -48,20 +48,22 @@ const SignUp = ({ toggleSignUp }) => {
   const handleSignUp = (e) => {
     if (typedPassword !== typedPassword2 || typedPassword.length < 1) {
       changePwResponse("Passwords do not match");
-    } else if (!isVerified) {
-      changeSignUpResponse("Please verify Gamer Tag");
+    } else if (typedUsername.length < 4) {
+      changeUsernameResponse("Username must contain four characters");
     } else {
       const loginObject = {
         username: typedUsername,
         password: typedPassword,
         gamerTag: gamerTag,
         platform: checkedPlatform,
+        png: soldierSelectedURL,
       };
       axios.post("/signUp", loginObject).then((results) => {
         results.data == "Username already taken"
-          ? changeUsernameRes(results.data)
+          ? changeUsernameResponse(results.data)
           : changeVerifiedResponse(results.data);
         toggleIsSignedUp(true);
+        changeSoldierSelectResponse("Please sign in");
       });
       //   console.log(results);
       //   if (results.data.user) {
@@ -79,15 +81,22 @@ const SignUp = ({ toggleSignUp }) => {
     change(e.target.value);
   };
 
+  const handleBack = () => toggleSignUp();
+  const handleNext = () => {
+    toggleSoldierSelect(true);
+    toggleSlideTrans(true);
+  };
+
   return showSoldierSelect ? (
     <SoldierSelectScreen
       toggleSoldierSelect={toggleSoldierSelect}
       soldierSelectedURL={soldierSelectedURL}
       changeSoldierSelectedURL={changeSoldierSelectedURL}
       changeSoldierSelectResponse={changeSoldierSelectResponse}
+      toggleSlideTrans={toggleSlideTrans}
     />
   ) : (
-    <div id="loginDiv">
+    <div id="signUpDiv">
       <h2>Enlist for Service</h2>
       <form onSubmit={(e) => handleLogin(e)}>
         <div>
@@ -98,10 +107,10 @@ const SignUp = ({ toggleSignUp }) => {
             type="text"
             onChange={(e) => {
               handleChange(e, changeUsername);
-              changeUsernameRes("");
+              changeUsernameResponse("");
             }}
           ></input>
-          <div className="loginResponse">{usernameRes}, &nbsp;</div>
+          <div className="loginResponse">{usernameResponse}, &nbsp;</div>
         </div>
 
         <div>
@@ -192,12 +201,15 @@ const SignUp = ({ toggleSignUp }) => {
           <div className="signUpResponse">{verifyResponse}, &nbsp;</div>
           <div className="signUpResponse">{soldierSelectResponse}, &nbsp;</div>
         </div>
-        <div>
+        <div className="loginButtonsWrapper">
           {isVerified ? (
             isSignedUp ? (
-              <h3 className="blueHover" onClick={() => toggleSignUp()}>
+              <button
+                className="signInButton blueHover pointerHover"
+                onClick={() => toggleSignUp()}
+              >
                 Sign In
-              </h3>
+              </button>
             ) : soldierSelectedURL ? (
               <input
                 className="blueHover pointerHover"
@@ -212,25 +224,24 @@ const SignUp = ({ toggleSignUp }) => {
                 id="submit"
                 type="button"
                 value="Next"
-                onClick={() => toggleSoldierSelect(true)}
+                onClick={handleNext}
               ></input>
             )
           ) : (
             <input
               className="blueHover pointerHover"
-              id="submit"
+              id="verify"
               type="button"
               value="Verify"
               onClick={(e) => handleVerify(e, gamerTag, checkedPlatform)}
             ></input>
           )}
-          <div className="signUpResponse">{signUpResponse}, &nbsp;</div>
-          {/* <input
-            className="blueHover"
-            id="submit"
-            type="submit"
-            onClick={(e) => handleSignUp(e)}
-          ></input> */}
+          <button
+            className="signInButton blueHover pointerHover"
+            onClick={handleBack}
+          >
+            Back
+          </button>
         </div>
       </form>
     </div>

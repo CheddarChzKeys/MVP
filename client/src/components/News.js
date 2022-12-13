@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
 import { css } from "@emotion/react";
 import MoonLoader from "react-spinners/MoonLoader";
+import { CSSTransition } from "react-transition-group";
 
-const News = ({ changeClicked, changeBackground }) => {
+const News = ({ activeClicked, changeClicked, changeBackground }) => {
   changeClicked("news");
   changeBackground("./Backgrounds/roze.png");
 
@@ -114,77 +115,86 @@ const News = ({ changeClicked, changeBackground }) => {
           <div className="smackNewsHeaderSpacer" />
         </div>
         <div className="smackNewsMain">
-          <div className="articleListWrapper">
-            {articles.map((article, index) => {
-              const articleNumber = counter;
-              return (
-                <a className="articleLink" href={article.url} target="_blank">
-                  <div
-                    key={article._id}
-                    ref={index === articles.length - 1 ? lastArticleRef : null}
-                    className="article"
-                    onMouseEnter={() => handleMouseEnter(articleNumber)}
-                    onMouseLeave={() => handleMouseLeave()}
-                  >
-                    <div className="articleTop">
-                      <div className="articleTextWrapper">
-                        <div className="title">{article.title}</div>
-                        <div className="sourceDateWrapper">
-                          <p className="sourceDate" id="source">
-                            {article.source.name}
-                          </p>
-                          <p
-                            className={
-                              highlightArticle === articleNumber
-                                ? "sourceDate sourceDateHighlight"
-                                : "sourceDate"
-                            }
-                          >
-                            {parseISOString(article.publishedAt)}
-                          </p>
-                          <p
-                            className={
-                              highlightArticle === articleNumber
-                                ? "seeFullArticle seeFullArticleShow"
-                                : "seeFullArticle"
-                            }
-                          >
-                            Read full article
-                          </p>
+          <CSSTransition
+            in={activeClicked === "news"}
+            timeout={1000}
+            classNames="addGalleryContentMod"
+            unmountOnExit
+          >
+            <div className="articleListWrapper">
+              {articles.map((article, index) => {
+                const articleNumber = counter;
+                return (
+                  <a className="articleLink" href={article.url} target="_blank">
+                    <div
+                      key={article._id}
+                      ref={
+                        index === articles.length - 1 ? lastArticleRef : null
+                      }
+                      className="article"
+                      onMouseEnter={() => handleMouseEnter(articleNumber)}
+                      onMouseLeave={() => handleMouseLeave()}
+                    >
+                      <div className="articleTop">
+                        <div className="articleTextWrapper">
+                          <div className="title">{article.title}</div>
+                          <div className="sourceDateWrapper">
+                            <p className="sourceDate" id="source">
+                              {article.source.name}
+                            </p>
+                            <p
+                              className={
+                                highlightArticle === articleNumber
+                                  ? "sourceDate sourceDateHighlight"
+                                  : "sourceDate"
+                              }
+                            >
+                              {parseISOString(article.publishedAt)}
+                            </p>
+                            <p
+                              className={
+                                highlightArticle === articleNumber
+                                  ? "seeFullArticle seeFullArticleShow"
+                                  : "seeFullArticle"
+                              }
+                            >
+                              Read full article
+                            </p>
+                          </div>
+                          <div className="contentWrapper">
+                            <p className="content">
+                              {article.content.split("[")[0]}
+                            </p>
+                          </div>
                         </div>
-                        <div className="contentWrapper">
-                          <p className="content">
-                            {article.content.split("[")[0]}
-                          </p>
+                        <div className="articleImageWrapper">
+                          <img
+                            className="articleImage"
+                            src={article.urlToImage}
+                          ></img>
                         </div>
                       </div>
-                      <div className="articleImageWrapper">
-                        <img
-                          className="articleImage"
-                          src={article.urlToImage}
-                        ></img>
-                      </div>
+                      {increaseCounter()}
                     </div>
-                    {increaseCounter()}
-                  </div>
-                </a>
-              );
-            })}
-            {!loadedAll && (
-              <div
-                className="galleryLoadMoreWrapper colorHover pointerHover"
-                onClick={getOlderArticles}
-              >
-                <p className="galleryLoadMore">Load More</p>
-              </div>
-            )}
-          </div>
-          <div className="bannerWrapper">
+                  </a>
+                );
+              })}
+              {!loadedAll && (
+                <div
+                  className="galleryLoadMoreWrapper colorHover pointerHover"
+                  onClick={getOlderArticles}
+                >
+                  <p className="galleryLoadMore">Load More</p>
+                </div>
+              )}
+            </div>
+          </CSSTransition>
+          {/* <div className="bannerWrapper">
             <img
               className="bannerImage"
               src="./Images/officialNewsBanner3.png"
             ></img>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

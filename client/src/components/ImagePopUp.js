@@ -48,7 +48,7 @@ function ImagePopUp(props) {
     props.changePopUpVideo(null);
   };
 
-  return props.showImagePopUp ? (
+  return (
     <div className="addBackdrop" onClick={onClose}>
       <div className="popUp">
         <div className="fullImageWrapper" onClick={(e) => e.stopPropagation()}>
@@ -87,8 +87,6 @@ function ImagePopUp(props) {
         </div>
       </div>
     </div>
-  ) : (
-    ""
   );
 }
 

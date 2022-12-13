@@ -2,36 +2,47 @@ import React from "react";
 import Carousel from "react-elastic-carousel";
 
 const SoldierSelectScreen = ({
+  toggleSlideTrans,
   toggleSoldierSelect,
   soldierSelectedURL,
   changeSoldierSelectedURL,
   changeSoldierSelectResponse,
 }) => {
   const imageList = [
-    "JERONIMO_K",
-    "jrickross",
-    "KiDKEN90",
-    "mRey89",
-    "nohypejustBEAST",
-    "booty_Thumper",
+    "Homegirl1",
     "Jigsaw1",
-    "Johan1",
+    "Johann1",
     "Mace1",
+    "Mara1",
+    "Operator1",
+    "Rambo1",
+    "Simi1",
+    "Snoop1",
   ];
 
   const selectSoldier = (imageURL) => {
-    const selectedSoldierURL = "./Images/" + imageURL + ".png";
-    console.log("selectedSoldierURL:", selectedSoldierURL);
-    changeSoldierSelectedURL(selectedSoldierURL);
+    const selectedSoldierURL =
+      "https://mywarzoneappbucket.s3.us-west-1.amazonaws.com/" +
+      imageURL +
+      ".png";
+    if (soldierSelectedURL === selectedSoldierURL) {
+      changeSoldierSelectedURL(null);
+      console.log("soldier unselected");
+    } else {
+      console.log("selectedSoldierURL:", selectedSoldierURL);
+      changeSoldierSelectedURL(selectedSoldierURL);
+    }
   };
 
   const handleNext = () => {
     toggleSoldierSelect(false);
     changeSoldierSelectResponse("Soldier selected");
+    toggleSlideTrans(true);
   };
 
   const handleBack = () => {
     toggleSoldierSelect(false);
+    toggleSlideTrans(true);
   };
 
   return (
@@ -43,15 +54,22 @@ const SoldierSelectScreen = ({
             return (
               <div
                 className={
-                  soldierSelectedURL === "./Images/" + imageURL + ".png"
-                    ? "soldierImageWrap soldierImageWrapHover"
-                    : "soldierImageWrap"
+                  soldierSelectedURL ===
+                  "https://mywarzoneappbucket.s3.us-west-1.amazonaws.com/" +
+                    imageURL +
+                    ".png"
+                    ? "soldierImageWrap soldierImageWrapHover pointerHover"
+                    : "soldierImageWrap pointerHover"
                 }
                 onClick={() => selectSoldier(imageURL)}
               >
                 <img
                   className="soldierImage"
-                  src={"./Images/" + imageURL + ".png"}
+                  src={
+                    "https://mywarzoneappbucket.s3.us-west-1.amazonaws.com/" +
+                    imageURL +
+                    ".png"
+                  }
                 />
               </div>
             );
@@ -62,15 +80,22 @@ const SoldierSelectScreen = ({
             return (
               <div
                 className={
-                  soldierSelectedURL === "./Images/" + imageURL + ".png"
-                    ? "soldierImageWrap soldierImageWrapHover"
-                    : "soldierImageWrap"
+                  soldierSelectedURL ===
+                  "https://mywarzoneappbucket.s3.us-west-1.amazonaws.com/" +
+                    imageURL +
+                    ".png"
+                    ? "soldierImageWrap soldierImageWrapHover pointerHover"
+                    : "soldierImageWrap pointerHover"
                 }
                 onClick={() => selectSoldier(imageURL)}
               >
                 <img
                   className="soldierImage"
-                  src={"./Images/" + imageURL + ".png"}
+                  src={
+                    "https://mywarzoneappbucket.s3.us-west-1.amazonaws.com/" +
+                    imageURL +
+                    ".png"
+                  }
                 />
               </div>
             );

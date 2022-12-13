@@ -1,3 +1,6 @@
+@import "~animate.css/animate.css";
+
+
 @font-face {
   font-family: "modernWarfare";
   src: url("./fonts/modernWarfare.ttf");
@@ -580,6 +583,7 @@ div::-webkit-scrollbar-thumb:hover {
   padding: 10px;
   height: 3em;
   background: rgba(70, 69, 69, 0.445);
+  border: 2px solid #79d9ff;
 }
 
 #typedMessage {
@@ -825,7 +829,7 @@ aside.emoji-picker-react {
 
 .popUp {
   color: #ffffff;
-  position: fixed;
+  /* position: fixed; */
   top: 0;
   left: 0;
   width: 100%;
@@ -850,7 +854,7 @@ aside.emoji-picker-react {
 }
 
 .closeButton {
-  position: fixed;
+  /* position: fixed; */
   width: 25px;
   z-index: 3;
   color: white;
@@ -935,7 +939,7 @@ aside.emoji-picker-react {
   flex: 1;
 }
 
-#loginDiv{
+#loginDiv, #signUpDiv{
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -948,7 +952,7 @@ aside.emoji-picker-react {
   font-family: "modernWarfare";
 }
 
-#loginDiv form {
+#loginDiv form, #signUpDiv form {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -960,13 +964,22 @@ aside.emoji-picker-react {
   margin: 0.5em 0;
 }
 
-#loginDiv #submit,
+#signUpDiv input {
+  flex: 1;
+  width: 100%;
+}
+
+/* #loginDiv #verify {
+  margin: 0 0;
+} */
+
+#loginDiv #submit, #signUpDiv #submit,
 #verify {
   flex: 1;
   color: #ffffff;
   background: rgba(70, 69, 69, 0);
   font-family: "modernWarfare";
-  font-size: large;
+  font-size: larger;
   text-align: start;
   padding: 0.5em 0;
   border: none;
@@ -1177,6 +1190,7 @@ aside.emoji-picker-react {
 .galleryList {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, 1fr);
   grid-gap: 10px;
 }
 
@@ -1221,6 +1235,7 @@ aside.emoji-picker-react {
 
 .itemViewComponentWrapper {
   flex: 1;
+  z-index: 1;
 }
 
 .itemViewComponent {
@@ -1314,6 +1329,7 @@ aside.emoji-picker-react {
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 2;
 }
 
 .addGalleryContent {
@@ -1552,10 +1568,84 @@ aside.emoji-picker-react {
   text-align: start;
   padding: 0.5em 0;
   border: none;
+  display:block;
 }
 
 #soldierSelectHeading {
   text-align: center;
   display: flex;
   justify-content: center;
+}
+
+/*Transitions*/
+
+.smackboardAnimation-enter {
+  opacity: 0;
+  transform: translateY(-25%)
+}
+
+.smackboardAnimation-enter-active{
+  opacity: 1;
+  transform: translateY(0%);
+  transition: transform 700ms, opacity 1000ms;
+}
+
+.addGalleryContentMod-enter {
+  opacity: 0;
+  transform:translateY(-25%);
+}
+.addGalleryContentMod-enter-active {
+  transform:translateY(0%);
+  opacity: 1;
+  transition: transform 800ms, opacity 1000ms;
+}
+.addGalleryContentMod-exit {
+  opacity: 1;
+  transform:translateX(0%)
+}
+.addGalleryContentMod-exit-active {
+  opacity: 0;
+  transform:translateX(-25%);
+  transition: transform 500ms, opacity 500ms;
+}
+
+.galleryListSlideLeft-enter {
+  opacity: 0;
+  transform:translateX(25%);
+}
+.galleryListSlideLeft-enter-active {
+  opacity: 1;
+  transform:translateX(0%);
+  transition: opacity 1000ms, transform 500ms;
+}
+
+.galleryListSlideRight-enter {
+  opacity: 0;
+  transform:translateX(-25%);
+}
+.galleryListSlideRight-enter-active {
+  opacity: 1;
+  transform:translateX(0%);
+  transition: opacity 1000ms, transform 500ms;
+}
+
+.selectedItemSlide-enter {
+  opacity: 0;
+  transform:translateX(25%);
+}
+
+.selectedItemSlide-enter-active {
+  opacity: 1;
+  transform:translateX(0%);
+  transition: opacity 1000ms, transform 900ms;
+}
+
+.signInSlideLeft-enter {
+  opacity: 0;
+  transform:translateX(25%);
+}
+.signInSlideLeft-enter-active {
+  opacity: 1;
+  transform:translateX(0%);
+  transition: opacity 1000ms, transform 500ms;
 }

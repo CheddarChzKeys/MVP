@@ -5,6 +5,7 @@ import DropzoneComponent from "./smackDropbox.js";
 import ImagePopUp from "./ImagePopUp.js";
 import { css } from "@emotion/react";
 import MoonLoader from "react-spinners/MoonLoader";
+import { CSSTransition } from "react-transition-group";
 const axios = require("axios").default;
 
 const io = require("socket.io-client");
@@ -12,12 +13,7 @@ const io = require("socket.io-client");
 let socket = io();
 let updatedChats = [];
 
-// socket.on("output", (data) => {
-//   updatedChats = data;
-//   console.log("updatedChats: ", updatedChats);
-// });
-
-function Chatbox({ changeClicked, changeBackground, username }) {
+function Chatbox({ activeClicked, changeClicked, changeBackground, username }) {
   changeClicked("smackboard");
   changeBackground("./Backgrounds/season6.png");
 
@@ -293,113 +289,120 @@ function Chatbox({ changeClicked, changeBackground, username }) {
       <div id="smackboardComponent">
         <div className="headerWrapper">
           <h1 className="componentHeader smackNewsHeader">Smackboard</h1>
-          <div className="smackNewsHeaderSpacer" />
         </div>
         <div className="smackNewsMain smackMain">
-          <div className="smackboardWrapper">
-            {loading ? (
-              <MoonLoader
-                color="#79d9ff"
-                loading={loading}
-                css={override}
-                size="100px"
-              />
-            ) : (
-              <div id="chatbox" ref={chatBoxRef}>
-                {!loadedAll && (
-                  <div
-                    ref={firstChatRef}
-                    className="galleryLoadMoreWrapper colorHover pointerHover"
-                    // onClick={getMoreChats}
-                  >
-                    <p className="galleryLoadMore">Load More</p>
-                  </div>
-                )}
-                {chats.map((chat, index) => {
-                  return (
+          <CSSTransition
+            in={activeClicked === "smackboard"}
+            timeout={1000}
+            classNames="smackboardAnimation"
+            unmountOnExit
+          >
+            <div className="smackboardWrapper">
+              {loading ? (
+                <MoonLoader
+                  color="#79d9ff"
+                  loading={loading}
+                  css={override}
+                  size="100px"
+                />
+              ) : (
+                <div id="chatbox" ref={chatBoxRef}>
+                  {!loadedAll && (
                     <div
-                      key={chat._id}
-                      ref={index === newChatsCount ? lastLoadedChat : null}
-                      id="chat"
+                      ref={firstChatRef}
+                      className="galleryLoadMoreWrapper colorHover pointerHover"
+                      // onClick={getMoreChats}
                     >
-                      <div id="nameDate">
-                        <div id="chatName">{chat.name}</div>
-                        <div id="chatDate">
-                          {getDateStamp(new Date()).split(", ")[0] ==
-                          getDateStamp(parseISOString(chat.date)).split(", ")[0]
-                            ? `Today, ${
-                                getDateStamp(parseISOString(chat.date)).split(
-                                  ", "
-                                )[1]
-                              }`
-                            : `${getDateStamp(parseISOString(chat.date))}`}
+                      <p className="galleryLoadMore">Load More</p>
+                    </div>
+                  )}
+                  {chats.map((chat, index) => {
+                    return (
+                      <div
+                        key={chat._id}
+                        ref={index === newChatsCount ? lastLoadedChat : null}
+                        id="chat"
+                      >
+                        <div id="nameDate">
+                          <div id="chatName">{chat.name}</div>
+                          <div id="chatDate">
+                            {getDateStamp(new Date()).split(", ")[0] ==
+                            getDateStamp(parseISOString(chat.date)).split(
+                              ", "
+                            )[0]
+                              ? `Today, ${
+                                  getDateStamp(parseISOString(chat.date)).split(
+                                    ", "
+                                  )[1]
+                                }`
+                              : `${getDateStamp(parseISOString(chat.date))}`}
+                          </div>
+                        </div>
+                        <div className="chatContent">
+                          <div id="chatMessage">{chat.message}</div>
+                          {chat.gif && (
+                            <img
+                              className="chatItem"
+                              id="chatGif"
+                              src={chat.gif.downsized.url}
+                              onClick={() => imageClick(chat.gif.original.url)}
+                            ></img>
+                          )}
+                          {chat.video && (
+                            <div className="ytOutterWrapper">
+                              <div id="ytPlayerWrapper" className="chatItem">
+                                <iframe
+                                  className="ytPlayer"
+                                  id="galleryYTPlayer"
+                                  type="text/html"
+                                  // width="400"
+                                  // height="243"
+                                  src={`http://www.youtube.com/embed/${chat.video}`}
+                                  frameBorder="0"
+                                  allowFullScreen="allowfullscreen"
+                                  mozallowfullscreen="mozallowfullscreen"
+                                  msallowfullscreen="msallowfullscreen"
+                                  oallowfullscreen="oallowfullscreen"
+                                  webkitallowfullscreen="webkitallowfullscreen"
+                                ></iframe>
+                              </div>
+                            </div>
+                          )}
+                          {chat.image && (
+                            <div id="chatImageWrapper">
+                              {chat.image.map((image) => {
+                                return (
+                                  <img
+                                    className="chatItem"
+                                    id="chatImg"
+                                    src={image}
+                                    onClick={() => imageClick(image)}
+                                  ></img>
+                                );
+                              })}
+                            </div>
+                          )}
                         </div>
                       </div>
-                      <div className="chatContent">
-                        <div id="chatMessage">{chat.message}</div>
-                        {chat.gif && (
-                          <img
-                            className="chatItem"
-                            id="chatGif"
-                            src={chat.gif.downsized.url}
-                            onClick={() => imageClick(chat.gif.original.url)}
-                          ></img>
-                        )}
-                        {chat.video && (
-                          <div className="ytOutterWrapper">
-                            <div id="ytPlayerWrapper" className="chatItem">
-                              <iframe
-                                className="ytPlayer"
-                                id="galleryYTPlayer"
-                                type="text/html"
-                                // width="400"
-                                // height="243"
-                                src={`http://www.youtube.com/embed/${chat.video}`}
-                                frameBorder="0"
-                                allowFullScreen="allowfullscreen"
-                                mozallowfullscreen="mozallowfullscreen"
-                                msallowfullscreen="msallowfullscreen"
-                                oallowfullscreen="oallowfullscreen"
-                                webkitallowfullscreen="webkitallowfullscreen"
-                              ></iframe>
-                            </div>
-                          </div>
-                        )}
-                        {chat.image && (
-                          <div id="chatImageWrapper">
-                            {chat.image.map((image) => {
-                              return (
-                                <img
-                                  className="chatItem"
-                                  id="chatImg"
-                                  src={image}
-                                  onClick={() => imageClick(image)}
-                                ></img>
-                              );
-                            })}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-            <div id="chatResponse">{submitResponse}, &nbsp;</div>
-            <div id="messageSubmit">
-              <div className="formDiv">
-                <form id="createMessage" onSubmit={(e) => handleSubmit(e)}>
-                  <input
-                    id="typedMessage"
-                    ref={inputRef}
-                    placeholder="Type your message here..."
-                    value={typedMessage}
-                    onChange={(e) => handleChange(e, changeMessage)}
-                  ></input>
-                </form>
-              </div>
-              <div className="buttonsWrapper">
-                {/* <div className="smackButtonWrapper">
+                    );
+                  })}
+                </div>
+              )}
+              <div id="chatResponse">{submitResponse}, &nbsp;</div>
+              <div id="messageSubmit">
+                <div className="formDiv">
+                  <form id="createMessage" onSubmit={(e) => handleSubmit(e)}>
+                    <input
+                      id="typedMessage"
+                      ref={inputRef}
+                      placeholder="Type your message here..."
+                      value={typedMessage}
+                      onChange={(e) => handleChange(e, changeMessage)}
+                    ></input>
+                  </form>
+                </div>
+                <div className="buttonsWrapper">
+                  {/* <div className="smackButtonWrapper">
                   <button
                     className="smackButton iconWrapper"
                     type="button"
@@ -410,100 +413,107 @@ function Chatbox({ changeClicked, changeBackground, username }) {
                   </button>
                 </div> */}
 
-                <div className="smackButtonWrapper">
-                  <button
-                    className={`smackButton iconWrapper ${
-                      submittedVideo ? "videoSubmitted" : ""
-                    }`}
-                    type="button"
-                    onMouseEnter={addVideoInput}
-                    onMouseLeave={hideVideoInput}
-                    onClick={(e) => onClickVideoModal(e)}
-                  >
-                    <img className="messageIcon" src="./icons/videoIcon.png" />
-                  </button>
-                  {showVideoModal && (
-                    <div
-                      id="videoSubmitDiv"
+                  <div className="smackButtonWrapper">
+                    <button
+                      className={`smackButton iconWrapper ${
+                        submittedVideo ? "videoSubmitted" : ""
+                      }`}
+                      type="button"
                       onMouseEnter={addVideoInput}
                       onMouseLeave={hideVideoInput}
+                      onClick={(e) => onClickVideoModal(e)}
                     >
-                      <div id="videoInput">
-                        <form
-                          id="videoForm"
-                          onSubmit={(e) => {
-                            e.stopPropagation();
-                            handleVideoSubmit(e);
-                          }}
-                        >
-                          <input
-                            id="ytLinkInput"
-                            type="text"
-                            placeholder="Insert YouTube link..."
-                            value={typedVideoLink}
-                            onChange={(e) =>
-                              handleChange(e, changeTypedVideoLink)
-                            }
-                            onClick={(e) => e.stopPropagation()}
-                          ></input>
-                          <input
-                            id="videoSubmit"
-                            type="submit"
-                            value="submit"
-                            onClick={(e) => e.stopPropagation()}
-                          ></input>
-                        </form>
+                      <img
+                        className="messageIcon"
+                        src="./icons/videoIcon.png"
+                      />
+                    </button>
+                    {showVideoModal && (
+                      <div
+                        id="videoSubmitDiv"
+                        onMouseEnter={addVideoInput}
+                        onMouseLeave={hideVideoInput}
+                      >
+                        <div id="videoInput">
+                          <form
+                            id="videoForm"
+                            onSubmit={(e) => {
+                              e.stopPropagation();
+                              handleVideoSubmit(e);
+                            }}
+                          >
+                            <input
+                              id="ytLinkInput"
+                              type="text"
+                              placeholder="Insert YouTube link..."
+                              value={typedVideoLink}
+                              onChange={(e) =>
+                                handleChange(e, changeTypedVideoLink)
+                              }
+                              onClick={(e) => e.stopPropagation()}
+                            ></input>
+                            <input
+                              id="videoSubmit"
+                              type="submit"
+                              value="submit"
+                              onClick={(e) => e.stopPropagation()}
+                            ></input>
+                          </form>
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-                <div className="smackButtonWrapper">
-                  <button
-                    className="smackButton iconWrapper"
-                    type="button"
-                    onMouseEnter={addGif}
-                    onMouseLeave={hideGif}
-                  >
-                    <img className="messageIcon" src="./icons/gifIcon.png" />
-                  </button>
-                  {showGifModal && (
-                    <div
-                      id="gifPicker"
+                    )}
+                  </div>
+                  <div className="smackButtonWrapper">
+                    <button
+                      className="smackButton iconWrapper"
+                      type="button"
                       onMouseEnter={addGif}
                       onMouseLeave={hideGif}
                     >
-                      <GifPicker id="emojiPicker" onSelected={onGifClick} />
-                    </div>
-                  )}
-                </div>
-                <div className="smackButtonWrapper">
-                  <button
-                    className="smackButton iconWrapper"
-                    type="button"
-                    onMouseEnter={addEmoji}
-                    onMouseLeave={hideEmoji}
-                  >
-                    <img className="messageIcon" src="./icons/emojiIcon.png" />
-                  </button>
-                  {showEmojiModal && (
-                    <div
-                      id="pickerDiv"
+                      <img className="messageIcon" src="./icons/gifIcon.png" />
+                    </button>
+                    {showGifModal && (
+                      <div
+                        id="gifPicker"
+                        onMouseEnter={addGif}
+                        onMouseLeave={hideGif}
+                      >
+                        <GifPicker id="emojiPicker" onSelected={onGifClick} />
+                      </div>
+                    )}
+                  </div>
+                  <div className="smackButtonWrapper">
+                    <button
+                      className="smackButton iconWrapper"
+                      type="button"
                       onMouseEnter={addEmoji}
                       onMouseLeave={hideEmoji}
                     >
-                      <Picker id="emojiPicker" onEmojiClick={onEmojiClick} />
-                    </div>
-                  )}
+                      <img
+                        className="messageIcon"
+                        src="./icons/emojiIcon.png"
+                      />
+                    </button>
+                    {showEmojiModal && (
+                      <div
+                        id="pickerDiv"
+                        onMouseEnter={addEmoji}
+                        onMouseLeave={hideEmoji}
+                      >
+                        <Picker id="emojiPicker" onEmojiClick={onEmojiClick} />
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
+              <DropzoneComponent
+                changeQeuedImages={changeQeuedImages}
+                previewImages={previewImages}
+                changePreviewImages={changePreviewImages}
+              />
             </div>
-            <DropzoneComponent
-              changeQeuedImages={changeQeuedImages}
-              previewImages={previewImages}
-              changePreviewImages={changePreviewImages}
-            />
-          </div>
-          <div className="bannerWrapper">
+          </CSSTransition>
+          {/* <div className="bannerWrapper">
             <div id="bannerImageWrapper1" className="bannerImageWrapper">
               <img
                 className="smackBannerImage"
@@ -531,17 +541,24 @@ function Chatbox({ changeClicked, changeBackground, username }) {
                 ></img>
               </a>
             </div>
-          </div>
+          </div> */}
         </div>
 
-        <ImagePopUp
-          popUpImage={popUpImage}
-          popUpVideo={popUpVideo}
-          showImagePopUp={showImagePopUp}
-          toggleImagePopUp={toggleImagePopUp}
-          changePopUpImage={changePopUpImage}
-          changePopUpVideo={changePopUpVideo}
-        />
+        <CSSTransition
+          in={showImagePopUp}
+          timeout={1000}
+          classNames="addGalleryContentMod"
+          unmountOnExit
+        >
+          <ImagePopUp
+            popUpImage={popUpImage}
+            popUpVideo={popUpVideo}
+            showImagePopUp={showImagePopUp}
+            toggleImagePopUp={toggleImagePopUp}
+            changePopUpImage={changePopUpImage}
+            changePopUpVideo={changePopUpVideo}
+          />
+        </CSSTransition>
       </div>
     </div>
   );
