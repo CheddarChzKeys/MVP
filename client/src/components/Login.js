@@ -1,10 +1,12 @@
 import React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import SignUp from "./SignUp.js";
+import { CSSTransition } from "react-transition-group";
 const axios = require("axios").default;
 
 const Login = ({
+  activeClicked,
   changeClicked,
   changeBackground,
   changeSignedInUser,
@@ -15,6 +17,7 @@ const Login = ({
   const [typedPassword, changePassword] = useState("");
   const [loginMessage, changeMessage] = useState(" ");
   const [signUpVisible, toggleSignUp] = useState(false);
+  const [slideTrans, toggleSlideTrans] = useState(false);
 
   changeClicked("signIn");
   changeBackground("../Backgrounds/nebulaBackground.png");
@@ -47,71 +50,92 @@ const Login = ({
   };
 
   const handleSignUp = () => {
+    toggleSlideTrans(true);
     toggleSignUp(!signUpVisible);
+
+    changeMessage("");
   };
+
+  useEffect(() => toggleSlideTrans(true), []);
 
   return (
     <div className="mainComponent">
       <div id="logoLogin">
-        <div id="mwLogo">
-          <img src="./Images/mwLogo.png"></img>
-        </div>
-        <div id="loginWrap">
-          {signUpVisible ? (
-            <SignUp toggleSignUp={handleSignUp} />
-          ) : (
-            <div id="loginDiv">
-              <h2>Log In</h2>
-              <form onSubmit={(e) => handleLogin(e)}>
-                <input
-                  className="textInput"
-                  id="username"
-                  placeholder="username"
-                  type="text"
-                  onChange={(e) => handleChange(e, changeUsername)}
-                ></input>
-                <input
-                  className="textInput"
-                  id="password"
-                  placeholder="password"
-                  type="password"
-                  value={typedPassword}
-                  onChange={(e) => handleChange(e, changePassword)}
-                ></input>
-                <div className="loginResponse"> {loginMessage} &nbsp;</div>
-
-                {isSignedIn ? (
-                  <div />
-                ) : (
+        <CSSTransition
+          in={activeClicked === "signIn"}
+          timeout={1000}
+          classNames="galleryListSlideRight"
+        >
+          <div id="mwLogo">
+            <img src="./Images/mwLogo.png"></img>
+          </div>
+        </CSSTransition>
+        <CSSTransition
+          in={slideTrans}
+          timeout={1000}
+          classNames="signInSlideLeft"
+          onEntered={() => toggleSlideTrans(false)}
+        >
+          <div id="loginWrap">
+            {signUpVisible ? (
+              <SignUp
+                toggleSignUp={handleSignUp}
+                toggleSlideTrans={toggleSlideTrans}
+              />
+            ) : (
+              <div id="loginDiv">
+                <h2>Log In</h2>
+                <form onSubmit={(e) => handleLogin(e)}>
                   <input
-                    className="blueHover pointerHover"
-                    id="submit"
-                    type="submit"
-                    value="submit"
+                    className="textInput"
+                    id="username"
+                    placeholder="username"
+                    type="text"
+                    onChange={(e) => handleChange(e, changeUsername)}
                   ></input>
+                  <input
+                    className="textInput"
+                    id="password"
+                    placeholder="password"
+                    type="password"
+                    value={typedPassword}
+                    onChange={(e) => handleChange(e, changePassword)}
+                  ></input>
+                  <div className="loginResponse"> {loginMessage} &nbsp;</div>
+
+                  {isSignedIn ? (
+                    <div />
+                  ) : (
+                    <input
+                      className="blueHover pointerHover"
+                      id="submit"
+                      type="submit"
+                      value="submit"
+                    ></input>
+                  )}
+                </form>
+                {isSignedIn ? (
+                  <h3
+                    className="blueHover"
+                    onClick={() => {
+                      toggleSignedIn();
+                      changeMessage("");
+                    }}
+                  >
+                    Sign Out
+                  </h3>
+                ) : (
+                  <h3
+                    className="blueHover pointerHover"
+                    onClick={() => handleSignUp()}
+                  >
+                    Enlist
+                  </h3>
                 )}
-              </form>
-              {isSignedIn ? (
-                <h3
-                  className="blueHover"
-                  onClick={() => {
-                    toggleSignedIn();
-                    changeMessage("");
-                  }}
-                >
-                  Sign Out
-                </h3>
-              ) : (
-                <h3
-                  className="blueHover pointerHover"
-                  onClick={() => handleSignUp()}
-                >
-                  Enlist
-                </h3>
-              )}
-            </div>
-          )}
-        </div>
+              </div>
+            )}
+          </div>
+        </CSSTransition>
       </div>
     </div>
   );

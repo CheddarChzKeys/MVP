@@ -12,11 +12,13 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import axios from "axios";
 import "core-js/stable";
 import "regenerator-runtime/runtime";
+import "animate.css";
 
 const App = () => {
   const [isSignedIn, changeSignedIn] = useState(false);
   const [signedInUser, changeSignedInUser] = useState(null);
   const [activeClicked, changeClicked] = useState(null);
+  const [memberList, changeMemberList] = useState(null);
 
   const toggleSignedIn = () => {
     changeSignedIn(!isSignedIn);
@@ -35,6 +37,14 @@ const App = () => {
   const changeBackgroundImage = (imageURL) => {
     const background = document.getElementById("htmlBody");
     background.style.background = `url(${imageURL}) center center / cover no-repeat fixed`;
+  };
+
+  //Get member list
+  const getMemberList = () => {
+    axios.get("/getMemberList").then((results) => {
+      console.log("HERE's the members list:", results.data);
+      changeMemberList(results.data);
+    });
   };
 
   //Check session storage for JWT to check if user has logged in
@@ -75,6 +85,7 @@ const App = () => {
                 toggleSignedIn={toggleSignedIn}
                 changeSignedInUser={changeSignedInUser}
                 changeBackground={changeBackgroundImage}
+                activeClicked={activeClicked}
                 changeClicked={changeClicked}
               />
             }
@@ -85,6 +96,8 @@ const App = () => {
               <Records
                 changeBackground={changeBackgroundImage}
                 changeClicked={changeClicked}
+                getMemberList={getMemberList}
+                memberList={memberList}
               />
             }
           />
@@ -94,6 +107,7 @@ const App = () => {
               <Smackboard
                 changeBackground={changeBackgroundImage}
                 username={signedInUser}
+                activeClicked={activeClicked}
                 changeClicked={changeClicked}
               />
             }
@@ -102,6 +116,7 @@ const App = () => {
             path="/news"
             element={
               <News
+                activeClicked={activeClicked}
                 changeClicked={changeClicked}
                 changeBackground={changeBackgroundImage}
               />

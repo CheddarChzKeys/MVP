@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import DropzoneComponent from "./galleryDropbox.js";
+import "animate.css";
 
 const AddGalleryContent = ({
   getGalleryContent,

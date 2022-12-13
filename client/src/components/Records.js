@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import Accolades from "./Accolades.js";
 
 import { css } from "@emotion/react";
@@ -6,7 +6,7 @@ import MoonLoader from "react-spinners/MoonLoader";
 
 const axios = require("axios").default;
 
-class StatsTable extends React.Component {
+class StatsTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,9 +25,21 @@ class StatsTable extends React.Component {
     `;
   }
 
+  moonLoader() {
+    return (
+      <MoonLoader
+        color="#79d9ff"
+        loading={this.state.loading}
+        css={this.override}
+        size="150"
+      />
+    );
+  }
+
   componentDidMount() {
-    this.getDbStats();
     this.props.changeBackground("./Backgrounds/season1.png");
+    this.props.getMemberList();
+    this.getDbStats();
   }
 
   getDbStats() {
@@ -75,26 +87,19 @@ class StatsTable extends React.Component {
             Weekly Accolades
           </h1>
           {this.state.loading ? (
-            <MoonLoader
-              color="#79d9ff"
-              loading={this.state.loading}
-              css={this.override}
-              size="150"
-            />
+            this.moonLoader()
           ) : (
-            <Accolades weekStats={this.state.weekStats} />
+            <Accolades
+              weekStats={this.state.weekStats}
+              memberList={this.props.memberList}
+            />
           )}
         </div>
         {/* Stat Tables */}
         <div className="componentBox">
           <h1 className="componentHeader">Weekly Stats</h1>
           {this.state.loading ? (
-            <MoonLoader
-              color="#79d9ff"
-              loading={this.state.loading}
-              css={this.override}
-              size="150"
-            />
+            this.moonLoader()
           ) : (
             <table id="rankings">
               <thead id="thead">
@@ -187,12 +192,7 @@ class StatsTable extends React.Component {
         <div className="componentBox">
           <h1 className="componentHeader">Lifetime Stats</h1>
           {this.state.loading ? (
-            <MoonLoader
-              color="#79d9ff"
-              loading={this.state.loading}
-              css={this.override}
-              size="150"
-            />
+            this.moonLoader()
           ) : (
             <table id="rankings">
               <thead id="thead">

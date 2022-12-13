@@ -36,40 +36,9 @@ let accoladeList = [
   },
 ];
 
-//Accolade scrollbar functionality
-
-// var button = document.getElementById("arrowsNext");
-// button.onclick = function () {
-//   var container = document.getElementById("accoladesBox");
-//   sideScroll(container, "right", 25, 100, 10);
-// };
-
-// var back = document.getElementById("arrowsBack");
-// back.onclick = function () {
-//   var container = document.getElementById("accoladeBox");
-//   sideScroll(container, "left", 25, 100, 10);
-// };
-
-function sideScroll(element, direction, speed, distance, step) {
-  var scrollAmount = 0;
-  var slideTimer = setInterval(function () {
-    if (direction == "left") {
-      element.scrollLeft -= step;
-    } else {
-      element.scrollLeft += step;
-    }
-    scrollAmount += step;
-    if (scrollAmount >= distance) {
-      window.clearInterval(slideTimer);
-    }
-  }, speed);
-}
-
-var container = React.createRef();
-
 //Accolades component
 
-function Accolades({ weekStats }) {
+function Accolades({ weekStats, memberList }) {
   const sorted = [...weekStats];
 
   const sortStat = (accolade, stat) => {
@@ -82,6 +51,22 @@ function Accolades({ weekStats }) {
         a[accolade.stat] < b[accolade.stat] ? 1 : -1
       )[0];
     }
+  };
+
+  const findPng = (gamerTag) => {
+    console.log(gamerTag);
+    console.log("memberList: ", memberList);
+    const memberIndex = memberList.findIndex((member) => {
+      console.log("gamerTag: ", gamerTag);
+      console.log("member gamerTag: ", member.gamerTag);
+      return member.gamerTag === gamerTag;
+    });
+    console.log("memberIndex: ", memberIndex);
+
+    if (memberList[memberIndex]) {
+      return memberList[memberIndex].png;
+    }
+    return;
   };
 
   return (
@@ -111,11 +96,7 @@ function Accolades({ weekStats }) {
                     </p>
                     <img
                       className="memberImage ranksItem"
-                      src={
-                        "./Images/" +
-                        sortStat(accolade, accolade.stat).username +
-                        ".png"
-                      }
+                      src={findPng(sortStat(accolade, accolade.stat).username)}
                     ></img>
                     <div></div>
                   </div>

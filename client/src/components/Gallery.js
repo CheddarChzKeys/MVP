@@ -4,6 +4,8 @@ import AddContentModal from "./AddGalleryContent.js";
 import ImagePopUp from "./ImagePopUp.js";
 import { css } from "@emotion/react";
 import MoonLoader from "react-spinners/MoonLoader";
+import { CSSTransition } from "react-transition-group";
+import "animate.css";
 
 const Gallery = ({ signedInUser, changeClicked, changeBackground }) => {
   changeClicked("gallery");
@@ -14,6 +16,8 @@ const Gallery = ({ signedInUser, changeClicked, changeBackground }) => {
   const [selectedItem, changeSelectedItem] = useState(null);
 
   const [showAddContent, changeAddContent] = useState(false);
+
+  const [imageClasses, setImageClasses] = useState("d-none");
 
   const [popUpImage, changePopUpImage] = useState(null);
 
@@ -29,6 +33,11 @@ const Gallery = ({ signedInUser, changeClicked, changeBackground }) => {
 
   const [prevLoadedAll, changePrevLoadedAll] = useState(true);
   const [nextLoadedAll, changeNextLoadedAll] = useState(false);
+
+  const [slideTrans, toggleSlideTrans] = useState(false);
+
+  const [gallerySlideLeft, toggleGallerySlideLeft] = useState(true);
+  const [selectedAnimation, toggleSelectedAnimation] = useState(false);
 
   const override = css`
     flex: 1;
@@ -50,7 +59,9 @@ const Gallery = ({ signedInUser, changeClicked, changeBackground }) => {
       changeOldestGalleryItem(newContent[newContent.length - 1]._id);
       changeContentList(newContent);
       changeSelectedItem(newContent[0]);
+      toggleSelectedAnimation(true);
       changeLoading(false);
+      toggleSlideTrans(true);
       return;
     });
   };
@@ -70,8 +81,11 @@ const Gallery = ({ signedInUser, changeClicked, changeBackground }) => {
           }
           // const newContentList = contentList.slice();
           // newContentList.push(...newContent);
+
           changeContentList(newContent);
           console.log("newestGalleryItem:", newestGalleryItem);
+          toggleGallerySlideLeft(true);
+          toggleSlideTrans(true);
           return;
         });
   };
@@ -92,12 +106,15 @@ const Gallery = ({ signedInUser, changeClicked, changeBackground }) => {
           // const newContentList = contentList.slice();
           // newContentList.push(...newContent);
           changeContentList(newContent);
+          toggleGallerySlideLeft(false);
+          toggleSlideTrans(true);
           return;
         });
   };
 
   const handleItemSelect = (clickedItem) => {
     changeSelectedItem(clickedItem);
+    toggleSelectedAnimation(true);
     return;
   };
 
@@ -114,9 +131,21 @@ const Gallery = ({ signedInUser, changeClicked, changeBackground }) => {
     getGalleryContent();
   }, []);
 
-  // useEffect(() => {
-  //   changeSelectedItem(contentList[0]);
-  // }, [contentList]);
+  function hideImage() {
+    console.log("onExit - executed hide image");
+    setImageClasses("d-none");
+  }
+
+  function showImage(node) {
+    console.log("onEnter");
+    setImageClasses("d-block");
+    node.style.opacity = 0;
+  }
+
+  function removeOpacity(node) {
+    console.log("onEntered - executed remove opacity");
+    node.style.opacity = 1;
+  }
 
   return (
     <div className="mainComponent">
@@ -126,7 +155,7 @@ const Gallery = ({ signedInUser, changeClicked, changeBackground }) => {
           <h1
             id="addContentButton"
             className="galleryHeader pointerHover colorHover"
-            onClick={() => toggleAddContent(true)}
+            onClick={() => toggleAddContent()}
           >
             add Content
           </h1>
@@ -142,31 +171,45 @@ const Gallery = ({ signedInUser, changeClicked, changeBackground }) => {
                 size="120px"
               />
             ) : (
-              <div className="galleryList">
-                {contentList.map((item) => {
-                  return (
-                    <div
-                      key={item._id}
-                      className="galleryItem"
-                      onClick={() => handleItemSelect(item)}
-                    >
-                      {item.video && (
-                        <div className="galleryVideoWrapper">
-                          <img
-                            className="galleryImage"
-                            src={`https://img.youtube.com/vi/${item.video}/hqdefault.jpg`}
-                          ></img>
-                        </div>
-                      )}
-                      {item.image && (
-                        <div className="galleryImageWrapper">
-                          <img className="galleryImage" src={item.image}></img>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
+              <CSSTransition
+                in={slideTrans}
+                timeout={1000}
+                classNames={
+                  gallerySlideLeft
+                    ? "galleryListSlideLeft"
+                    : "galleryListSlideRight"
+                }
+                onEntered={() => toggleSlideTrans(false)}
+              >
+                <div className="galleryList">
+                  {contentList.map((item) => {
+                    return (
+                      <div
+                        key={item._id}
+                        className="galleryItem"
+                        onClick={() => handleItemSelect(item)}
+                      >
+                        {item.video && (
+                          <div className="galleryVideoWrapper">
+                            <img
+                              className="galleryImage"
+                              src={`https://img.youtube.com/vi/${item.video}/hqdefault.jpg`}
+                            ></img>
+                          </div>
+                        )}
+                        {item.image && (
+                          <div className="galleryImageWrapper">
+                            <img
+                              className="galleryImage"
+                              src={item.image}
+                            ></img>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </CSSTransition>
             )}
 
             <div className="galleryLoadMoreWrapper">
@@ -192,68 +235,88 @@ const Gallery = ({ signedInUser, changeClicked, changeBackground }) => {
               </p>
             </div>
           </div>
-          {selectedItem && (
-            <div className="itemViewComponentWrapper">
-              <div className="itemViewComponent gridBackground">
-                {selectedItem.image && (
-                  <div className="imageViewWrapper pointerHover">
-                    <img
-                      className="viewPortImage"
-                      onClick={() => imageClick(selectedItem)}
-                      src={selectedItem.image}
-                    />
-                  </div>
-                )}
-                {selectedItem.video && (
-                  <div className="videoViewWrapper">
-                    <iframe
-                      className="ytPlayer"
-                      id="galleryYTPlayer"
-                      type="text/html"
-                      // width="400"
-                      // height="243"
-                      src={`http://www.youtube.com/embed/${selectedItem.video}?autoplay=1&enablejsapi=1`}
-                      // allow="autoplay *"
-                      frameBorder="0"
-                      allowFullScreen="allowfullscreen"
-                      mozallowfullscreen="mozallowfullscreen"
-                      msallowfullscreen="msallowfullscreen"
-                      oallowfullscreen="oallowfullscreen"
-                      webkitallowfullscreen="webkitallowfullscreen"
-                    ></iframe>
-                  </div>
-                )}
-                <div className="itemDetails">
-                  <p
-                    className="expand pointerHover colorHover"
-                    onClick={() => imageClick(selectedItem)}
-                  >
-                    expand
-                  </p>
-                  <p id="source" className="usernameDate">
-                    {selectedItem.userName}
-                  </p>
-                  <p id="date" className="detailsDate">
-                    {selectedItem.uploadDate}
-                  </p>
-                  {selectedItem.description && (
-                    <p className="detailsDescription">
-                      {selectedItem.description}
-                    </p>
+          <div className="itemViewComponentWrapper">
+            <CSSTransition
+              in={selectedAnimation}
+              timeout={1100}
+              classNames="selectedItemSlide"
+              onEntered={() => toggleSelectedAnimation(false)}
+            >
+              {selectedItem ? (
+                <div className="itemViewComponent gridBackground">
+                  {selectedItem.image && (
+                    <div className="imageViewWrapper pointerHover">
+                      <img
+                        className="viewPortImage"
+                        onClick={() => imageClick(selectedItem)}
+                        src={selectedItem.image}
+                      />
+                    </div>
                   )}
+                  {selectedItem.video && (
+                    <div className="videoViewWrapper">
+                      <iframe
+                        className="ytPlayer"
+                        id="galleryYTPlayer"
+                        type="text/html"
+                        // width="400"
+                        // height="243"
+                        src={`http://www.youtube.com/embed/${selectedItem.video}?autoplay=1&enablejsapi=1`}
+                        // allow="autoplay *"
+                        frameBorder="0"
+                        allowFullScreen="allowfullscreen"
+                        mozallowfullscreen="mozallowfullscreen"
+                        msallowfullscreen="msallowfullscreen"
+                        oallowfullscreen="oallowfullscreen"
+                        webkitallowfullscreen="webkitallowfullscreen"
+                      ></iframe>
+                    </div>
+                  )}
+                  <div className="itemDetails">
+                    <p
+                      className="expand pointerHover colorHover"
+                      onClick={() => imageClick(selectedItem)}
+                    >
+                      expand
+                    </p>
+                    <p id="source" className="usernameDate">
+                      {selectedItem.userName}
+                    </p>
+                    <p id="date" className="detailsDate">
+                      {selectedItem.uploadDate}
+                    </p>
+                    {selectedItem.description && (
+                      <p className="detailsDescription">
+                        {selectedItem.description}
+                      </p>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
+              ) : (
+                <div />
+              )}
+            </CSSTransition>
+          </div>
         </div>
-        {showAddContent && (
+        {/* {showAddContent && ( */}
+        <CSSTransition
+          in={showAddContent}
+          timeout={1000}
+          classNames="addGalleryContentMod"
+          unmountOnExit
+        >
           <AddContentModal
             signedInUser={signedInUser}
             getGalleryContent={getGalleryContent}
             toggleAddContent={toggleAddContent}
           />
-        )}
-        {showImagePopUp && (
+        </CSSTransition>
+        <CSSTransition
+          in={showImagePopUp}
+          timeout={1000}
+          classNames="addGalleryContentMod"
+          unmountOnExit
+        >
           <ImagePopUp
             popUpImage={popUpImage}
             popUpVideo={popUpVideo}
@@ -262,7 +325,7 @@ const Gallery = ({ signedInUser, changeClicked, changeBackground }) => {
             changePopUpImage={changePopUpImage}
             changePopUpVideo={changePopUpVideo}
           />
-        )}
+        </CSSTransition>
       </div>
     </div>
   );
