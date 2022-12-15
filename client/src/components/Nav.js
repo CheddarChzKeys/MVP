@@ -3,8 +3,11 @@ import ReactDOM from "react-dom";
 import Records from "./Records.js";
 import Chat from "./Smackboard.js";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { ActiveUser } from "./ActiveUserContext.js";
 
-function Nav({ toggleSignedIn, signedInUser, activeClicked, changeClicked }) {
+function Nav({ toggleSignedIn }) {
+  const { signedInUser, activeClicked } = useContext(ActiveUser);
   return (
     <div className="mainHeaderDiv gridBackground">
       <Link to="/">

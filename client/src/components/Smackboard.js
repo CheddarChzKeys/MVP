@@ -1,4 +1,11 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useContext,
+} from "react";
+import { ActiveUser } from "./ActiveUserContext.js";
 import Picker from "emoji-picker-react";
 import GifPicker from "react-giphy-picker";
 import DropzoneComponent from "./smackDropbox.js";
@@ -6,14 +13,18 @@ import ImagePopUp from "./ImagePopUp.js";
 import { css } from "@emotion/react";
 import MoonLoader from "react-spinners/MoonLoader";
 import { CSSTransition } from "react-transition-group";
-const axios = require("axios").default;
 
+const axios = require("axios").default;
 const io = require("socket.io-client");
 
 let socket = io();
 let updatedChats = [];
 
-function Chatbox({ activeClicked, changeClicked, changeBackground, username }) {
+function Chatbox({ changeBackground }) {
+  const { signedInUser, activeClicked, changeClicked } = useContext(ActiveUser);
+
+  const userName = signedInUser;
+
   changeClicked("smackboard");
   changeBackground("./Backgrounds/season6.png");
 
@@ -34,8 +45,6 @@ function Chatbox({ activeClicked, changeClicked, changeBackground, username }) {
   const [loading, changeLoading] = useState(true);
   const [loadedAll, changeLoadedAll] = useState(true);
   const [newChatsCount, changeNewChatsCount] = useState(0);
-
-  const userName = username;
 
   const override = css`
     align-items: center;

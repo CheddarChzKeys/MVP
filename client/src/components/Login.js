@@ -1,23 +1,20 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import SignUp from "./SignUp.js";
 import { CSSTransition } from "react-transition-group";
+import { ActiveUser } from "./ActiveUserContext.js";
 const axios = require("axios").default;
 
-const Login = ({
-  activeClicked,
-  changeClicked,
-  changeBackground,
-  changeSignedInUser,
-  toggleSignedIn,
-  isSignedIn,
-}) => {
+const Login = ({ changeBackground, toggleSignedIn }) => {
   const [typedUsername, changeUsername] = useState("");
   const [typedPassword, changePassword] = useState("");
   const [loginMessage, changeMessage] = useState(" ");
   const [signUpVisible, toggleSignUp] = useState(false);
   const [slideTrans, toggleSlideTrans] = useState(false);
+
+  const { signedInUser, changeSignedInUser, activeClicked, changeClicked } =
+    useContext(ActiveUser);
 
   changeClicked("signIn");
   changeBackground("../Backgrounds/nebulaBackground.png");
@@ -103,7 +100,7 @@ const Login = ({
                   ></input>
                   <div className="loginResponse"> {loginMessage} &nbsp;</div>
 
-                  {isSignedIn ? (
+                  {signedInUser ? (
                     <div />
                   ) : (
                     <input
@@ -114,7 +111,7 @@ const Login = ({
                     ></input>
                   )}
                 </form>
-                {isSignedIn ? (
+                {signedInUser ? (
                   <h3
                     className="blueHover"
                     onClick={() => {

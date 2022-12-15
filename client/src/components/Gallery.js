@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import AddContentModal from "./AddGalleryContent.js";
 import ImagePopUp from "./ImagePopUp.js";
 import { css } from "@emotion/react";
 import MoonLoader from "react-spinners/MoonLoader";
 import { CSSTransition } from "react-transition-group";
-import "animate.css";
+import { ActiveUser } from "./ActiveUserContext.js";
 
-const Gallery = ({ signedInUser, changeClicked, changeBackground }) => {
+const Gallery = ({ changeBackground }) => {
+  const { signedInUser, changeClicked } = useContext(ActiveUser);
+
   changeClicked("gallery");
   changeBackground("./Backgrounds/reaper.png");
 

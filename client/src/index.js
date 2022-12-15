@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, createContext } from "react";
 import ReactDOM from "react-dom";
 import Nav from "./components/Nav.js";
 import Records from "./components/Records.js";
@@ -8,11 +8,11 @@ import News from "./components/News.js";
 import Gallery from "./components/Gallery.js";
 import Login from "./components/Login.js";
 import Footer from "./components/Footer.js";
+import { ActiveUser } from "./components/ActiveUserContext.js";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import axios from "axios";
 import "core-js/stable";
 import "regenerator-runtime/runtime";
-import "animate.css";
 
 const App = () => {
   const [isSignedIn, changeSignedIn] = useState(false);
@@ -34,7 +34,7 @@ const App = () => {
     console.log("toggled Sign In");
   };
 
-  const changeBackgroundImage = (imageURL) => {
+  const changeBackground = (imageURL) => {
     const background = document.getElementById("htmlBody");
     background.style.background = `url(${imageURL}) center center / cover no-repeat fixed`;
   };
@@ -69,70 +69,50 @@ const App = () => {
   return (
     <Router>
       <div>
-        <Nav
-          isSignedIn={isSignedIn}
-          signedInUser={signedInUser}
-          toggleSignedIn={toggleSignedIn}
-          activeClicked={activeClicked}
-          changeClicked={changeClicked}
-        />
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <Login
-                isSignedIn={isSignedIn}
-                toggleSignedIn={toggleSignedIn}
-                changeSignedInUser={changeSignedInUser}
-                changeBackground={changeBackgroundImage}
-                activeClicked={activeClicked}
-                changeClicked={changeClicked}
-              />
-            }
-          />
-          <Route
-            path="/records"
-            element={
-              <Records
-                changeBackground={changeBackgroundImage}
-                changeClicked={changeClicked}
-                getMemberList={getMemberList}
-                memberList={memberList}
-              />
-            }
-          />
-          <Route
-            path="/smackboard"
-            element={
-              <Smackboard
-                changeBackground={changeBackgroundImage}
-                username={signedInUser}
-                activeClicked={activeClicked}
-                changeClicked={changeClicked}
-              />
-            }
-          />
-          <Route
-            path="/news"
-            element={
-              <News
-                activeClicked={activeClicked}
-                changeClicked={changeClicked}
-                changeBackground={changeBackgroundImage}
-              />
-            }
-          />
-          <Route
-            path="/gallery"
-            element={
-              <Gallery
-                signedInUser={signedInUser}
-                changeClicked={changeClicked}
-                changeBackground={changeBackgroundImage}
-              />
-            }
-          />
-        </Routes>
+        <ActiveUser.Provider
+          value={{
+            signedInUser,
+            changeSignedInUser,
+            activeClicked,
+            changeClicked,
+          }}
+        >
+          <Nav toggleSignedIn={toggleSignedIn} />
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Login
+                  toggleSignedIn={toggleSignedIn}
+                  changeBackground={changeBackground}
+                />
+              }
+            />
+            <Route
+              path="/records"
+              element={
+                <Records
+                  changeBackground={changeBackground}
+                  changeClicked={changeClicked}
+                  getMemberList={getMemberList}
+                  memberList={memberList}
+                />
+              }
+            />
+            <Route
+              path="/smackboard"
+              element={<Smackboard changeBackground={changeBackground} />}
+            />
+            <Route
+              path="/news"
+              element={<News changeBackground={changeBackground} />}
+            />
+            <Route
+              path="/gallery"
+              element={<Gallery changeBackground={changeBackground} />}
+            />
+          </Routes>
+        </ActiveUser.Provider>
       </div>
       <Footer />
     </Router>
