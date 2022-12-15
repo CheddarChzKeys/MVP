@@ -1,10 +1,19 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useContext,
+} from "react";
+import { ActiveUser } from "./ActiveUserContext.js";
 import axios from "axios";
 import { css } from "@emotion/react";
 import MoonLoader from "react-spinners/MoonLoader";
 import { CSSTransition } from "react-transition-group";
 
-const News = ({ activeClicked, changeClicked, changeBackground }) => {
+const News = ({ changeBackground }) => {
+  const { activeClicked, changeClicked } = useContext(ActiveUser);
+
   changeClicked("news");
   changeBackground("./Backgrounds/roze.png");
 
