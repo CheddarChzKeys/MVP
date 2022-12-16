@@ -120,13 +120,3 @@ const App = () => {
 };
 
 ReactDOM.render(<App />, document.getElementById("app"));
-
-// $(document).ready(function () {
-//   $("html").css({
-//     background: 'url("./Backgrounds/reaper.jpg")',
-//     "background-size": "cover",
-//     "background-repeat": "no-repeat",
-//     "background-position": "center center",
-//     "background-attachment": "fixed",
-//   });
-// });

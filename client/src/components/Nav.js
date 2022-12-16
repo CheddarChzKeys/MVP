@@ -11,7 +11,7 @@ function Nav({ toggleSignedIn }) {
   return (
     <div className="mainHeaderDiv gridBackground">
       <Link to="/">
-        <p id="headerTag">EASTSIDE WARFARE</p>
+        <p id="headerTag">Warzone Files</p>
       </Link>
       <nav className="nav">
         <div className="navMenu">
