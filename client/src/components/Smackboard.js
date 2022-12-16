@@ -266,18 +266,11 @@ function Chatbox({ changeBackground }) {
   }, []);
 
   useEffect(() => {
-    // if (didMountRef.current) {
-    //   scrollToBottom();
-    //   // didMountRef.current = false;
-    // } else {
-    //   // didMountRef.current = true;
-    // }
     socket.on("addOlderChats", (data) => {
       changeLoading(true);
       console.log("data.result:", data);
       const reversedChats = data.result.slice().reverse();
       console.log("data.result after reverse: ", reversedChats);
-      // changeLoadedAll(true);
       updatedChats = reversedChats.concat(chats);
       const loadedAllTimeout = setTimeout(() => {
         changeLoadedAll(data.loadedAll);
@@ -320,7 +313,6 @@ function Chatbox({ changeBackground }) {
                     <div
                       ref={firstChatRef}
                       className="galleryLoadMoreWrapper colorHover pointerHover"
-                      // onClick={getMoreChats}
                     >
                       <p className="galleryLoadMore">Load More</p>
                     </div>
@@ -364,8 +356,6 @@ function Chatbox({ changeBackground }) {
                                   className="ytPlayer"
                                   id="galleryYTPlayer"
                                   type="text/html"
-                                  // width="400"
-                                  // height="243"
                                   src={`http://www.youtube.com/embed/${chat.video}`}
                                   frameBorder="0"
                                   allowFullScreen="allowfullscreen"
@@ -411,17 +401,6 @@ function Chatbox({ changeBackground }) {
                   </form>
                 </div>
                 <div className="buttonsWrapper">
-                  {/* <div className="smackButtonWrapper">
-                  <button
-                    className="smackButton iconWrapper"
-                    type="button"
-                    onMouseEnter={addVideoInput}
-                    onMouseLeave={hideVideoInput}
-                  >
-                    <img className="messageIcon" src="./icons/linkIcon.png" />
-                  </button>
-                </div> */}
-
                   <div className="smackButtonWrapper">
                     <button
                       className={`smackButton iconWrapper ${

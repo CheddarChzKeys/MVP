@@ -1616,7 +1616,7 @@ aside.emoji-picker-react {
 .galleryListSlideLeft-enter-active {
   opacity: 1;
   transform:translateX(0%);
-  transition: opacity 1000ms, transform 500ms;
+  transition: opacity 1000ms, transform 400ms;
 }
 
 .galleryListSlideRight-enter {
@@ -1637,7 +1637,7 @@ aside.emoji-picker-react {
 .selectedItemSlide-enter-active {
   opacity: 1;
   transform:translateX(0%);
-  transition: opacity 1000ms, transform 900ms;
+  transition: opacity 1000ms, transform 700ms;
 }
 
 .signInSlideLeft-enter {

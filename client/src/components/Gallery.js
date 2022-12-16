@@ -240,7 +240,7 @@ const Gallery = ({ changeBackground }) => {
           <div className="itemViewComponentWrapper">
             <CSSTransition
               in={selectedAnimation}
-              timeout={1100}
+              timeout={1000}
               classNames="selectedItemSlide"
               onEntered={() => toggleSelectedAnimation(false)}
             >

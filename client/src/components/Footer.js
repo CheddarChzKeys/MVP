@@ -11,7 +11,7 @@ const Footer = () => {
         </div>
         <div className="modernWarfareWrap">
           <a
-            href="https://store.playstation.com/en-us/product/UP0002-CUSA08829_00-CODWARZONE000001"
+            href="https://store.playstation.com/en-us/product/UP0002-PPSA01649_00-CODWZ2BUNDLE0001"
             target="_blank"
           >
             <img
