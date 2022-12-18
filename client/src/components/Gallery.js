@@ -281,11 +281,11 @@ const Gallery = ({ changeBackground }) => {
                     >
                       expand
                     </p>
-                    <p id="source" className="usernameDate">
-                      {selectedItem.userName}
-                    </p>
                     <p id="date" className="detailsDate">
                       {selectedItem.uploadDate}
+                    </p>
+                    <p id="source" className="usernameDate">
+                      {selectedItem.userName}
                     </p>
                     {selectedItem.description && (
                       <p className="detailsDescription">
