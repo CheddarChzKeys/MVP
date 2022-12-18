@@ -28,7 +28,6 @@ function Chatbox({ changeBackground }) {
   changeClicked("smackboard");
   changeBackground("./Backgrounds/season6.png");
 
-  const [chats, updateChats] = useState([]);
   const [typedMessage, changeMessage] = useState("");
   const [typedVideoLink, changeTypedVideoLink] = useState("");
   const [submittedVideo, changeSubmittedVideo] = useState(null);
@@ -43,6 +42,8 @@ function Chatbox({ changeBackground }) {
   const [popUpVideo, changePopUpVideo] = useState(null);
   const [showImagePopUp, toggleImagePopUp] = useState(false);
   const [loading, changeLoading] = useState(true);
+
+  const [chats, updateChats] = useState([]);
   const [loadedAll, changeLoadedAll] = useState(true);
   const [newChatsCount, changeNewChatsCount] = useState(0);
 
@@ -233,7 +234,7 @@ function Chatbox({ changeBackground }) {
     console.log("chat count: ", chats);
     const timeout1 = setTimeout(() => {
       chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
-    }, 1000);
+    }, 500);
   };
 
   const scrollToLastLoadedChat = () => {

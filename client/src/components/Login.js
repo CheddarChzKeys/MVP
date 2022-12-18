@@ -16,9 +16,6 @@ const Login = ({ changeBackground, toggleSignedIn }) => {
   const { signedInUser, changeSignedInUser, activeClicked, changeClicked } =
     useContext(ActiveUser);
 
-  changeClicked("signIn");
-  changeBackground("../Backgrounds/nebulaBackground.png");
-
   const navigate = useNavigate();
 
   const handleLogin = (e) => {
@@ -53,7 +50,11 @@ const Login = ({ changeBackground, toggleSignedIn }) => {
     changeMessage("");
   };
 
-  useEffect(() => toggleSlideTrans(true), []);
+  useEffect(() => {
+    changeBackground("../Backgrounds/nebulaBackground.png");
+    changeClicked("signIn");
+    toggleSlideTrans(true);
+  }, []);
 
   return (
     <div className="mainComponent">

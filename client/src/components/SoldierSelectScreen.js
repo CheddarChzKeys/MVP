@@ -27,9 +27,7 @@ const SoldierSelectScreen = ({
       ".png";
     if (soldierSelectedURL === selectedSoldierURL) {
       changeSoldierSelectedURL(null);
-      console.log("soldier unselected");
     } else {
-      console.log("selectedSoldierURL:", selectedSoldierURL);
       changeSoldierSelectedURL(selectedSoldierURL);
     }
   };
@@ -53,6 +51,7 @@ const SoldierSelectScreen = ({
           {imageList.map((imageURL) => {
             return (
               <div
+                key={imageURL}
                 className={
                   soldierSelectedURL ===
                   "https://mywarzoneappbucket.s3.us-west-1.amazonaws.com/" +
@@ -79,6 +78,7 @@ const SoldierSelectScreen = ({
           {imageList.map((imageURL) => {
             return (
               <div
+                key={imageURL}
                 className={
                   soldierSelectedURL ===
                   "https://mywarzoneappbucket.s3.us-west-1.amazonaws.com/" +
