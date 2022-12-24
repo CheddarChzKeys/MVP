@@ -2,7 +2,6 @@ const express = require("express");
 const path = require("path");
 const jwt = require("jsonwebtoken");
 
-const API = require("call-of-duty-api")({ platform: "acti" });
 const getApiStats = require("./getApiStats.js");
 const verifyMember = require("./verifyMember.js");
 const getNews = require("./getNews.js");
@@ -16,6 +15,9 @@ const mongo = require("mongodb").MongoClient;
 const { ObjectId } = require("mongodb");
 
 const bcrypt = require("bcrypt");
+
+// import API from "call-of-duty-api";
+// API.login(ssoToken: string);
 
 app.use(express.static(path.join(__dirname, "..", "public")));
 app.use(express.json());
@@ -477,7 +479,8 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
 
   //fetch real time stats from COD API every 5 minutes and save to database.
   // getStats(db);
-  const updateDbStats = setInterval(() => getApiStats.getApiStats(db), 150000);
+  // const updateDbStats = setInterval(() => getApiStats.getApiStats(db), 150000);
+  getApiStats.getApiStats(db);
 
   getNews.getNews(db);
 });

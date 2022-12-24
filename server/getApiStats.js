@@ -1,9 +1,9 @@
-const API = require("call-of-duty-api")({ platform: "acti" });
+const API = require("call-of-duty-api");
 const SSOtoken = require("../hidden/ssoToken.js");
 
 const getPlayerInfo = async (gamertag, platform, whichStats) => {
   try {
-    let loginMessage = await API.loginWithSSO(SSOtoken.token);
+    let loginMessage = await API.login(SSOtoken.token);
     return getData(gamertag, platform, whichStats);
   } catch (Error) {
     console.log(Error);
@@ -13,10 +13,11 @@ const getPlayerInfo = async (gamertag, platform, whichStats) => {
 const getData = async (gamertag, platform, whichStats) => {
   try {
     if (whichStats == "weekly") {
-      let data = await API.MWweeklystats(gamertag, platform);
+      let data = await API.Warzone.combatHistory(gamertag, platform);
+      console.log("DATA: ", data);
       return data;
     } else {
-      let data = await API.MWBattleData(gamertag, platform);
+      let data = await API.Warzone.fullData(gamertag, platform);
       return data;
     }
   } catch (Error) {
@@ -54,29 +55,30 @@ const getApiStats = async (db) => {
         members.map((member) => {
           return getPlayerInfo(member.gamerTag, member.platform, "weekly").then(
             (data) => {
-              if (data.wz.all.properties) {
-                data.wz.all.properties.username = member.gamerTag.split("#")[0];
-                data.wz.all.properties.kdRatio = parseFloat(
-                  data.wz.all.properties.kdRatio.toFixed(2)
-                );
-                data.wz.all.properties.avgLifeTime = parseFloat(
-                  data.wz.all.properties.avgLifeTime.toFixed(2)
-                );
-                data.wz.all.properties.headshotPercentage = parseFloat(
-                  data.wz.all.properties.headshotPercentage.toFixed(2)
-                );
-                data.wz.all.properties.killsPerGame = parseFloat(
-                  data.wz.all.properties.killsPerGame.toFixed(2)
-                );
-                data.wz.all.properties.distanceTraveled = Math.floor(
-                  // feet to miles conversion
-                  data.wz.all.properties.distanceTraveled / 5280
-                );
-                data.wz.all.properties.avgLifeTime = Math.floor(
-                  data.wz.all.properties.avgLifeTime
-                );
-                allMembersWeeklyStats.push(data.wz.all.properties);
-              }
+              console.log("last 20: ", data);
+              // if (data.wz.all.properties) {
+              //   data.wz.all.properties.username = member.gamerTag.split("#")[0];
+              //   data.wz.all.properties.kdRatio = parseFloat(
+              //     data.wz.all.properties.kdRatio.toFixed(2)
+              //   );
+              //   data.wz.all.properties.avgLifeTime = parseFloat(
+              //     data.wz.all.properties.avgLifeTime.toFixed(2)
+              //   );
+              //   data.wz.all.properties.headshotPercentage = parseFloat(
+              //     data.wz.all.properties.headshotPercentage.toFixed(2)
+              //   );
+              //   data.wz.all.properties.killsPerGame = parseFloat(
+              //     data.wz.all.properties.killsPerGame.toFixed(2)
+              //   );
+              //   data.wz.all.properties.distanceTraveled = Math.floor(
+              //     // feet to miles conversion
+              //     data.wz.all.properties.distanceTraveled / 5280
+              //   );
+              //   data.wz.all.properties.avgLifeTime = Math.floor(
+              //     data.wz.all.properties.avgLifeTime
+              //   );
+              //   allMembersWeeklyStats.push(data.wz.all.properties);
+              // }
             }
           );
         })
@@ -89,8 +91,15 @@ const getApiStats = async (db) => {
                 member.platform,
                 "lifetime"
               ).then((data) => {
-                data.br.username = member.gamerTag.split("#")[0];
-                allMembersLifetimeStats.push(data.br);
+                data.data.lifetime.mode.br.properties.username =
+                  member.gamerTag.split("#")[0];
+                allMembersLifetimeStats.push(
+                  data.data.lifetime.mode.br.properties
+                );
+                console.log(
+                  "lifetime API response:",
+                  data.data.lifetime.mode.br.properties
+                );
               });
             })
           );

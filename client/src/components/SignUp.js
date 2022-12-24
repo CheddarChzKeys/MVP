@@ -4,14 +4,18 @@ import "regenerator-runtime/runtime";
 import SoldierSelectScreen from "./SoldierSelectScreen.js";
 import { CSSTransition } from "react-transition-group";
 
-const SignUp = ({ toggleSignUp, toggleSlideTrans }) => {
+const SignUp = ({
+  toggleSignUp,
+  toggleSlideTrans,
+  soldierSelectedURL,
+  changeSoldierSelectedURL,
+}) => {
   const [typedUsername, changeUsername] = useState("");
   const [typedPassword, changePassword] = useState("");
   const [typedPassword2, changePassword2] = useState("");
   const [gamerTag, changeGamerTag] = useState("");
   const [checkedPlatform, changePlatform] = useState(null);
-  const [isVerified, changeVerified] = useState(true);
-  const [soldierSelectedURL, changeSoldierSelectedURL] = useState(null);
+  const [isVerified, changeVerified] = useState(false);
   const [usernameResponse, changeUsernameResponse] = useState("");
   const [pwResponse, changePwResponse] = useState("");
   const [verifyResponse, changeVerifiedResponse] = useState("Verify gamertag");
@@ -27,7 +31,7 @@ const SignUp = ({ toggleSignUp, toggleSlideTrans }) => {
     };
     console.log("verifyObject:", verifyObject);
     const results = await axios.post("/verify", verifyObject);
-    if (results.data) {
+    if (results.data.status === "success") {
       changeVerified(true);
       changeVerifiedResponse("Gamer Tag verified");
       console.log("result is: ", results);

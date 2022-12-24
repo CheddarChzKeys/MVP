@@ -21,14 +21,10 @@ const SoldierSelectScreen = ({
   ];
 
   const selectSoldier = (imageURL) => {
-    const selectedSoldierURL =
-      "https://mywarzoneappbucket.s3.us-west-1.amazonaws.com/" +
-      imageURL +
-      ".png";
-    if (soldierSelectedURL === selectedSoldierURL) {
+    if (soldierSelectedURL === imageURL) {
       changeSoldierSelectedURL(null);
     } else {
-      changeSoldierSelectedURL(selectedSoldierURL);
+      changeSoldierSelectedURL(imageURL);
     }
   };
 
@@ -53,48 +49,19 @@ const SoldierSelectScreen = ({
               <div
                 key={imageURL}
                 className={
-                  soldierSelectedURL ===
-                  "https://mywarzoneappbucket.s3.us-west-1.amazonaws.com/" +
-                    imageURL +
-                    ".png"
+                  soldierSelectedURL === imageURL
                     ? "soldierImageWrap soldierImageWrapHover pointerHover"
                     : "soldierImageWrap pointerHover"
                 }
                 onClick={() => selectSoldier(imageURL)}
+                onMouseEnter={() => selectSoldier(imageURL)}
               >
                 <img
                   className="soldierImage"
                   src={
                     "https://mywarzoneappbucket.s3.us-west-1.amazonaws.com/" +
                     imageURL +
-                    ".png"
-                  }
-                />
-              </div>
-            );
-          })}
-        </div>
-        <div className="soldierList">
-          {imageList.map((imageURL) => {
-            return (
-              <div
-                key={imageURL}
-                className={
-                  soldierSelectedURL ===
-                  "https://mywarzoneappbucket.s3.us-west-1.amazonaws.com/" +
-                    imageURL +
-                    ".png"
-                    ? "soldierImageWrap soldierImageWrapHover pointerHover"
-                    : "soldierImageWrap pointerHover"
-                }
-                onClick={() => selectSoldier(imageURL)}
-              >
-                <img
-                  className="soldierImage"
-                  src={
-                    "https://mywarzoneappbucket.s3.us-west-1.amazonaws.com/" +
-                    imageURL +
-                    ".png"
+                    "_largeThumb.png"
                   }
                 />
               </div>
