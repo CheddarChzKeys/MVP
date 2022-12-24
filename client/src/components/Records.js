@@ -31,7 +31,7 @@ class StatsTable extends Component {
         color="#79d9ff"
         loading={this.state.loading}
         css={this.override}
-        size="150"
+        size="150px"
       />
     );
   }

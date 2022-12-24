@@ -12,6 +12,7 @@ const Login = ({ changeBackground, toggleSignedIn }) => {
   const [loginMessage, changeMessage] = useState(" ");
   const [signUpVisible, toggleSignUp] = useState(false);
   const [slideTrans, toggleSlideTrans] = useState(false);
+  const [soldierSelectedURL, changeSoldierSelectedURL] = useState(null);
 
   const { signedInUser, changeSignedInUser, activeClicked, changeClicked } =
     useContext(ActiveUser);
@@ -65,7 +66,17 @@ const Login = ({ changeBackground, toggleSignedIn }) => {
           classNames="galleryListSlideRight"
         >
           <div id="mwLogo">
-            <img src="./Images/mwLogo.png"></img>
+            {soldierSelectedURL ? (
+              <img
+                src={
+                  "https://mywarzoneappbucket.s3.us-west-1.amazonaws.com/" +
+                  soldierSelectedURL +
+                  ".png"
+                }
+              />
+            ) : (
+              <img src="./Images/mwLogo.png"></img>
+            )}
           </div>
         </CSSTransition>
         <CSSTransition
@@ -79,6 +90,8 @@ const Login = ({ changeBackground, toggleSignedIn }) => {
               <SignUp
                 toggleSignUp={handleSignUp}
                 toggleSlideTrans={toggleSlideTrans}
+                soldierSelectedURL={soldierSelectedURL}
+                changeSoldierSelectedURL={changeSoldierSelectedURL}
               />
             ) : (
               <div id="loginDiv">
