@@ -6,6 +6,7 @@ const SoldierSelectScreen = ({
   toggleSoldierSelect,
   soldierSelectedURL,
   changeSoldierSelectedURL,
+  changeSoldierHighlightedURL,
   changeSoldierSelectResponse,
 }) => {
   const imageList = [
@@ -39,6 +40,10 @@ const SoldierSelectScreen = ({
     toggleSlideTrans(true);
   };
 
+  const highlightSoldier = (imageURL) => {
+    changeSoldierHighlightedURL(imageURL);
+  };
+
   return (
     <div id="soldierSelectWrapper">
       <h3 id="soldierSelectHeading">Soldier Select</h3>
@@ -54,7 +59,8 @@ const SoldierSelectScreen = ({
                     : "soldierImageWrap pointerHover"
                 }
                 onClick={() => selectSoldier(imageURL)}
-                onMouseEnter={() => selectSoldier(imageURL)}
+                onMouseEnter={() => highlightSoldier(imageURL)}
+                onMouseLeave={() => highlightSoldier(null)}
               >
                 <img
                   className="soldierImage"

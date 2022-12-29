@@ -164,7 +164,7 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
       { usernameLowerCase: usernameLowerCase },
       async (err, data) => {
         if (data) {
-          res.send("Username already taken");
+          res.send("Username taken");
         } else {
           await users.insertOne({
             username,

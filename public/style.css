@@ -55,6 +55,11 @@ html {
   cursor: default;
 }
 
+.blueLink {
+  color:#79d9ff;
+  text-decoration: none;
+}
+
 /* Navigation Bar*/
 
 .gridBackground {
@@ -921,6 +926,7 @@ aside.emoji-picker-react {
   display: flex;
   align-items: center;
   position: relative;
+  min-height: 70vh;
 }
 
 #mwLogo {
@@ -929,8 +935,14 @@ aside.emoji-picker-react {
   flex: 1;
 }
 
+/* #loginPreview{
+  display: flex;
+  justify-content: center;
+  flex: 1;
+} */
+
 #mwLogo img {
-  width: 80%;
+  width: 100%;
 }
 
 #loginWrap {
