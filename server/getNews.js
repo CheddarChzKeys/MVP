@@ -8,7 +8,7 @@ const getNews = (db) => {
   newsapi.v2
     .everything({
       q: "+'call of duty' AND warzone",
-      from: "2022-12-01",
+      from: "2022-12-15",
       sortBy: "publishedAt",
       apiKey: key,
       domains:

@@ -13,6 +13,7 @@ const Login = ({ changeBackground, toggleSignedIn }) => {
   const [signUpVisible, toggleSignUp] = useState(false);
   const [slideTrans, toggleSlideTrans] = useState(false);
   const [soldierSelectedURL, changeSoldierSelectedURL] = useState(null);
+  const [soldierHighlightedURL, changeSoldierHighlightedURL] = useState(null);
 
   const { signedInUser, changeSignedInUser, activeClicked, changeClicked } =
     useContext(ActiveUser);
@@ -51,6 +52,40 @@ const Login = ({ changeBackground, toggleSignedIn }) => {
     changeMessage("");
   };
 
+  const handlePreviewImage = () => {
+    if (soldierSelectedURL) {
+      return (
+        <div id="mwLogo">
+          <img
+            src={
+              "https://mywarzoneappbucket.s3.us-west-1.amazonaws.com/" +
+              soldierSelectedURL +
+              "_full.png"
+            }
+          />
+        </div>
+      );
+    } else if (soldierHighlightedURL) {
+      return (
+        <div id="mwLogo">
+          <img
+            src={
+              "https://mywarzoneappbucket.s3.us-west-1.amazonaws.com/" +
+              soldierHighlightedURL +
+              "_full.png"
+            }
+          />
+        </div>
+      );
+    } else {
+      return (
+        <div id="mwLogo">
+          <img src="./Images/mwLogo.png"></img>
+        </div>
+      );
+    }
+  };
+
   useEffect(() => {
     changeBackground("../Backgrounds/nebulaBackground.png");
     changeClicked("signIn");
@@ -65,19 +100,7 @@ const Login = ({ changeBackground, toggleSignedIn }) => {
           timeout={1000}
           classNames="galleryListSlideRight"
         >
-          <div id="mwLogo">
-            {soldierSelectedURL ? (
-              <img
-                src={
-                  "https://mywarzoneappbucket.s3.us-west-1.amazonaws.com/" +
-                  soldierSelectedURL +
-                  ".png"
-                }
-              />
-            ) : (
-              <img src="./Images/mwLogo.png"></img>
-            )}
-          </div>
+          {handlePreviewImage()}
         </CSSTransition>
         <CSSTransition
           in={slideTrans}
@@ -92,6 +115,7 @@ const Login = ({ changeBackground, toggleSignedIn }) => {
                 toggleSlideTrans={toggleSlideTrans}
                 soldierSelectedURL={soldierSelectedURL}
                 changeSoldierSelectedURL={changeSoldierSelectedURL}
+                changeSoldierHighlightedURL={changeSoldierHighlightedURL}
               />
             ) : (
               <div id="loginDiv">
