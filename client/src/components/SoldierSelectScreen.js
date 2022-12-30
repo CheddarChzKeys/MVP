@@ -12,7 +12,7 @@ const SoldierSelectScreen = ({
   const imageList = [
     "Homegirl1",
     "Jigsaw1",
-    "Johann1",
+    "Johan1",
     "Mace1",
     "Mara1",
     "Operator1",
