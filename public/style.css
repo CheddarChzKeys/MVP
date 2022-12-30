@@ -1189,10 +1189,9 @@ aside.emoji-picker-react {
 .galleryMain {
   display: flex;
   justify-content: space-between;
-  gap: 2%;
+  gap: 1%;
 
-  margin-top: 15px;
-  min-height: 75vh;
+  margin: 15px 0 25px 0;
 }
 
 .galleryListWrapper {
@@ -1236,18 +1235,27 @@ aside.emoji-picker-react {
 
 .galleryLoadMoreWrapper {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 2%;
   font-family: "modernWarfare";
   color: #efefef;
+  margin:2% 0 0 0;
 }
 
 .galleryLoadMore {
   font-size: 1.2vw;
 }
 
+#prevNextSeparator {
+  border-left: 2px solid white;
+  border-right: 2px solid white;
+  width:1%
+}
+
 .itemViewComponentWrapper {
   flex: 1;
   z-index: 1;
+  position: relative;
 }
 
 .itemViewComponent {
@@ -1255,12 +1263,16 @@ aside.emoji-picker-react {
   border: 1px solid white;
   border-radius: 2px;
   padding: 10px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
 }
 
 .imageViewWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  max-height:70%;
+  overflow:auto;
 }
 
 .videoViewWrapper {
@@ -1289,7 +1301,7 @@ aside.emoji-picker-react {
 }
 
 .viewPortImage {
-  width: 100%;
+  max-width: 100%;
 }
 
 .expand {
@@ -1309,6 +1321,22 @@ aside.emoji-picker-react {
 /* .itemDetails p {
   margin: 5px 5px auto;
 } */
+.galleryUserWrapper {
+  display: grid;
+  grid-template-rows:1fr , repeat(2);
+  grid-template-columns: 1fr 7fr;
+}
+
+.galleryUserThumb{
+width: 50px;
+background-color: #030303;
+grid-row-start: 1;
+grid-row-end: 3;
+}
+
+.userThumbImage{
+  width: 100%;
+}
 
 .usernameDate {
   font-size: 1.5vw;

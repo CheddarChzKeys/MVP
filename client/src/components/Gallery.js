@@ -225,6 +225,7 @@ const Gallery = ({ changeBackground }) => {
               >
                 Prev
               </p>
+              <div id="prevNextSeparator"></div>
               <p
                 className={
                   nextLoadedAll
@@ -274,19 +275,27 @@ const Gallery = ({ changeBackground }) => {
                       ></iframe>
                     </div>
                   )}
+                  <p
+                    className="expand pointerHover colorHover"
+                    onClick={() => imageClick(selectedItem)}
+                  >
+                    expand
+                  </p>
                   <div className="itemDetails">
-                    <p
-                      className="expand pointerHover colorHover"
-                      onClick={() => imageClick(selectedItem)}
-                    >
-                      expand
-                    </p>
-                    <p id="date" className="detailsDate">
-                      {selectedItem.uploadDate}
-                    </p>
-                    <p id="source" className="usernameDate">
-                      {selectedItem.userName}
-                    </p>
+                    <div className="galleryUserWrapper">
+                      <div className="galleryUserThumb">
+                        <img
+                          className="userThumbImage"
+                          src="https://mywarzoneappbucket.s3.us-west-1.amazonaws.com/Homegirl1_largeThumb.png"
+                        />
+                      </div>
+                      <p id="source" className="usernameDate">
+                        {selectedItem.userName}
+                      </p>
+                      <p id="date" className="detailsDate">
+                        {selectedItem.uploadDate}
+                      </p>
+                    </div>
                     {selectedItem.description && (
                       <p className="detailsDescription">
                         {selectedItem.description}
