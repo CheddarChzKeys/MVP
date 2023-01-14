@@ -382,7 +382,14 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
 
   app.get("/getGalleryContent", (req, res) => {
     const galleryDB = db.collection("gallery");
-    const collectionCount = galleryDB.count();
+    let collectionCount;
+    galleryDB.count((err, result) => {
+      if (err) {
+        res.send("Database Error Detected: ", err);
+      } else {
+        collectionCount = result;
+      }
+    });
     galleryDB
       .find()
       .sort({ _id: -1 })
@@ -395,9 +402,13 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
             result: result,
             loadedAll: false,
           };
-          if (result.length === collectionCount) {
+          console.log("collectionCount: ", collectionCount);
+          console.log("result.length: ", result.length);
+          if (result.length == collectionCount) {
+            console.log("condition should be true");
             resultObject.loadedAll = true;
           }
+          console.log("resultObject.loadedAll: ", resultObject.loadedAll);
           res.send(resultObject);
         }
       });
@@ -461,6 +472,8 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
             loadedAll: false,
             collectionCount: collectionCount,
           };
+          console.log("RESULT.LENGTH: ", result.length);
+          console.log("COLLECTIONCOUNT: ", collectionCount);
           if (result.length === collectionCount) {
             resultObject.loadedAll = true;
           }

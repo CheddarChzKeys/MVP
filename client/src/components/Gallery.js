@@ -34,12 +34,15 @@ const Gallery = ({ changeBackground }) => {
   const [loading, changeLoading] = useState(true);
 
   const [prevLoadedAll, changePrevLoadedAll] = useState(true);
-  const [nextLoadedAll, changeNextLoadedAll] = useState(false);
+  const [nextLoadedAll, changeNextLoadedAll] = useState(true);
 
   const [slideTrans, toggleSlideTrans] = useState(false);
 
   const [gallerySlideLeft, toggleGallerySlideLeft] = useState(true);
+
   const [selectedAnimation, toggleSelectedAnimation] = useState(false);
+
+  const [showVideoDetails, toggleShowVideoDetails] = useState(false);
 
   const override = css`
     flex: 1;
@@ -60,7 +63,7 @@ const Gallery = ({ changeBackground }) => {
       changeNewestGalleryItem(newContent[0]._id);
       changeOldestGalleryItem(newContent[newContent.length - 1]._id);
       changeContentList(newContent);
-      changeSelectedItem(newContent[0]);
+      handleItemSelect(newContent[0]);
       toggleSelectedAnimation(true);
       changeLoading(false);
       toggleSlideTrans(true);
@@ -114,8 +117,19 @@ const Gallery = ({ changeBackground }) => {
         });
   };
 
-  const handleItemSelect = (clickedItem) => {
-    changeSelectedItem(clickedItem);
+  const handleItemSelect = async (clickedItem) => {
+    let newSelectedItem = { ...clickedItem };
+    const ytDetails = await axios
+      .get(
+        `https://www.googleapis.com/youtube/v3/videos?id=${clickedItem.video}&key=AIzaSyD99eok2I2008at5rMFrh79QlId-sdN_3w&part=snippet,statistics`
+      )
+      .then((result) => {
+        return result.data.items[0];
+      });
+    console.log("ytDetails: ", ytDetails);
+    newSelectedItem.details = ytDetails;
+    toggleShowVideoDetails(false);
+    changeSelectedItem(newSelectedItem);
     toggleSelectedAnimation(true);
     return;
   };
@@ -149,6 +163,9 @@ const Gallery = ({ changeBackground }) => {
     node.style.opacity = 1;
   }
 
+  const handleShowVideoDetails = () => {
+    toggleShowVideoDetails(!showVideoDetails);
+  };
   return (
     <div className="mainComponent">
       <div className="gallery">
@@ -275,12 +292,12 @@ const Gallery = ({ changeBackground }) => {
                       ></iframe>
                     </div>
                   )}
-                  <p
+                  <btn
                     className="expand pointerHover colorHover"
                     onClick={() => imageClick(selectedItem)}
                   >
                     expand
-                  </p>
+                  </btn>
                   <div className="itemDetails">
                     <div className="galleryUserWrapper">
                       <div className="galleryUserThumb">
@@ -297,9 +314,63 @@ const Gallery = ({ changeBackground }) => {
                       </p>
                     </div>
                     {selectedItem.description && (
-                      <p className="detailsDescription">
-                        {selectedItem.description}
-                      </p>
+                      <>
+                        <p className="detailsDescription">
+                          {selectedItem.description}
+                        </p>
+                        {selectedItem.details && (
+                          <div className="videoDetails ">
+                            {showVideoDetails ? (
+                              <btn
+                                className="detailsLabel pointerHover"
+                                onClick={handleShowVideoDetails}
+                              >
+                                Video Details &#x25BE;
+                              </btn>
+                            ) : (
+                              <btn
+                                className="detailsLabel pointerHover"
+                                onClick={handleShowVideoDetails}
+                              >
+                                Video Details &#x25B8;
+                              </btn>
+                            )}
+                            {showVideoDetails && (
+                              <>
+                                <p
+                                  id="title"
+                                  className="detailsDescriptionTitle"
+                                >
+                                  {selectedItem.details.snippet.title}
+                                </p>
+                                <p
+                                  id="views"
+                                  className="detailsDescriptionSmall"
+                                >
+                                  {selectedItem.details.statistics.viewCount}{" "}
+                                  views
+                                </p>
+                                <p
+                                  id="likes"
+                                  className="detailsDescriptionSmall"
+                                >
+                                  {selectedItem.details.statistics.likeCount}{" "}
+                                  likes
+                                </p>
+                                <p
+                                  id="channel"
+                                  className="detailsDescriptionTitle"
+                                >
+                                  {selectedItem.details.snippet.channelTitle}
+                                </p>
+                                <p className="detailsDescriptionSmall">
+                                  {selectedItem.details.snippet.description}
+                                </p>
+                              </>
+                            )}
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
                 </div>
