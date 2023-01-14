@@ -6,6 +6,7 @@ import { css } from "@emotion/react";
 import MoonLoader from "react-spinners/MoonLoader";
 import { CSSTransition } from "react-transition-group";
 import { ActiveUser } from "./ActiveUserContext.js";
+import ytAPIKey from "../../../hidden/youtubeAPIv3.js";
 
 const Gallery = ({ changeBackground }) => {
   const { signedInUser, changeClicked } = useContext(ActiveUser);
@@ -121,7 +122,7 @@ const Gallery = ({ changeBackground }) => {
     let newSelectedItem = { ...clickedItem };
     const ytDetails = await axios
       .get(
-        `https://www.googleapis.com/youtube/v3/videos?id=${clickedItem.video}&key=AIzaSyD99eok2I2008at5rMFrh79QlId-sdN_3w&part=snippet,statistics`
+        `https://www.googleapis.com/youtube/v3/videos?id=${clickedItem.video}&key=${ytAPIKey}&part=snippet,statistics`
       )
       .then((result) => {
         return result.data.items[0];
