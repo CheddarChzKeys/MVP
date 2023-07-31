@@ -13,6 +13,7 @@ import ImagePopUp from "./ImagePopUp.js";
 import { css } from "@emotion/react";
 import MoonLoader from "react-spinners/MoonLoader";
 import { CSSTransition } from "react-transition-group";
+import ytAPIKey from "../../../hidden/youtubeAPIv3.js";
 
 const axios = require("axios").default;
 const io = require("socket.io-client");
@@ -21,15 +22,12 @@ let socket = io();
 let updatedChats = [];
 
 function Chatbox({ changeBackground }) {
-  const { signedInUser, activeClicked, changeClicked } = useContext(ActiveUser);
-
-  const userName = signedInUser;
-
-  changeClicked("smackboard");
-  changeBackground("./Backgrounds/season6.png");
+  const { signedInUser, activeClicked, changeClicked, memberList } =
+    useContext(ActiveUser);
 
   const [typedMessage, changeMessage] = useState("");
   const [typedVideoLink, changeTypedVideoLink] = useState("");
+  const [videoPreview, changeVideoPreview] = useState(null);
   const [submittedVideo, changeSubmittedVideo] = useState(null);
   const [showVideoModal, toggleVideoModal] = useState(false);
   const [keepVideoModal, toggleKeepVideoModal] = useState(false);
@@ -57,10 +55,6 @@ function Chatbox({ changeBackground }) {
   const observer = useRef();
   const didMountRef = useRef(false);
   const lastLoadedChat = useRef(null);
-
-  // let getMoreChats = () => {
-  //   socket.emit("getMoreChats", chats[0]._id);
-  // };
 
   const firstChatRef = useCallback(
     (node) => {
@@ -102,12 +96,13 @@ function Chatbox({ changeBackground }) {
 
   const onClickVideoModal = (e) => {
     e.stopPropagation();
-    toggleKeepVideoModal(true);
+    toggleVideoModal(!showVideoModal);
   };
 
   const closeAllModals = () => {
     toggleKeepVideoModal(false);
     toggleVideoModal(false);
+    toggleGifModal(false);
   };
 
   const addEmoji = () => {
@@ -118,8 +113,9 @@ function Chatbox({ changeBackground }) {
     toggleEmojiModal(false);
   };
 
-  const addGif = () => {
-    toggleGifModal(true);
+  const toggleGif = (e) => {
+    e.stopPropagation();
+    toggleGifModal(!showGifModal);
   };
 
   const hideGif = () => {
@@ -137,10 +133,13 @@ function Chatbox({ changeBackground }) {
   };
 
   const onGifClick = (gif) => {
-    if (userName) {
+    const username = signedInUser.username;
+    const png = signedInUser.png;
+    if (signedInUser) {
       socket.emit("sendGif", {
-        userName,
+        username,
         gif,
+        png,
       });
       console.log(gif);
     } else {
@@ -149,6 +148,7 @@ function Chatbox({ changeBackground }) {
         changeResponse("");
       }, 2500);
     }
+    toggleGifModal(false);
   };
 
   const handleChange = (e, field) => {
@@ -166,9 +166,11 @@ function Chatbox({ changeBackground }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (userName) {
+    if (signedInUser) {
       changePreviewImages([]);
       changeResponse("creating post");
+      const username = signedInUser.username;
+      const png = signedInUser.png;
       return Promise.all(
         qeuedImages.map(async (image) => {
           const imgRequestURL =
@@ -195,10 +197,11 @@ function Chatbox({ changeBackground }) {
           imageURLs = null;
         }
         socket.emit("sendMessage", {
-          userName,
+          username,
           typedMessage,
           imageURLs,
           submittedVideo,
+          png,
         });
         changeMessage("");
         changeQeuedImages([]);
@@ -216,6 +219,42 @@ function Chatbox({ changeBackground }) {
       }, 2500);
     }
   };
+
+  const handleVideoPreview = (videoLink) => {
+    let videoID = videoLink;
+    const re =
+      /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/i;
+
+    const newVideoID = re.exec(videoID);
+
+    axios
+      .get(
+        `https://www.googleapis.com/youtube/v3/videos?id=${newVideoID}&key=${ytAPIKey}&part=snippet,statistics`
+      )
+      .then((result) => {
+        console.log("YOUTUBE RESULT", result.data.items[0]);
+        changeVideoPreview(result.data.items[0]);
+      });
+    return;
+  };
+
+  // const handleImagePreview = (imageLink) => {
+  //   function checkImage(imageSrc) {
+  //     console.log("In checkImage function");
+  //     var img = new Image();
+  //     img.onload = () => {
+  //       console.log("in onload");
+  //       console.log(imageSrc);
+  //       changeVideoPreview(imageSrc);
+  //     };
+  //     img.onerror = () => {
+  //       console.log("in onerror");
+  //     };
+  //     img.src = imageSrc;
+  //   }
+
+  //   return checkImage(imageLink);
+  // };
 
   const handleVideoSubmit = (e) => {
     e.preventDefault();
@@ -252,7 +291,22 @@ function Chatbox({ changeBackground }) {
     toggleImagePopUp(true);
   };
 
+  const convertedTimeStamp = (date) => {
+    const timeStamp = getDateStamp(parseISOString(date));
+    const timeStampArray = timeStamp.split(" ");
+    const timeArray = timeStampArray[1].split(":");
+    const time = timeArray[0] + ":" + timeArray[1];
+    timeStampArray[1] = time;
+    if (getDateStamp(new Date()).split(", ")[0] == timeStamp.split(", ")[0]) {
+      return `Today, ${timeStampArray[1] + timeStampArray[2]}`;
+    } else {
+      return timeStampArray.join(" ");
+    }
+  };
+
   useEffect(() => {
+    changeClicked("smackboard");
+    changeBackground("./Backgrounds/season6.png");
     socket.on("allChats", (data) => {
       const reversedChats = data.result.slice().reverse();
       // changeLoadedAll(data.loadedAll);
@@ -269,9 +323,7 @@ function Chatbox({ changeBackground }) {
   useEffect(() => {
     socket.on("addOlderChats", (data) => {
       changeLoading(true);
-      console.log("data.result:", data);
       const reversedChats = data.result.slice().reverse();
-      console.log("data.result after reverse: ", reversedChats);
       updatedChats = reversedChats.concat(chats);
       const loadedAllTimeout = setTimeout(() => {
         changeLoadedAll(data.loadedAll);
@@ -283,9 +335,9 @@ function Chatbox({ changeBackground }) {
     });
   }, [chats]);
 
-  useEffect(() => {
-    console.log("qeued image state:", qeuedImages);
-  }, [qeuedImages]);
+  // useEffect(() => {
+  //   console.log("qeued image state:", qeuedImages);
+  // }, [qeuedImages]);
 
   return (
     <div className="mainComponent" onClick={closeAllModals}>
@@ -325,63 +377,62 @@ function Chatbox({ changeBackground }) {
                         ref={index === newChatsCount ? lastLoadedChat : null}
                         id="chat"
                       >
-                        <div id="nameDate">
-                          <div id="chatName">{chat.name}</div>
-                          <div id="chatDate">
-                            {getDateStamp(new Date()).split(", ")[0] ==
-                            getDateStamp(parseISOString(chat.date)).split(
-                              ", "
-                            )[0]
-                              ? `Today, ${
-                                  getDateStamp(parseISOString(chat.date)).split(
-                                    ", "
-                                  )[1]
-                                }`
-                              : `${getDateStamp(parseISOString(chat.date))}`}
-                          </div>
-                        </div>
-                        <div className="chatContent">
-                          <div id="chatMessage">{chat.message}</div>
-                          {chat.gif && (
+                        <div className="nameDate">
+                          <div className="chatAvatarWrapper">
                             <img
-                              className="chatItem"
-                              id="chatGif"
-                              src={chat.gif.downsized.url}
-                              onClick={() => imageClick(chat.gif.original.url)}
-                            ></img>
-                          )}
-                          {chat.video && (
-                            <div className="ytOutterWrapper">
-                              <div id="ytPlayerWrapper" className="chatItem">
-                                <iframe
-                                  className="ytPlayer"
-                                  id="galleryYTPlayer"
-                                  type="text/html"
-                                  src={`http://www.youtube.com/embed/${chat.video}`}
-                                  frameBorder="0"
-                                  allowFullScreen="allowfullscreen"
-                                  mozallowfullscreen="mozallowfullscreen"
-                                  msallowfullscreen="msallowfullscreen"
-                                  oallowfullscreen="oallowfullscreen"
-                                  webkitallowfullscreen="webkitallowfullscreen"
-                                ></iframe>
+                              className="chatAvatarImage"
+                              src={`https://mywarzoneappbucket.s3.us-west-1.amazonaws.com/${chat.png}_largeThumb.png`}
+                            />
+                          </div>
+                          <div className="chatName">{chat.name}</div>
+                          <div className="chatDate">
+                            {convertedTimeStamp(chat.date)}
+                          </div>
+                          <div className="chatContent">
+                            <div id="chatMessage">{chat.message}</div>
+                            {chat.gif && (
+                              <img
+                                className="chatItem"
+                                id="chatGif"
+                                src={chat.gif.downsized.url}
+                                onClick={() =>
+                                  imageClick(chat.gif.original.url)
+                                }
+                              ></img>
+                            )}
+                            {chat.video && (
+                              <div className="ytOutterWrapper">
+                                <div id="ytPlayerWrapper" className="chatItem">
+                                  <iframe
+                                    className="ytPlayer"
+                                    id="galleryYTPlayer"
+                                    type="text/html"
+                                    src={`http://www.youtube.com/embed/${chat.video}`}
+                                    frameBorder="0"
+                                    allowFullScreen="allowfullscreen"
+                                    mozallowfullscreen="mozallowfullscreen"
+                                    msallowfullscreen="msallowfullscreen"
+                                    oallowfullscreen="oallowfullscreen"
+                                    webkitallowfullscreen="webkitallowfullscreen"
+                                  ></iframe>
+                                </div>
                               </div>
-                            </div>
-                          )}
-                          {chat.image && (
-                            <div id="chatImageWrapper">
-                              {chat.image.map((image) => {
-                                return (
-                                  <img
-                                    className="chatItem"
-                                    id="chatImg"
-                                    src={image}
-                                    onClick={() => imageClick(image)}
-                                  ></img>
-                                );
-                              })}
-                            </div>
-                          )}
+                            )}
+                            {chat.image && (
+                              <div id="chatImageWrapper">
+                                {chat.image.map((image) => {
+                                  return (
+                                    <img
+                                      className="chatItem"
+                                      id="chatImg"
+                                      src={image}
+                                      onClick={() => imageClick(image)}
+                                    ></img>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
                     );
@@ -408,8 +459,6 @@ function Chatbox({ changeBackground }) {
                         submittedVideo ? "videoSubmitted" : ""
                       }`}
                       type="button"
-                      onMouseEnter={addVideoInput}
-                      onMouseLeave={hideVideoInput}
                       onClick={(e) => onClickVideoModal(e)}
                     >
                       <img
@@ -417,56 +466,17 @@ function Chatbox({ changeBackground }) {
                         src="./icons/videoIcon.png"
                       />
                     </button>
-                    {showVideoModal && (
-                      <div
-                        id="videoSubmitDiv"
-                        onMouseEnter={addVideoInput}
-                        onMouseLeave={hideVideoInput}
-                      >
-                        <div id="videoInput">
-                          <form
-                            id="videoForm"
-                            onSubmit={(e) => {
-                              e.stopPropagation();
-                              handleVideoSubmit(e);
-                            }}
-                          >
-                            <input
-                              id="ytLinkInput"
-                              type="text"
-                              placeholder="Insert YouTube link..."
-                              value={typedVideoLink}
-                              onChange={(e) =>
-                                handleChange(e, changeTypedVideoLink)
-                              }
-                              onClick={(e) => e.stopPropagation()}
-                            ></input>
-                            <input
-                              id="videoSubmit"
-                              type="submit"
-                              value="submit"
-                              onClick={(e) => e.stopPropagation()}
-                            ></input>
-                          </form>
-                        </div>
-                      </div>
-                    )}
                   </div>
                   <div className="smackButtonWrapper">
                     <button
                       className="smackButton iconWrapper"
                       type="button"
-                      onMouseEnter={addGif}
-                      onMouseLeave={hideGif}
+                      onClick={(e) => toggleGif(e)}
                     >
                       <img className="messageIcon" src="./icons/gifIcon.png" />
                     </button>
                     {showGifModal && (
-                      <div
-                        id="gifPicker"
-                        onMouseEnter={addGif}
-                        onMouseLeave={hideGif}
-                      >
+                      <div id="gifPicker" onClick={(e) => e.stopPropagation()}>
                         <GifPicker id="emojiPicker" onSelected={onGifClick} />
                       </div>
                     )}
@@ -548,6 +558,47 @@ function Chatbox({ changeBackground }) {
             changePopUpVideo={changePopUpVideo}
           />
         </CSSTransition>
+
+        {showVideoModal && (
+          <div id="videoSubmitDiv">
+            <div id="videoInput">
+              <p className="modalHeading">Post A Video</p>
+              <div className="videoThumbWrapper">
+                {typedVideoLink && handleVideoPreview(typedVideoLink)}
+                {videoPreview ? (
+                  <img
+                    className="ytImagePreview"
+                    src={videoPreview.snippet.thumbnails.standard.url}
+                  ></img>
+                ) : (
+                  <h3>No video selected</h3>
+                )}
+              </div>
+              <form
+                id="videoForm"
+                onSubmit={(e) => {
+                  e.stopPropagation();
+                  handleVideoSubmit(e);
+                }}
+              >
+                <input
+                  id="ytLinkInput"
+                  type="text"
+                  placeholder="Insert YouTube link..."
+                  value={typedVideoLink}
+                  onChange={(e) => handleChange(e, changeTypedVideoLink)}
+                  onClick={(e) => e.stopPropagation()}
+                ></input>
+                <input
+                  id="videoSubmit"
+                  type="submit"
+                  value="submit"
+                  onClick={(e) => e.stopPropagation()}
+                ></input>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

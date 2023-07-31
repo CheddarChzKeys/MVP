@@ -113,7 +113,10 @@ const News = ({ changeBackground }) => {
   };
 
   useEffect(() => {
-    getNewArticles();
+    axios.get("/updateNews").then((updateMessage) => {
+      console.log(updateMessage);
+      getNewArticles();
+    });
   }, []);
 
   return (

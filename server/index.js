@@ -1,19 +1,19 @@
 const express = require("express");
 const path = require("path");
-const jwt = require("jsonwebtoken");
 
 const getApiStats = require("./getApiStats.js");
 const verifyMember = require("./verifyMember.js");
 const getNews = require("./getNews.js");
 
-const PORT = 8080;
 const app = express();
+const PORT = 8080;
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const mongo = require("mongodb").MongoClient;
 const { ObjectId } = require("mongodb");
 
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 // import API from "call-of-duty-api";
@@ -22,6 +22,7 @@ const bcrypt = require("bcrypt");
 app.use(express.static(path.join(__dirname, "..", "public")));
 app.use(express.json());
 
+// Use below line when deploying via Docker
 // mongo.connect("mongodb://mongo:27017/warzone", function (err, client) {
 mongo.connect("mongodb://localhost/warzone", function (err, client) {
   if (err) {
@@ -94,11 +95,12 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
     socket.on("sendMessage", (message) => {
       const date = new Date();
       chat.insertOne({
-        name: message.userName,
+        name: message.username,
         message: message.typedMessage,
         image: message.imageURLs,
         video: message.submittedVideo,
         date: date,
+        png: message.png,
       });
       chat
         .find()
@@ -121,9 +123,10 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
       console.log("heard sendGif");
       const date = new Date();
       chat.insertOne({
-        name: gifMessage.userName,
+        name: gifMessage.username,
         gif: gifMessage.gif,
         date: date,
+        png: gifMessage.png,
       });
       chat
         .find()
@@ -199,16 +202,12 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
             res.json({ message: "Invalid password" });
           } else {
             //create jwt and send to client
-            const accessToken = jwt.sign(
-              {
-                username: foundUser.username,
-              },
-              "secret",
-              { expiresIn: "30s" }
-            );
+            const accessToken = jwt.sign({ user: foundUser }, "secret", {
+              expiresIn: "30s",
+            });
             const refreshToken = jwt.sign(
               {
-                username: foundUser.username,
+                user: foundUser,
               },
               "secret",
               { expiresIn: "1h" }
@@ -216,11 +215,11 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
             refreshTokens.insertOne({
               refreshToken,
             });
+            console.log("FOUND USER: ", foundUser);
             res.json({
-              username: foundUser.username,
+              user: foundUser,
               accessToken: accessToken,
               refreshToken: refreshToken,
-              message: "Welcome Soldier",
             });
           }
         }
@@ -238,15 +237,18 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
 
   app.post("/verifyToken", (req, res) => {
     const accessToken = req.body.accessToken;
+    console.log("VERIFYING TOKENS");
     jwt.verify(accessToken, "secret", async (err, decoded) => {
       if (err) {
         const refreshToken = req.body.refreshToken;
         if (refreshToken) {
+          console.log("FOUND LOCAL REFRESH TOKEN");
           const refreshTokens = db.collection("refreshTokens");
           const foundRefreshToken = await refreshTokens.findOne({
             refreshToken: refreshToken,
           });
           if (foundRefreshToken) {
+            console.log("FOUND DB REFRESH TOKEN");
             jwt.verify(
               foundRefreshToken.refreshToken,
               "secret",
@@ -256,24 +258,25 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
                     refreshToken: foundRefreshToken.refreshToken,
                   });
                   return res.status(401).send(err);
+                } else {
+                  console.log("REFRESH DECODED: ", decoded);
+                  const newAccessToken = jwt.sign(decoded.user, "secret", {
+                    expiresIn: "30s",
+                  });
+                  return res
+                    .status(200)
+                    .json({ user: decoded, newAccessToken: newAccessToken });
                 }
-                const newAccessToken = jwt.sign(
-                  {
-                    username: decoded.username,
-                  },
-                  "secret",
-                  { expiresIn: "30s" }
-                );
-                res
-                  .status(200)
-                  .json({ username: decoded.username, newAccessToken });
               }
             );
           }
+        } else {
+          return res.status(401).send(err);
         }
-        return res.status(401).send(err);
+      } else {
+        console.log("DECODED: ", decoded);
+        return res.status(200).json({ user: decoded });
       }
-      res.status(200).json(decoded);
     });
   });
 
@@ -297,7 +300,7 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
         console.log("db.users error: ", err);
       } else {
         console.log("Here's a members log:", result);
-        res.status(200).json(result);
+        return res.status(200).json(result);
       }
     });
   });
@@ -320,6 +323,12 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
           res.status(200).json(stats);
         }
       });
+  });
+
+  app.get("/updateNews", async (req, res) => {
+    resultMessage = await getNews.getNews(db);
+    console.log(resultMessage);
+    res.send(resultMessage);
   });
 
   app.get("/getNews", (req, res) => {
@@ -494,8 +503,6 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
   // getStats(db);
   // const updateDbStats = setInterval(() => getApiStats.getApiStats(db), 150000);
   getApiStats.getApiStats(db);
-
-  getNews.getNews(db);
 });
 
 server.listen(PORT, () => {
