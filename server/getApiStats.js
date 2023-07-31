@@ -14,7 +14,6 @@ const getData = async (gamertag, platform, whichStats) => {
   try {
     if (whichStats == "weekly") {
       let data = await API.Warzone.combatHistory(gamertag, platform);
-      console.log("DATA: ", data);
       return data;
     } else {
       let data = await API.Warzone.fullData(gamertag, platform);
@@ -46,7 +45,6 @@ const getApiStats = async (db) => {
     if (err) {
       console.log("db.users error: ", err);
     } else {
-      console.log("Here's a members log:", result);
       members = result;
       const allMembersWeeklyStats = [];
       const allMembersLifetimeStats = [];
@@ -55,7 +53,6 @@ const getApiStats = async (db) => {
         members.map((member) => {
           return getPlayerInfo(member.gamerTag, member.platform, "weekly").then(
             (data) => {
-              console.log("last 20: ", data);
               // if (data.wz.all.properties) {
               //   data.wz.all.properties.username = member.gamerTag.split("#")[0];
               //   data.wz.all.properties.kdRatio = parseFloat(
@@ -96,10 +93,10 @@ const getApiStats = async (db) => {
                 allMembersLifetimeStats.push(
                   data.data.lifetime.mode.br.properties
                 );
-                console.log(
-                  "lifetime API response:",
-                  data.data.lifetime.mode.br.properties
-                );
+                // console.log(
+                //   "lifetime API response:",
+                //   data.data.lifetime.mode.br.properties
+                // );
               });
             })
           );

@@ -493,7 +493,7 @@ div::-webkit-scrollbar-thumb:hover {
   background-size: 1.5px;
   display: flex;
   flex-direction: column;
-  padding: 5px 10px;
+  padding: 10px;
   margin: 0 0 1em 0;
 }
 
@@ -516,27 +516,25 @@ div::-webkit-scrollbar-thumb:hover {
   cursor: pointer;
 }
 
-#chatName {
+.chatName {
+  font-family:"orbitron";
   color: #79d9ff;
-  font-size: medium;
-  margin-right: 7px;
+  font-size: 1.2rem;
+  margin: 0 7px 3px 0;
 }
 
-#chatDate {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  font-size: small;
+.chatDate {
+  font-size: .9rem;
   color: rgb(151, 147, 147);
 }
 
 .chatContent {
-  padding: 0 0 0 10px;
+  margin: 10px 0 0 0;
 }
 
 #chatMessage {
   color: #ffffff;
-  font-size: large;
+  font-size: 1.2rem;
   padding-top: 2px;
 }
 
@@ -570,10 +568,27 @@ div::-webkit-scrollbar-thumb:hover {
   margin: 1em 0;
 }
 
-#nameDate {
-  display: flex;
+.nameDate {
+  display: grid;
+  grid-template-columns: 3rem 20fr;
   margin-bottom: 2px;
+  column-gap: .75vw;
   align-items: flex-end;
+}
+
+.chatAvatarWrapper {
+  grid-row-start: 1;
+  grid-row-end: 4;
+  border-radius: 50%;
+  background-color: white;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-self: start;
+}
+
+.chatAvatarImage {
+  width: 90%;
 }
 
 #chatUsername {
@@ -609,40 +624,95 @@ div::-webkit-scrollbar-thumb:hover {
 }
 
 #videoInput {
-  position: absolute;
-  right: 0;
-  bottom: 2.5em;
-  width: 400px;
-  color: rgb(0, 0, 0);
-  background-color: rgba(3, 3, 3, 0.205);
-  border-radius: 5px;
-  padding: 3px;
-  border: 2px solid rgb(121, 217, 255);
+  width: 30vw;
+  height: fit-content;
+  background-color: rgb(3, 3, 3);
+  padding: 10px;
+  color: #ffffff;
+  font-family: modernWarfare;
+  display:flex;
+  flex-direction: column;
+  justify-content:space-evenly;
+  border: 1px solid #79d9ff;
+}
+
+.ytImagePreview{
+  width: 100%;
 }
 
 #videoForm {
   display: flex;
+  flex-direction:column;
+  justify-content: space-evenly;
+  flex: 2;
 }
 
 #ytLinkInput {
   display: inline-block;
-  border-radius: 5px;
+  height: 5vh;
+  background-image: url(./black-tile.png);
+  background-color: rgba(0, 2, 0, 0.575);
+  background-size: 1.5px;
+  color: white;
+  font-size: 1em;
+  border: none;
+  margin: 1vh 0;
+  padding: 0 10px;
+  border: 1px solid rgba(0, 0, 0, 0)
+}
+
+#ytLinkInput:focus{
+  outline: none !important;
+  border: 1px solid #79d9ff;
+}
+
+#videoSubmitDiv{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  background-color: #000000d3;
+  align-items: center;
+}
+
+.modalHeading {
+  margin: 1vh 0;
+  font-size: 1.35rem;
+}
+
+.videoThumbWrapper{
+  display: flex;
+  align-items:center;
+  justify-content:center;
+  width: 100%;
+  aspect-ratio:16/9;
   flex: 3;
-  height: 30px;
+  background-image: url(./black-tile.png);
+  background-color: rgba(0, 2, 0, 0.575);
+  background-size: 1.5px;
+  color:rgb(151, 147, 147);
+  margin: 1vh 0;
 }
 
 #videoSubmit {
   display: inline-block;
-  border-radius: 5px;
   font-family: "modernWarfare";
-  flex: 1;
   background-color: rgba(70, 69, 69, 0.445);
+  width: 15vw;
   color: white;
+  height: 5vh;
+  align-self:center;
+  font-size: 1vw;
+  margin: 1vh 0;
 }
 
 #videoSubmit:hover {
   text-shadow: 0px 0px 10px #79d9ff;
   color: #79d9ff;
+  cursor:pointer;
 }
 
 .sc-htoDjs {
@@ -696,7 +766,8 @@ aside.emoji-picker-react {
 }
 
 .buttonsWrapper {
-  width: 30%;
+  width: 12%;
+  min-width: 125px;
   justify-content: flex-end;
   display: flex;
 }
@@ -709,15 +780,15 @@ aside.emoji-picker-react {
 }
 
 .iconWrapper {
-  border-bottom: 1px solid #f8f9fa00;
+  border-bottom: 2px solid #f8f9fa00;
 }
 
 .iconWrapper:hover {
-  border-bottom: 1px solid #f8f9fa;
+  border-bottom: 2px solid #f8f9fa;
 }
 
 .iconWrapperBlue {
-  border-bottom: 1px solid #79d9ff;
+  border-bottom: 2px solid #79d9ff;
 }
 
 .smackButton {
@@ -733,7 +804,7 @@ aside.emoji-picker-react {
 }
 
 .messageIcon {
-  width: 50%;
+  width: 90%;
 }
 
 .smackButton:hover {
@@ -1419,13 +1490,13 @@ grid-row-end: 3;
 }
 
 .addGalleryContent {
-  color: #ffffff;
-  width: 35vw;
-  font-family: modernWarfare;
-  background-color: black;
-  padding: 10px;
-  margin-left: auto;
-  margin-right: auto;
+    color: #ffffff;
+    width: 35vw;
+    font-family: modernWarfare;
+    background-color: black;
+    padding: 10px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .addContentMain {

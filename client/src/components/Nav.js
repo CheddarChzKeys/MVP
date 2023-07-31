@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { ActiveUser } from "./ActiveUserContext.js";
 
-function Nav({ toggleSignedIn }) {
+function Nav({ toggleSignedIn, newSignedInUser }) {
   const { signedInUser, activeClicked } = useContext(ActiveUser);
   return (
     <div className="mainHeaderDiv gridBackground">
@@ -66,7 +66,7 @@ function Nav({ toggleSignedIn }) {
             <>
               <div className="navItemBox">
                 <div className="navItemNoHover" id="noHover">
-                  {signedInUser}
+                  {newSignedInUser.username}
                 </div>
               </div>
               <div className="navItemBox">

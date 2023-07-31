@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, createContext } from "react";
+import { useEffect, useState, useMemo, createContext } from "react";
 import ReactDOM from "react-dom";
 import Nav from "./components/Nav.js";
 import Records from "./components/Records.js";
@@ -19,6 +19,8 @@ const App = () => {
   const [signedInUser, changeSignedInUser] = useState(null);
   const [activeClicked, changeClicked] = useState(null);
   const [memberList, changeMemberList] = useState(null);
+
+  const newSignedInUser = useMemo(() => signedInUser, [signedInUser]);
 
   const toggleSignedIn = () => {
     changeSignedIn(!isSignedIn);
@@ -48,23 +50,33 @@ const App = () => {
   };
 
   //Check session storage for JWT to check if user has logged in
-  const accessToken = localStorage.getItem("accessToken");
-  const refreshToken = localStorage.getItem("refreshToken");
-  if (accessToken) {
-    axios
-      .post("/verifyToken", {
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-      })
-      .then((results) => {
-        console.log("token verification results:", results);
-        if (results.data.newAccessToken) {
-          localStorage.setItem("accessToken", results.data.newAccessToken);
-        }
-        changeSignedIn(true);
-        changeSignedInUser(results.data.username);
-      });
-  }
+  const checkSession = () => {
+    const accessToken = localStorage.getItem("accessToken");
+    const refreshToken = localStorage.getItem("refreshToken");
+    console.log("CHECKING ACCESS TOKEN RESULTS: ", accessToken);
+    console.log("CHECKING REFRESH TOKEN RESULTS: ", refreshToken);
+    if (accessToken) {
+      axios
+        .post("/verifyToken", {
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+        })
+        .then((results) => {
+          console.log("token verification results:", results);
+          if (results.data.newAccessToken) {
+            console.log("SETTING NEW ACCESS TOKEN");
+            localStorage.setItem("accessToken", results.data.newAccessToken);
+          }
+          changeSignedIn(true);
+          console.log("SIGN IN SUCCESFULL: ", results.data);
+          changeSignedInUser(results.data.user.user);
+        });
+    }
+  };
+
+  useEffect(() => {
+    checkSession();
+  }, []);
 
   return (
     <Router>
@@ -77,7 +89,10 @@ const App = () => {
             changeClicked,
           }}
         >
-          <Nav toggleSignedIn={toggleSignedIn} />
+          <Nav
+            newSignedInUser={newSignedInUser}
+            toggleSignedIn={toggleSignedIn}
+          />
           <Routes>
             <Route
               path="/"
@@ -101,7 +116,12 @@ const App = () => {
             />
             <Route
               path="/smackboard"
-              element={<Smackboard changeBackground={changeBackground} />}
+              element={
+                <Smackboard
+                  memberList={memberList}
+                  changeBackground={changeBackground}
+                />
+              }
             />
             <Route
               path="/news"
