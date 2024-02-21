@@ -82,7 +82,7 @@ const AddGalleryContent = ({
 
       const newTimestamp = new Date().toLocaleString().split(",")[0];
 
-      const user = signedInUser ? signedInUser : "Anonymous User";
+      const user = signedInUser ? signedInUser.username : "Anonymous User";
 
       const newItemObject = {
         userName: user,

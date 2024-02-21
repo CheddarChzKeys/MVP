@@ -120,6 +120,7 @@ const Gallery = ({ changeBackground }) => {
 
   const handleItemSelect = async (clickedItem) => {
     let newSelectedItem = { ...clickedItem };
+    console.log(newSelectedItem);
     const ytDetails = await axios
       .get(
         `https://www.googleapis.com/youtube/v3/videos?id=${clickedItem.video}&key=${ytAPIKey}&part=snippet,statistics`
@@ -130,6 +131,7 @@ const Gallery = ({ changeBackground }) => {
     console.log("ytDetails: ", ytDetails);
     newSelectedItem.details = ytDetails;
     toggleShowVideoDetails(false);
+    console.log(newSelectedItem);
     changeSelectedItem(newSelectedItem);
     toggleSelectedAnimation(true);
     return;
@@ -171,13 +173,13 @@ const Gallery = ({ changeBackground }) => {
     <div className="mainComponent">
       <div className="gallery">
         <div id="galleryHeaderWrapper" className="headerWrapper">
-          <h1 className="galleryHeader">Gallery</h1>
+          <h1 className="galleryHeader">GALLERY </h1>
           <h1
             id="addContentButton"
             className="galleryHeader pointerHover colorHover"
             onClick={() => toggleAddContent()}
           >
-            add Content
+            ADD CONTENT
           </h1>
           >
         </div>
