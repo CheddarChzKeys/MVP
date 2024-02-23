@@ -78,15 +78,16 @@ html {
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: fit-content;
 }
 
 #headerTag {
   display: inline-block;
-  margin: 2.2vh 0 0 0;
   color: #ffffff;
   /* border-bottom: 1px solid #79d9ff; */
   font-family: "modernWarfare";
   font-size: 3vw;
+  margin:1.5vw 0;
 }
 
 .nav {
@@ -95,6 +96,7 @@ html {
   height: 25%;
   z-index: 1;
   width: 80%;
+  flex: 1;
 }
 
 .navMenu {
