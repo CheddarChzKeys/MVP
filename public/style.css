@@ -191,7 +191,7 @@ html {
 .componentHeader {
   font-family: "modernWarfare";
   position: relative;
-  font-size: 25px;
+  font-size: 2.5vw;
   color: rgb(255, 255, 255);
   border-bottom: 1px solid #79d9ff;
   white-space: nowrap;
