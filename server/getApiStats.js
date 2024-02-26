@@ -17,6 +17,7 @@ const getData = async (gamertag, platform, whichStats) => {
       return data;
     } else {
       let data = await API.Warzone.fullData(gamertag, platform);
+      console.log("newStats: ", data);
       return data;
     }
   } catch (Error) {
