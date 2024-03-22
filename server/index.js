@@ -1,8 +1,7 @@
 const express = require("express");
 const path = require("path");
 
-const getApiStats = require("./getApiStats.js");
-const verifyMember = require("./verifyMember.js");
+const updateStats = require("./models/updateStats");
 const getNews = require("./getNews.js");
 
 const app = express();
@@ -19,17 +18,23 @@ const bcrypt = require("bcrypt");
 // import API from "call-of-duty-api";
 // API.login(ssoToken: string);
 
+const usersRoutes = require("./routes/usersRoutes");
+
 app.use(express.static(path.join(__dirname, "..", "public")));
 app.use(express.json());
 
+
 // Use below line when deploying via Docker
 // mongo.connect("mongodb://mongo:27017/warzone", function (err, client) {
+let db;
 mongo.connect("mongodb://localhost/warzone", function (err, client) {
   if (err) {
     throw err;
   }
   console.log("MongoDB connected...");
-  const db = client.db("warzone");
+  db = client.db("warzone");
+  updateStats(db);
+})
 
   io.on("connection", (socket) => {
     socket.emit("welcome", "You are now connected with socket.io!");
@@ -46,7 +51,7 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
         .limit(10)
         .sort({ _id: -1 })
         .toArray(function (err, res) {
-          if (err) {
+          if (err) {``
             throw err;
           }
           const resultObject = {
@@ -146,13 +151,14 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
     });
   });
 
-  app.post("/verify", async (req, res) => {
-    const gamerTag = req.body.gamerTag;
-    const platform = req.body.platform;
+  app.use("/users", usersRoutes);
+  // app.post("/verify", async (req, res) => {
+  //   const gamerTag = req.body.gamerTag;
+  //   const platform = req.body.platform;
 
-    const result = await verifyMember.verifyMember(gamerTag, platform);
-    res.send(result);
-  });
+  //   const result = await verifyMember.verifyMember(gamerTag, platform);
+  //   res.send(result);
+  // });
 
   app.post("/signUp", async (req, res) => {
     const users = db.collection("users");
@@ -502,8 +508,7 @@ mongo.connect("mongodb://localhost/warzone", function (err, client) {
   //fetch real time stats from COD API every 5 minutes and save to database.
   // getStats(db);
   // const updateDbStats = setInterval(() => getApiStats.getApiStats(db), 150000);
-  getApiStats.getApiStats(db);
-});
+
 
 server.listen(PORT, () => {
   console.log(`Server listening at localhost: ${PORT}`);
