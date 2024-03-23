@@ -63,7 +63,7 @@ const SignUp = ({
         platform: checkedPlatform,
         png: soldierSelectedURL,
       };
-      axios.post("/signUp", loginObject).then((results) => {
+      axios.post("/users/signUp", loginObject).then((results) => {
         if (results.data === "Username taken") {
           changeUsernameResponse(results.data);
         } else {
