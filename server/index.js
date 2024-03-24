@@ -154,98 +154,111 @@ io.on("connection", (socket) => {
 
 app.use("/users", usersRoutes);
 
-app.post("/login", async (req, res) => {
-  const usernameAttempt = req.body.username.toLowerCase();
-  const passwordAttempt = req.body.password;
-  const users = db.collection("users");
-  const refreshTokens = db.collection("refreshTokens");
-  const foundUser = await users.findOne({
-    usernameLowerCase: usernameAttempt,
-  });
-  if (!foundUser) {
-    res.status(200).json({ message: "Invalid username" });
-  } else {
-    bcrypt.compare(passwordAttempt, foundUser.password, function (err, result) {
-      if (result == false) {
-        res.json({ message: "Invalid password" });
-      } else {
-        //create jwt and send to client
-        const accessToken = jwt.sign({ user: foundUser }, "secret", {
-          expiresIn: "30s",
-        });
-        const refreshToken = jwt.sign(
-          {
-            user: foundUser,
-          },
-          "secret",
-          { expiresIn: "1h" }
-        );
-        refreshTokens.insertOne({
-          refreshToken,
-        });
-        console.log("FOUND USER: ", foundUser);
-        res.json({
-          user: foundUser,
-          accessToken: accessToken,
-          refreshToken: refreshToken,
-        });
-      }
-    });
-  }
-});
+// app.post("/login", async (req, res) => {
+//   const usernameAttempt = req.body.username.toLowerCase();
+//   const passwordAttempt = req.body.password;
+//   const users = db.collection("users");
+//   const refreshTokens = db.collection("refreshTokens");
+//   const foundUser = await users.findOne({
+//     usernameLowerCase: usernameAttempt,
+//   });
+//   if (!foundUser) {
+//     res.status(200).json({ message: "Invalid username" });
+//   } else {
+//     bcrypt.compare(passwordAttempt, foundUser.password, function (err, result) {
+//       if (result == false) {
+//         res.json({ message: "Invalid password" });
+//       } else {
+//         //create jwt and send to client
+//         const accessToken = jwt.sign({ user: foundUser }, "secret", {
+//           expiresIn: "30s",
+//         });
+//         const refreshToken = jwt.sign(
+//           {
+//             user: foundUser,
+//           },
+//           "secret",
+//           { expiresIn: "1h" }
+//         );
+//         refreshTokens.insertOne({
+//           refreshToken,
+//         });
+//         console.log("FOUND USER: ", foundUser);
+//         res.json({
+//           user: foundUser,
+//           accessToken: accessToken,
+//           refreshToken: refreshToken,
+//         });
+//       }
+//     });
+//   }
+// });
 
-app.post("/logout", async (req, res) => {
-  const deadRefreshToken = req.body.deadRefreshToken;
-  const refreshTokens = db.collection("refreshTokens");
-  await refreshTokens.deleteOne({
-    refreshToken: deadRefreshToken,
-  });
-});
+// app.post("/logout", async (req, res) => {
+//   const deadRefreshToken = req.body.deadRefreshToken;
+//   const refreshTokens = db.collection("refreshTokens");
+//   await refreshTokens.deleteOne({
+//     refreshToken: deadRefreshToken,
+//   });
+// });
 
-app.post("/verifyToken", (req, res) => {
-  const accessToken = req.body.accessToken;
-  console.log("VERIFYING TOKENS");
-  jwt.verify(accessToken, "secret", async (err, decoded) => {
-    if (err) {
-      const refreshToken = req.body.refreshToken;
-      if (refreshToken) {
-        console.log("FOUND LOCAL REFRESH TOKEN");
-        const refreshTokens = db.collection("refreshTokens");
-        const foundRefreshToken = await refreshTokens.findOne({
-          refreshToken: refreshToken,
-        });
-        if (foundRefreshToken) {
-          console.log("FOUND DB REFRESH TOKEN");
-          jwt.verify(
-            foundRefreshToken.refreshToken,
-            "secret",
-            async (err, decoded) => {
-              if (err) {
-                await refreshTokens.deleteOne({
-                  refreshToken: foundRefreshToken.refreshToken,
-                });
-                return res.status(401).send(err);
-              } else {
-                console.log("REFRESH DECODED: ", decoded);
-                const newAccessToken = jwt.sign(decoded.user, "secret", {
-                  expiresIn: "30s",
-                });
-                return res
-                  .status(200)
-                  .json({ user: decoded, newAccessToken: newAccessToken });
-              }
-            }
-          );
-        }
-      } else {
-        return res.status(401).send(err);
-      }
-    } else {
-      console.log("DECODED: ", decoded);
-      return res.status(200).json({ user: decoded });
-    }
-  });
-});
+// app.post("/verifyToken", (req, res) => {
+//   const accessToken = req.body.accessToken;
+//   console.log("VERIFYING TOKENS");
+//   jwt.verify(accessToken, "secret", async (err, decoded) => {
+//     if (err) {
+//       const refreshToken = req.body.refreshToken;
+//       if (refreshToken) {
+//         console.log("FOUND LOCAL REFRESH TOKEN");
+//         const refreshTokens = db.collection("refreshTokens");
+//         const foundRefreshToken = await refreshTokens.findOne({
+//           refreshToken: refreshToken,
+//         });
+//         if (foundRefreshToken) {
+//           console.log("FOUND DB REFRESH TOKEN");
+//           jwt.verify(
+//             foundRefreshToken.refreshToken,
+//             "secret",
+//             async (err, decoded) => {
+//               if (err) {
+//                 await refreshTokens.deleteOne({
+//                   refreshToken: foundRefreshToken.refreshToken,
+//                 });
+//                 return res.status(401).send(err);
+//               } else {
+//                 console.log("REFRESH DECODED: ", decoded);
+//                 const newAccessToken = jwt.sign(decoded.user, "secret", {
+//                   expiresIn: "30s",
+//                 });
+//                 return res
+//                   .status(200)
+//                   .json({ user: decoded, newAccessToken: newAccessToken });
+//               }
+//             }
+//           );
+//         }
+//       } else {
+//         return res.status(401).send(err);
+//       }
+//     } else {
+//       console.log("DECODED: ", decoded);
+//       return res.status(200).json({ user: decoded });
+//     }
+//   });
+// });
+
+// app.get("/getMemberList", (req, res) => {
+//   let members = [];
+//   const users = db.collection("users");
+//   users.find({}).toArray((err, result) => {
+//     if (err) {
+//       console.log("db.users error: ", err);
+//     } else {
+//       console.log("Here's a members log:", result);
+//       return res.status(200).json(result);
+//     }
+//   });
+// });
 
 app.post("/newGalleryContent", (req, res) => {
   const newContentItem = req.body;
@@ -255,19 +268,6 @@ app.post("/newGalleryContent", (req, res) => {
       res.send({ message: "Error uploading to gallery:" }, err);
     } else {
       res.send({ message: "Successfully uploaded to gallery" });
-    }
-  });
-});
-
-app.get("/getMemberList", (req, res) => {
-  let members = [];
-  const users = db.collection("users");
-  users.find({}).toArray((err, result) => {
-    if (err) {
-      console.log("db.users error: ", err);
-    } else {
-      console.log("Here's a members log:", result);
-      return res.status(200).json(result);
     }
   });
 });

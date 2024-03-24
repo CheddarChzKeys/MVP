@@ -29,7 +29,7 @@ const App = () => {
       const deadRefreshToken = localStorage.getItem("refreshToken");
       if (deadRefreshToken) {
         console.log("found dead refresh token");
-        axios.post("/logout", { deadRefreshToken });
+        axios.post("users/logOut", { deadRefreshToken });
       }
       changeSignedInUser(null);
     }
@@ -43,6 +43,7 @@ const App = () => {
 
   //Get member list
   const getMemberList = () => {
+    console.log("ATTEMPTING GET MEMBER LIST");
     axios.get("/getMemberList").then((results) => {
       console.log("HERE's the members list:", results.data);
       changeMemberList(results.data);
@@ -57,7 +58,7 @@ const App = () => {
     console.log("CHECKING REFRESH TOKEN RESULTS: ", refreshToken);
     if (accessToken) {
       axios
-        .post("/verifyToken", {
+        .post("/users/verifyToken", {
           accessToken: accessToken,
           refreshToken: refreshToken,
         })

@@ -31,7 +31,7 @@ const SignUp = ({
       platform: checkedPlatform,
     };
     console.log("verifyObject:", verifyObject);
-    const results = await axios.post("/users/verify", verifyObject);
+    const results = await axios.post("/users/verifyGamertag", verifyObject);
     if (results.data.status === "success") {
       changeVerified(true);
       changeVerifiedResponse("Gamer Tag verified");
