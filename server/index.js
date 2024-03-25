@@ -20,6 +20,7 @@ const bcrypt = require("bcrypt");
 // API.login(ssoToken: string);
 
 const usersRoutes = require("./routes/usersRoutes");
+const newsRoutes = require(".routes/newsRoutes");
 
 app.use(express.static(path.join(__dirname, "..", "public")));
 app.use(express.json());
@@ -260,17 +261,17 @@ app.use("/users", usersRoutes);
 //   });
 // });
 
-app.post("/newGalleryContent", (req, res) => {
-  const newContentItem = req.body;
-  const dbGallery = db.collection("gallery");
-  dbGallery.insertOne(newContentItem).then((response, err) => {
-    if (err) {
-      res.send({ message: "Error uploading to gallery:" }, err);
-    } else {
-      res.send({ message: "Successfully uploaded to gallery" });
-    }
-  });
-});
+// app.post("/newGalleryContent", (req, res) => {
+//   const newContentItem = req.body;
+//   const dbGallery = db.collection("gallery");
+//   dbGallery.insertOne(newContentItem).then((response, err) => {
+//     if (err) {
+//       res.send({ message: "Error uploading to gallery:" }, err);
+//     } else {
+//       res.send({ message: "Successfully uploaded to gallery" });
+//     }
+//   });
+// });
 
 app.get("/getDbStats", (req, res) => {
   let stats;
@@ -292,34 +293,36 @@ app.get("/getDbStats", (req, res) => {
     });
 });
 
+app.use("/news", newsRoutes);
+
 app.get("/updateNews", async (req, res) => {
   resultMessage = await getNews.getNews(db);
   console.log(resultMessage);
   res.send(resultMessage);
 });
 
-app.get("/getNews", (req, res) => {
-  const newsDB = db.collection("news");
-  const collectionCount = newsDB.count();
-  newsDB
-    .find()
-    .sort({ publishedAt: -1 })
-    .limit(10)
-    .toArray((err, result) => {
-      if (err) {
-        res.send("Error detected: " + err);
-      } else {
-        const resultObject = {
-          result: result,
-          loadedAll: false,
-        };
-        if (result.length === collectionCount) {
-          resultObject.loadedAll = true;
-        }
-        res.send(resultObject);
-      }
-    });
-});
+// app.get("/getNews", (req, res) => {
+//   const newsDB = db.collection("news");
+//   const collectionCount = newsDB.count();
+//   newsDB
+//     .find()
+//     .sort({ publishedAt: -1 })
+//     .limit(10)
+//     .toArray((err, result) => {
+//       if (err) {
+//         res.send("Error detected: " + err);
+//       } else {
+//         const resultObject = {
+//           result: result,
+//           loadedAll: false,
+//         };
+//         if (result.length === collectionCount) {
+//           resultObject.loadedAll = true;
+//         }
+//         res.send(resultObject);
+//       }
+//     });
+// });
 
 app.get("/getOlderArticles", (req, res) => {
   const lastArticleDate = req.query.last
@@ -456,6 +459,18 @@ app.get("/getNextGalleryContent", (req, res) => {
         res.send(resultObject);
       }
     });
+});
+
+app.post("/newGalleryContent", (req, res) => {
+  const newContentItem = req.body;
+  const dbGallery = db.collection("gallery");
+  dbGallery.insertOne(newContentItem).then((response, err) => {
+    if (err) {
+      res.send({ message: "Error uploading to gallery:" }, err);
+    } else {
+      res.send({ message: "Successfully uploaded to gallery" });
+    }
+  });
 });
 
 app.get("/*", function (req, res) {
