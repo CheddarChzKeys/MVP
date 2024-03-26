@@ -59,12 +59,14 @@ const Gallery = ({ changeBackground }) => {
 
   const getGalleryContent = () => {
     axios.get("/getGalleryContent").then((result) => {
-      const newContent = result.data.result;
-      changeNextLoadedAll(result.data.loadedAll);
-      changeNewestGalleryItem(newContent[0]._id);
-      changeOldestGalleryItem(newContent[newContent.length - 1]._id);
-      changeContentList(newContent);
-      handleItemSelect(newContent[0]);
+      if (result.data.result) {
+        const newContent = result.data.result;
+        changeNewestGalleryItem(newContent[0]._id);
+        changeOldestGalleryItem(newContent[newContent.length - 1]._id);
+        handleItemSelect(newContent[0]);
+        changeNextLoadedAll(result.data.loadedAll);
+        changeContentList(newContent);
+      }
       toggleSelectedAnimation(true);
       changeLoading(false);
       toggleSlideTrans(true);
