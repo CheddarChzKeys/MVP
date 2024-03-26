@@ -1,4 +1,4 @@
-const verifyMember = require("../verifyMember.js");
+const verifyMember = require("../models/verifyMember.js");
 
 const verify = async (req, res) => {
   const gamerTag = req.body.gamerTag;

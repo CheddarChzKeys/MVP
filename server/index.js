@@ -1,16 +1,14 @@
 const express = require("express");
 const path = require("path");
 
-const updateStats = require("./models/updateStats");
-const getNews = require("./getNews.js");
+const updateStatsDb = require("./models/updateStatsDb.js");
+const updateNewsDb = require("./models/updateNewsDb.js");
 
 const app = express();
 const PORT = 8080;
-
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
-const mongo = require("mongodb").MongoClient;
-const mongoClient = require("./dbaccess");
+const mongoClient = require("./dbAccess");
 const { ObjectId } = require("mongodb");
 
 const jwt = require("jsonwebtoken");
@@ -20,7 +18,7 @@ const bcrypt = require("bcrypt");
 // API.login(ssoToken: string);
 
 const usersRoutes = require("./routes/usersRoutes");
-const newsRoutes = require(".routes/newsRoutes");
+const newsRoutes = require("./routes/newsRoutes");
 
 app.use(express.static(path.join(__dirname, "..", "public")));
 app.use(express.json());
@@ -34,7 +32,9 @@ app.use(express.json());
 //   }
 //   console.log("MongoDB connected...");
 const db = mongoClient.db("warzone");
-updateStats(db);
+updateStatsDb();
+updateNewsDb();
+
 // })
 
 io.on("connection", (socket) => {
@@ -150,10 +150,11 @@ io.on("connection", (socket) => {
         console.log("output res:", resultObject);
         socket.emit("allChats", resultObject);
       });
+    });
   });
-});
-
-app.use("/users", usersRoutes);
+  
+  app.use("/users", usersRoutes);
+  app.use("/news", newsRoutes);
 
 // app.post("/login", async (req, res) => {
 //   const usernameAttempt = req.body.username.toLowerCase();
@@ -293,13 +294,12 @@ app.get("/getDbStats", (req, res) => {
     });
 });
 
-app.use("/news", newsRoutes);
 
-app.get("/updateNews", async (req, res) => {
-  resultMessage = await getNews.getNews(db);
-  console.log(resultMessage);
-  res.send(resultMessage);
-});
+// app.get("/updateNews", async (req, res) => {
+//   resultMessage = await getNews.getNews(db);
+//   console.log(resultMessage);
+//   res.send(resultMessage);
+// });
 
 // app.get("/getNews", (req, res) => {
 //   const newsDB = db.collection("news");
@@ -324,40 +324,40 @@ app.get("/updateNews", async (req, res) => {
 //     });
 // });
 
-app.get("/getOlderArticles", (req, res) => {
-  const lastArticleDate = req.query.last
-    ? req.query.last
-    : "2022-03-00T00:00:01Z";
-  let collectionCount;
-  const newsDB = db.collection("news");
-  newsDB
-    .find({ publishedAt: { $lt: lastArticleDate } })
-    .count((err, result) => {
-      if (err) {
-        res.send("Database Error Detected:", err);
-      } else {
-        collectionCount = result;
-      }
-    });
-  newsDB
-    .find({ publishedAt: { $lt: lastArticleDate } })
-    .sort({ publishedAt: -1 })
-    .limit(10)
-    .toArray((err, result) => {
-      if (err) {
-        res.send("Database Error Detected:", err);
-      } else {
-        const resultObject = {
-          result: result,
-          loadedAll: false,
-        };
-        if (result.length === collectionCount) {
-          resultObject.loadedAll = true;
-        }
-        res.send(resultObject);
-      }
-    });
-});
+// app.get("/getOlderArticles", (req, res) => {
+//   const lastArticleDate = req.query.last
+//     ? req.query.last
+//     : "2022-03-00T00:00:01Z";
+//   let collectionCount;
+//   const newsDB = db.collection("news");
+//   newsDB
+//     .find({ publishedAt: { $lt: lastArticleDate } })
+//     .count((err, result) => {
+//       if (err) {
+//         res.send("Database Error Detected:", err);
+//       } else {
+//         collectionCount = result;
+//       }
+//     });
+//   newsDB
+//     .find({ publishedAt: { $lt: lastArticleDate } })
+//     .sort({ publishedAt: -1 })
+//     .limit(10)
+//     .toArray((err, result) => {
+//       if (err) {
+//         res.send("Database Error Detected:", err);
+//       } else {
+//         const resultObject = {
+//           result: result,
+//           loadedAll: false,
+//         };
+//         if (result.length === collectionCount) {
+//           resultObject.loadedAll = true;
+//         }
+//         res.send(resultObject);
+//       }
+//     });
+// });
 
 app.get("/getGalleryContent", (req, res) => {
   const galleryDB = db.collection("gallery");

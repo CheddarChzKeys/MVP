@@ -78,17 +78,17 @@ const News = ({ changeBackground }) => {
   };
 
   const getNewArticles = () => {
-    axios.get("/getNews").then((results) => {
+    axios.get("/news/getNews").then((results) => {
       const newArticles = results.data.result;
       changeLoadedAll(results.data.loadedAll);
       changeOldestArticle(newArticles[newArticles.length - 1].publishedAt);
       updateArticles(newArticles);
-    });
+    });``
   };
 
   const getOlderArticles = () => {
     axios
-      .get("/getOlderArticles", { params: { last: oldestArticle } })
+      .get("/news/getMoreNews", { params: { last: oldestArticle } })
       .then((results) => {
         const olderArticles = results.data.result;
         changeLoadedAll(results.data.loadedAll);
@@ -113,11 +113,8 @@ const News = ({ changeBackground }) => {
   };
 
   useEffect(() => {
-    axios.get("/updateNews").then((updateMessage) => {
-      console.log(updateMessage);
       getNewArticles();
-    });
-  }, []);
+    }, []);
 
   return (
     <div className="mainComponent">

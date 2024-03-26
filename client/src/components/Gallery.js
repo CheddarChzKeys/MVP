@@ -181,7 +181,6 @@ const Gallery = ({ changeBackground }) => {
           >
             ADD CONTENT
           </h1>
-          >
         </div>
         <div className="galleryMain">
           <div className="galleryListWrapper">
