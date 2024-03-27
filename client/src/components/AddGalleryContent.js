@@ -17,7 +17,7 @@ const AddGalleryContent = ({
   const [previewImages, changePreviewImages] = useState([]);
 
   const addGalleryItem = (newItem) => {
-    return axios.post("/newGalleryContent", newItem).then((results) => {
+    return axios.post("/gallery/add", newItem).then((results) => {
       getGalleryContent();
       const message = results.data.message;
       console.log("addItemMessage:", message);

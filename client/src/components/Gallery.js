@@ -57,8 +57,8 @@ const Gallery = ({ changeBackground }) => {
     changeAddContent(!showAddContent);
   };
 
-  const getGalleryContent = () => {
-    axios.get("/getGalleryContent").then((result) => {
+  const getNewestGalleryContent = () => {
+    axios.get("/gallery/getNewest").then((result) => {
       if (result.data.result) {
         const newContent = result.data.result;
         changeNewestGalleryItem(newContent[0]._id);
@@ -77,7 +77,7 @@ const Gallery = ({ changeBackground }) => {
   const getNextGalleryContent = () => {
     !nextLoadedAll &&
       axios
-        .get("/getNextGalleryContent", { params: { last: oldestGalleryItem } })
+        .get("/gallery/getNext", { params: { last: oldestGalleryItem } })
         .then((result) => {
           console.log("result:", result);
           const newContent = result.data.result;
@@ -101,7 +101,7 @@ const Gallery = ({ changeBackground }) => {
   const getPrevGalleryContent = () => {
     !prevLoadedAll &&
       axios
-        .get("/getPrevGalleryContent", { params: { first: newestGalleryItem } })
+        .get("/gallery/getPrev", { params: { first: newestGalleryItem } })
         .then((result) => {
           console.log("result:", result);
           const newContent = result.data.result.slice().reverse();
@@ -149,7 +149,7 @@ const Gallery = ({ changeBackground }) => {
   };
 
   useEffect(() => {
-    getGalleryContent();
+    getNewestGalleryContent();
   }, []);
 
   function hideImage() {
@@ -393,7 +393,7 @@ const Gallery = ({ changeBackground }) => {
         >
           <AddContentModal
             signedInUser={signedInUser}
-            getGalleryContent={getGalleryContent}
+            getGalleryContent={getNewestGalleryContent}
             toggleAddContent={toggleAddContent}
           />
         </CSSTransition>
