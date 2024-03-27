@@ -43,7 +43,7 @@ class StatsTable extends Component {
   }
 
   getDbStats() {
-    axios.get("/getDbStats").then((results) => {
+    axios.get("/stats/warzoneStats").then((results) => {
       console.log("getWeekStats results:", results);
       results.data.weeklyStats = results.data.weeklyStats.sort((a, b) =>
         a["kdRatio"] < b["kdRatio"] ? 1 : -1
