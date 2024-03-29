@@ -59,7 +59,7 @@ const Gallery = ({ changeBackground }) => {
 
   const getNewestGalleryContent = () => {
     axios.get("/gallery/getNewest").then((result) => {
-      if (result.data.result) {
+      if (result.data.result.length > 0) {
         const newContent = result.data.result;
         changeNewestGalleryItem(newContent[0]._id);
         changeOldestGalleryItem(newContent[newContent.length - 1]._id);
