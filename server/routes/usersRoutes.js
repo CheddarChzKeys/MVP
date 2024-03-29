@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-const usersController = require("../controllers/usersController");
-const verifyController = require("../controllers/verifyGamertagController");
-const signUpController = require("../controllers/signUpController");
-const logInController = require("../controllers/logInController");
-const logOutController = require("../controllers/logOutController");
-const verifyTokenController = require("../controllers/verifyTokenController");
+const usersController = require("../controllers/users/usersController");
+const verifyController = require("../controllers/users/verifyGamertagController");
+const signUpController = require("../controllers/users/signUpController");
+const logInController = require("../controllers/users/logInController");
+const logOutController = require("../controllers/users/logOutController");
+const verifyTokenController = require("../controllers/users/verifyTokenController");
 
 router.get("/users"), usersController;
 

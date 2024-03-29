@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const getWarzoneStatsController = require("../controllers/getWarzoneStatsController");
+const getWarzoneStatsController = require("../controllers/stats/getWarzoneStatsController");
 
 router.get("/warzoneStats", getWarzoneStatsController);
 
