@@ -1,5 +1,5 @@
 const getGalleryDbCount = require("../../models/gallery/getGalleryDbCount");
-const getNewestGalleryDbContent = require("../../models/gallery/getNewestGalleryDbContent");
+const getNewestGalleryDbContent = require("../../models/gallery/getGalleryDbContent");
 
 const getNewestGalleryContent = async (req, res) => {
   try{
