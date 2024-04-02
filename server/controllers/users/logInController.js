@@ -1,4 +1,4 @@
-const dbClient = require("../../dbaccess");
+const dbClient = require("../../dbAccess");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 

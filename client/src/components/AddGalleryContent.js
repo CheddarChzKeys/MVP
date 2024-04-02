@@ -18,9 +18,9 @@ const AddGalleryContent = ({
 
   const addGalleryItem = (newItem) => {
     return axios.post("/gallery/add", newItem).then((results) => {
-      getGalleryContent();
       const message = results.data.message;
       console.log("addItemMessage:", message);
+      getGalleryContent();
       return message;
     });
   };

@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 
 const updateStatsDb = require("./models/updateStatsDb.js");
-const updateNewsDb = require("./models/updateNewsDb.js");
+const updateNewsDb = require("./models/news/updateNewsDb.js");
 
 const app = express();
 const PORT = 8080;
