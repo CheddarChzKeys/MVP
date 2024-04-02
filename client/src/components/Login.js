@@ -23,7 +23,8 @@ const Login = ({ changeBackground, toggleSignedIn }) => {
   const handleLogin = (e) => {
     const loginObject = { username: typedUsername, password: typedPassword };
     axios.post("/users/login", loginObject).then((results) => {
-      changeMessage(results.data.user.message);
+      console.log("RESULTS: ", results)
+      changeMessage(results.data.message);
       if (results.data.user) {
         changeSignedInUser(results.data.user);
         toggleSignedIn(true);
