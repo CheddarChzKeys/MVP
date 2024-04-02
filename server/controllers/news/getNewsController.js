@@ -11,10 +11,10 @@ const getNews = async (req, res) => {
   if (count === result.length) {
     loadedAll = true;
   }
-  res.send(200, {result: result, loadedAll: loadedAll})
+  res.status(200).send({result: result, loadedAll: loadedAll})
   }
   catch(err) {
-  res.send(500, "Error detected: " + err)
+  res.status(500).send("Error detected: " + err)
   }
 };
 
