@@ -1,7 +1,5 @@
 const API = require("call-of-duty-api");
-const SSOtoken = require("../../hidden/ssoToken.js");
-const dbClient = require("../dbAccess");
-const db = dbClient.db("warzone");
+const SSOtoken = require("../../../hidden/ssoToken.js");
 
 const getPlayerInfo = async (gamertag, platform, whichStats) => {
   try {
