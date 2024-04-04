@@ -1,24 +1,17 @@
-const dbClient = require("../../dbAccess");
+const getStatsDb = require("../../models/stats/getStatsDb");
 
-const getWarzoneStats = (req, res) => {
-  const db = dbClient.db("warzone");
-  let stats;
-  const dbGameStats = db.collection("gameStats");
-  dbGameStats
-    .find()
-    .sort({ _id: -1 })
-    .limit(1)
-    .toArray(function (err, result) {
-      if (err) {
-        res.send("Error detected: " + err);
-      } else {
-        stats = {
-          weeklyStats: result[0].weeklyStats,
-          lifetimeStats: result[0].lifetimeStats,
-        };
-        res.status(200).json(stats);
-      }
-    });
+const getWarzoneStats = async (req, res) => {
+  try {
+    const statsDb = await getStatsDb();
+    const stats = {
+      weeklyStats: statsDb[0].weeklyStats,
+      lifetimeStats: statsDb[0].lifetimeStats,
+    };
+    res.status(200).send(stats);
+  } catch (err) {
+    console.log(`Error detected: ${err}`);
+    res.send({ weeklyStats: [], lifetimeStats: [] });
+  }
 };
 
 module.exports = getWarzoneStats;
