@@ -8,7 +8,7 @@ const logInController = require("../controllers/users/logInController");
 const logOutController = require("../controllers/users/logOutController");
 const verifyTokenController = require("../controllers/users/verifyTokenController");
 
-router.get("/users"), usersController;
+router.get("/", usersController);
 
 router.post("/verifyGamertag", verifyController);
 router.post("/signUp", signUpController);

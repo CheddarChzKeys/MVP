@@ -5,8 +5,6 @@ const findUsersDb = require("../../models/users/findUsersDb");
 const refreshTokensDb = require("../../models/users/refreshTokensDb");
 const jwtKey = require("../../../hidden/jwt");
 
-
-
 const logIn = async (req, res) => {
   const usernameAttempt = req.body.username.toLowerCase();
   const passwordAttempt = req.body.password;
@@ -31,7 +29,7 @@ const logIn = async (req, res) => {
           jwtKey.key,
           { expiresIn: "1h" }
         );
-        const refreshTokenResult = await refreshTokensDb.add({refreshToken});
+        const refreshTokenResult = await refreshTokensDb.add(refreshToken);
         if (refreshTokenResult.acknowledged) {
           res.status(200).send({
             user: foundUser,
@@ -39,7 +37,7 @@ const logIn = async (req, res) => {
             refreshToken: refreshToken,
           });
         } else {
-          res.status(200).send({message: "Refresh token error"});
+          res.status(200).send({ message: "Refresh token error" });
         }
       }
     });

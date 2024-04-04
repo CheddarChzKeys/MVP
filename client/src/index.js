@@ -44,8 +44,8 @@ const App = () => {
   //Get member list
   const getMemberList = () => {
     console.log("ATTEMPTING GET MEMBER LIST");
-    axios.get("/getMemberList").then((results) => {
-      console.log("HERE's the members list:", results.data);
+    axios.get("/users").then((results) => {
+      console.log("HERE's the members list:", results);
       changeMemberList(results.data);
     });
   };
@@ -54,9 +54,9 @@ const App = () => {
   const checkSession = () => {
     const accessToken = localStorage.getItem("accessToken");
     const refreshToken = localStorage.getItem("refreshToken");
-    console.log("CHECKING ACCESS TOKEN RESULTS: ", accessToken);
-    console.log("CHECKING REFRESH TOKEN RESULTS: ", refreshToken);
     if (accessToken) {
+      console.log("CHECKING ACCESS TOKEN RESULTS: ", accessToken);
+      console.log("CHECKING REFRESH TOKEN RESULTS: ", refreshToken);
       axios
         .post("/users/verifyToken", {
           accessToken: accessToken,
@@ -65,12 +65,12 @@ const App = () => {
         .then((results) => {
           console.log("token verification results:", results);
           if (results.data.newAccessToken) {
-            console.log("SETTING NEW ACCESS TOKEN");
+            console.log("SETTING NEW ACCESS TOKEN: ", results.data);
             localStorage.setItem("accessToken", results.data.newAccessToken);
           }
           changeSignedIn(true);
           console.log("SIGN IN SUCCESFULL: ", results.data);
-          changeSignedInUser(results.data.user.user);
+          changeSignedInUser(results.data.user);
         });
     }
   };

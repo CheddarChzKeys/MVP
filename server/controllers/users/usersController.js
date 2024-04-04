@@ -1,17 +1,9 @@
-const dbClient = require("../../dbAccess.js");
+const findUsersDb = require("../../models/users/findUsersDb");
 
-const getMembers = (req, res) => {
-  let members = [];
-  const db = dbClient.db("warzone");
-  const users = db.collection("users");
-  users.find({}).toArray((err, result) => {
-    if (err) {
-      console.log("db.users error: ", err);
-    } else {
-      console.log("Here's a members log:", result);
-      return res.status(200).json(result);
-    }
-  });
+const getUsersList = async (req, res) => {
+  let foundUsers = await findUsersDb();
+  const usersList = foundUsers ? foundUsers : [];
+  res.status(200).send(usersList);
 };
 
-module.exports = getMembers;
+module.exports = getUsersList;
