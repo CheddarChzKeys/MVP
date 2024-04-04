@@ -1,50 +1,48 @@
-const dbClient = require("../../dbAccess");
 const jwt = require("jsonwebtoken");
+const jwtkey = require("../../../hidden/jwt");
+const refreshTokensDb = require("../../models/users/refreshTokensDb.js");
 
-const verifyToken = (req, res) => {
+const verify = (token) => {
+  return jwt.verify(token, jwtkey.key, (err, decoded) => {
+    if (decoded) {
+      return decoded;
+    }
+    return;
+  });
+};
+
+const verifyToken = async (req, res) => {
   const accessToken = req.body.accessToken;
-  const db = dbClient.db("warzone");
-  console.log("VERIFYING TOKENS");
-  jwt.verify(accessToken, "secret", async (err, decoded) => {
-    if (err) {
-      const refreshToken = req.body.refreshToken;
-      if (refreshToken) {
-        console.log("FOUND LOCAL REFRESH TOKEN");
-        const refreshTokens = db.collection("refreshTokens");
-        const foundRefreshToken = await refreshTokens.findOne({
-          refreshToken: refreshToken,
-        });
-        if (foundRefreshToken) {
-          console.log("FOUND DB REFRESH TOKEN");
-          jwt.verify(
-            foundRefreshToken.refreshToken,
-            "secret",
-            async (err, decoded) => {
-              if (err) {
-                await refreshTokens.deleteOne({
-                  refreshToken: foundRefreshToken.refreshToken,
-                });
-                return res.status(401).send(err);
-              } else {
-                console.log("REFRESH DECODED: ", decoded);
-                const newAccessToken = jwt.sign(decoded.user, "secret", {
-                  expiresIn: "30s",
-                });
-                return res
-                  .status(200)
-                  .json({ user: decoded, newAccessToken: newAccessToken });
-              }
+  const decodedAccessToken = verify(accessToken);
+  if (decodedAccessToken) {
+    return res.status(200).json(decodedAccessToken);
+  } else {
+    const refreshToken = req.body.refreshToken;
+    if (refreshToken) {
+      const foundRefreshToken = await refreshTokensDb.find(refreshToken);
+      if (foundRefreshToken) {
+        decodedRefreshToken = verify(foundRefreshToken.refreshToken);
+        if (decodedRefreshToken) {
+          const newAccessToken = jwt.sign(
+            { user: decodedRefreshToken.user },
+            jwtkey.key,
+            {
+              expiresIn: "30s",
             }
           );
+          return res.status(200).send({
+            user: decodedRefreshToken.user,
+            newAccessToken: newAccessToken,
+          });
+        } else {
+          await refreshTokensDb.delete(foundRefreshToken.refreshToken);
+          return res.status(401);
         }
-      } else {
-        return res.status(401).send(err);
       }
     } else {
-      console.log("DECODED: ", decoded);
-      return res.status(200).json({ user: decoded });
+      return res.status(200).send("Refresh token expired");
     }
-  });
+  }
 };
 
 module.exports = verifyToken;
