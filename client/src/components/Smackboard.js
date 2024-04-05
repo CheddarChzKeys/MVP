@@ -67,7 +67,7 @@ function Chatbox({ changeBackground }) {
           observer.current.disconnect();
         }
         observer.current = new IntersectionObserver((entries) => {
-          if (entries[0].isIntersecting && !loadedAll) {
+          if (entries[0].isIntersecting && !loadedAll && chats.length > 0) {
             console.log("node is intersecting");
             changeLoading(true);
             changeLoadedAll(true);
@@ -136,12 +136,11 @@ function Chatbox({ changeBackground }) {
     const username = signedInUser.username;
     const png = signedInUser.png;
     if (signedInUser) {
-      socket.emit("sendGif", {
+      socket.emit("sendMessage", {
         username,
-        gif,
+        gif: { downsized: gif.downsized.url, original: gif.original.url },
         png,
       });
-      console.log(gif);
     } else {
       changeResponse("Please sign in");
       const messageFlash = setTimeout(() => {
@@ -394,10 +393,8 @@ function Chatbox({ changeBackground }) {
                               <img
                                 className="chatItem"
                                 id="chatGif"
-                                src={chat.gif.downsized.url}
-                                onClick={() =>
-                                  imageClick(chat.gif.original.url)
-                                }
+                                src={chat.gif.downsized}
+                                onClick={() => imageClick(chat.gif.original)}
                               ></img>
                             )}
                             {chat.video && (

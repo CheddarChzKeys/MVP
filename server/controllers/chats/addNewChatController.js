@@ -4,20 +4,25 @@ const getChatsDb = require("../../models/chats/getChatsDb");
 
 const addChat = (socket) => {
   socket.on("sendMessage", async (message) => {
-    const date = new Date();
-    const newChat = {
-      name: message.username,
-      message: message.typedMessage,
-      image: message.imageURLs,
-      video: message.submittedVideo,
-      date: date,
-      png: message.png,
-    };
-    const newChatResult = await addChatDb(newChat);
-    const count = await getChatsCountDb();
-    const result = await getChatsDb();
-    const loadedAll = result.length === count ? true : false;
-    socket.emit("allChats", { result, loadedAll });
+    try {
+      const date = new Date();
+      const newChat = {
+        name: message.username,
+        message: message.typedMessage,
+        gif: message.gif,
+        image: message.imageURLs,
+        video: message.submittedVideo,
+        date: date,
+        png: message.png,
+      };
+      const newChatResult = await addChatDb(newChat);
+      const count = await getChatsCountDb();
+      const result = await getChatsDb();
+      const loadedAll = result.length === count ? true : false;
+      socket.emit("allChats", { result, loadedAll });
+    } catch (err) {
+      console.log(`Error: ${err}`);
+    }
   });
 };
 
