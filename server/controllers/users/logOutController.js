@@ -9,7 +9,7 @@ const logOut = async (req, res) => {
     res.status(200);
   } catch (err) {
     console.log(`Error: ${err.message}`);
-    res.send(err);
+    res.status(500);
   }
 };
 
