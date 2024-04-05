@@ -1,9 +1,13 @@
 const findUsersDb = require("../../models/users/findUsersDb");
 
 const getUsersList = async (req, res) => {
-  let foundUsers = await findUsersDb();
-  const usersList = foundUsers ? foundUsers : [];
-  res.status(200).send(usersList);
+  try {
+    const foundUsers = await findUsersDb();
+    res.send(foundUsers);
+  } catch (err) {
+    console.log(`Error: ${err}`);
+    res.send([]);
+  }
 };
 
 module.exports = getUsersList;

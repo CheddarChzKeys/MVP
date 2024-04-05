@@ -7,7 +7,7 @@ const getWarzoneStats = async (req, res) => {
       weeklyStats: statsDb[0].weeklyStats,
       lifetimeStats: statsDb[0].lifetimeStats,
     };
-    res.status(200).send(stats);
+    res.send(stats);
   } catch (err) {
     console.log(`Error detected: ${err}`);
     res.send({ weeklyStats: [], lifetimeStats: [] });

@@ -64,19 +64,12 @@ const SignUp = ({
         png: soldierSelectedURL,
       };
       axios.post("/users/signUp", loginObject).then((results) => {
-        if (results.data === "Username taken") {
-          changeUsernameResponse(results.data);
-        } else {
-          changeVerifiedResponse(results.data);
+        if (results.data.message === "success") {
           toggleIsSignedUp(true);
           toggleSlideTrans(true);
+        } else {
+          changeUsernameResponse(results.data.message);
         }
-        //   console.log(results);
-        //   if (results.data.user) {
-        //     changeSignedInUser(results.data.user.username);
-        //     toggleSignedIn(true);
-        //   }
-        // });
       });
     }
     e.preventDefault();
