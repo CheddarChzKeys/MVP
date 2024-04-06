@@ -31,12 +31,12 @@ const SignUp = ({
       platform: checkedPlatform,
     };
     console.log("verifyObject:", verifyObject);
-    const results = await axios.post("/users/verifyGamertag", verifyObject);
-    if (results.data.status === "success") {
+    const results = await axios.post("/users/verifyGamerTag", verifyObject);
+    console.log("RESULTS: ", results);
+    if (results.data === "success") {
       changeVerified(true);
       changeVerifiedResponse("Gamer Tag verified");
       console.log("result is: ", results);
-      console.log("isVerified =", isVerified);
     } else {
       changeVerified(false);
       changeVerifiedResponse("Verification failed");
