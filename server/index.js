@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 
-const updateStatsDb = require("./models/stats/updateStatsDb.js");
+const updateStatsDb = require("./controllers/stats/updateStatsController.js");
 const updateNewsDb = require("./models/news/updateNewsDb.js");
 
 const app = express();
