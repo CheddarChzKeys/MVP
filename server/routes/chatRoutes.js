@@ -4,7 +4,6 @@ const { ObjectId } = require("mongodb");
 const getChatsController = require("../controllers/chats/getChatsController");
 const getMoreChatsController = require("../controllers/chats/getMoreChatsController");
 const addNewChatController = require("../controllers/chats/addNewChatController");
-const sendGifController = require("../controllers/chats/addNewGifController");
 
 const socketRoutes = (io) => {
   io.on("connection", (socket) => {
@@ -15,7 +14,6 @@ const socketRoutes = (io) => {
     getChatsController(socket);
     getMoreChatsController(socket);
     addNewChatController(socket);
-    sendGifController(socket);
   });
 };
 
