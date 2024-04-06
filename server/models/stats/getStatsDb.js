@@ -8,9 +8,9 @@ const getStats = () => {
     .sort({ _id: -1 })
     .limit(1)
     .toArray()
-    .catch((error) => {
-      console.log("IN THE DB CATCH ERROR");
-      throw new Error("Stats database error");
+    .catch((err) => {
+      console.log(`Error: ${err}`);
+      return [];
     });
 };
 

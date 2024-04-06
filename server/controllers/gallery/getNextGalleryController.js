@@ -4,7 +4,7 @@ const getGalleryDbContent = require("../../models/gallery/getGalleryDbContent");
 const getNextGalleryContent = async (req, res) => {
   try {
     const lastId = req.query.last;
-    let count = await getGalleryDbCount(lastId);
+    let count = await getGalleryDbCount(lastId, "next");
     const result = await getGalleryDbContent(lastId, "next");
     const loadedAll = count === result.length ? true : false;
     res.send({
