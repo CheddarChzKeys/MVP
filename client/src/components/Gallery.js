@@ -317,65 +317,56 @@ const Gallery = ({ changeBackground }) => {
                         {selectedItem.uploadDate}
                       </p>
                     </div>
-                    {selectedItem.description && (
-                      <>
+                    <>
+                      {selectedItem.description && (
                         <p className="detailsDescription">
                           {selectedItem.description}
                         </p>
-                        {selectedItem.details && (
-                          <div className="videoDetails ">
-                            {showVideoDetails ? (
-                              <btn
-                                className="detailsLabel pointerHover"
-                                onClick={handleShowVideoDetails}
+                      )}
+                      {selectedItem.details && (
+                        <div className="videoDetails ">
+                          {showVideoDetails ? (
+                            <btn
+                              className="detailsLabel pointerHover"
+                              onClick={handleShowVideoDetails}
+                            >
+                              Video Details &#x25BE;
+                            </btn>
+                          ) : (
+                            <btn
+                              className="detailsLabel pointerHover"
+                              onClick={handleShowVideoDetails}
+                            >
+                              Video Details &#x25B8;
+                            </btn>
+                          )}
+                          {showVideoDetails && (
+                            <>
+                              <p id="title" className="detailsDescriptionTitle">
+                                {selectedItem.details.snippet.title}
+                              </p>
+                              <p id="views" className="detailsDescriptionSmall">
+                                {selectedItem.details.statistics.viewCount}{" "}
+                                views
+                              </p>
+                              <p id="likes" className="detailsDescriptionSmall">
+                                {selectedItem.details.statistics.likeCount}{" "}
+                                likes
+                              </p>
+                              <p
+                                id="channel"
+                                className="detailsDescriptionTitle"
                               >
-                                Video Details &#x25BE;
-                              </btn>
-                            ) : (
-                              <btn
-                                className="detailsLabel pointerHover"
-                                onClick={handleShowVideoDetails}
-                              >
-                                Video Details &#x25B8;
-                              </btn>
-                            )}
-                            {showVideoDetails && (
-                              <>
-                                <p
-                                  id="title"
-                                  className="detailsDescriptionTitle"
-                                >
-                                  {selectedItem.details.snippet.title}
-                                </p>
-                                <p
-                                  id="views"
-                                  className="detailsDescriptionSmall"
-                                >
-                                  {selectedItem.details.statistics.viewCount}{" "}
-                                  views
-                                </p>
-                                <p
-                                  id="likes"
-                                  className="detailsDescriptionSmall"
-                                >
-                                  {selectedItem.details.statistics.likeCount}{" "}
-                                  likes
-                                </p>
-                                <p
-                                  id="channel"
-                                  className="detailsDescriptionTitle"
-                                >
-                                  {selectedItem.details.snippet.channelTitle}
-                                </p>
-                                <p className="detailsDescriptionSmall">
-                                  {selectedItem.details.snippet.description}
-                                </p>
-                              </>
-                            )}
-                          </div>
-                        )}
-                      </>
-                    )}
+                                {selectedItem.details.snippet.channelTitle}
+                              </p>
+                              <p className="detailsDescriptionSmall">
+                                {selectedItem.details.snippet.description}
+                              </p>
+                            </>
+                          )}
+                        </div>
+                      )}
+                    </>
                   </div>
                 </div>
               ) : (

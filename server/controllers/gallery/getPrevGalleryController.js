@@ -5,9 +5,7 @@ const getPrevGalleryContent = async (req, res) => {
   try {
     const firstId = req.query.first;
     let count = await getGalleryDbCount(firstId, "prev");
-    console.log("COUNT: ", count);
     const result = await getGalleryDbContent(firstId, "prev");
-    console.log("RESULTLENGTH: ", result);
     const loadedAll = count === result.length ? true : false;
     res.send({
       result: result,

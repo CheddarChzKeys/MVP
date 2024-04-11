@@ -13,8 +13,6 @@ import { CSSTransition } from "react-transition-group";
 
 const News = ({ changeBackground }) => {
   const { activeClicked, changeClicked } = useContext(ActiveUser);
-
-  changeClicked("news");
   changeBackground("./Backgrounds/roze.png");
 
   const [articles, updateArticles] = useState([]);
@@ -27,28 +25,21 @@ const News = ({ changeBackground }) => {
 
   const lastArticleRef = useCallback(
     (node) => {
-      console.log("useCallback activated");
       if (loading) {
-        console.log("loading is true");
         return;
       } else {
-        console.log("RUNNING USECALLBACK");
         if (observer.current) {
-          console.log("Disconnecting observer.current");
           observer.current.disconnect();
         }
         observer.current = new IntersectionObserver((entries) => {
           if (entries[0].isIntersecting && !loadedAll) {
-            console.log("node is intersecting");
             changeLoadedAll(true);
             getOlderArticles();
           }
         });
         if (node) {
-          console.log("Connecting new observer node");
           observer.current.observe(node);
         }
-        console.log("Here's the first chat node:", node);
       }
     },
     [loading, loadedAll, articles]
@@ -66,7 +57,6 @@ const News = ({ changeBackground }) => {
 
   const increaseCounter = () => {
     counter += 1;
-    console.log("counter:", counter);
   };
 
   const handleMouseEnter = (articleNum) => {
@@ -83,7 +73,8 @@ const News = ({ changeBackground }) => {
       changeLoadedAll(results.data.loadedAll);
       changeOldestArticle(newArticles[newArticles.length - 1].publishedAt);
       updateArticles(newArticles);
-    });``
+    });
+    ``;
   };
 
   const getOlderArticles = () => {
@@ -113,8 +104,9 @@ const News = ({ changeBackground }) => {
   };
 
   useEffect(() => {
-      getNewArticles();
-    }, []);
+    getNewArticles();
+    changeClicked("news");
+  }, []);
 
   return (
     <div className="mainComponent">
@@ -134,7 +126,12 @@ const News = ({ changeBackground }) => {
               {articles.map((article, index) => {
                 const articleNumber = counter;
                 return (
-                  <a className="articleLink" href={article.url} target="_blank">
+                  <a
+                    key={article._id}
+                    className="articleLink"
+                    href={article.url}
+                    target="_blank"
+                  >
                     <div
                       key={article._id}
                       ref={
