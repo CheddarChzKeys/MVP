@@ -11,15 +11,14 @@ import { css } from "@emotion/react";
 import MoonLoader from "react-spinners/MoonLoader";
 import { CSSTransition } from "react-transition-group";
 
-const News = ({ changeBackground }) => {
-  const { activeClicked, changeClicked } = useContext(ActiveUser);
+const News = ({ changeBackground, changeClicked }) => {
   changeBackground("./Backgrounds/roze.png");
 
   const [articles, updateArticles] = useState([]);
   const [highlightArticle, toggleHighlightArticle] = useState(null);
   const [oldestArticle, changeOldestArticle] = useState(null);
   const [loading, changeLoading] = useState(false);
-  const [loadedAll, changeLoadedAll] = useState("false");
+  const [loadedAll, changeLoadedAll] = useState(false);
 
   const observer = useRef();
 
@@ -117,7 +116,7 @@ const News = ({ changeBackground }) => {
         </div>
         <div className="smackNewsMain">
           <CSSTransition
-            in={activeClicked === "news"}
+            in={"news" === "news"}
             timeout={1000}
             classNames="addGalleryContentMod"
             unmountOnExit

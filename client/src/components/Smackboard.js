@@ -61,9 +61,7 @@ function Chatbox({ changeBackground }) {
       if (loading) {
         return;
       } else {
-        console.log("RUNNING USECALLBACK");
         if (observer.current) {
-          console.log("Disconnecting observer.current");
           observer.current.disconnect();
         }
         observer.current = new IntersectionObserver((entries) => {
@@ -75,10 +73,8 @@ function Chatbox({ changeBackground }) {
           }
         });
         if (node) {
-          console.log("Connecting new observer node");
           observer.current.observe(node);
         }
-        console.log("Here's the first chat node:", node);
       }
     },
     [loading, loadedAll, chats]
@@ -133,9 +129,9 @@ function Chatbox({ changeBackground }) {
   };
 
   const onGifClick = (gif) => {
-    const username = signedInUser.username;
-    const png = signedInUser.png;
     if (signedInUser) {
+      const username = signedInUser.username;
+      const png = signedInUser.png;
       socket.emit("sendMessage", {
         username,
         gif: { downsized: gif.downsized.url, original: gif.original.url },
@@ -257,7 +253,6 @@ function Chatbox({ changeBackground }) {
 
   const handleVideoSubmit = (e) => {
     e.preventDefault();
-    console.log("prevent dEFAULT!");
     let videoID = typedVideoLink;
     const re =
       /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/i;
@@ -269,14 +264,12 @@ function Chatbox({ changeBackground }) {
   };
 
   const scrollToBottom = () => {
-    console.log("chat count: ", chats);
     const timeout1 = setTimeout(() => {
       chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
     }, 500);
   };
 
   const scrollToLastLoadedChat = () => {
-    console.log("scrolling to last loaded chat");
     const timeout1 = setTimeout(() => {
       lastLoadedChat.current.scrollIntoView({
         block: "center",

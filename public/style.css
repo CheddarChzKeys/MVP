@@ -1119,6 +1119,10 @@ aside.emoji-picker-react {
   margin: auto 0 auto 0;
 }
 
+.checkboxLabel {
+  font-size:70%;
+}
+
 /* news Component */
 
 #newsComponent {
@@ -1461,7 +1465,6 @@ grid-row-end: 3;
 .detailsLabel {
   font-family: "modernWarfare";
   font-size: 1vw;
-  text-align: center;
 }
 
 #title{
@@ -1612,7 +1615,7 @@ grid-row-end: 3;
   max-height: 100%;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: 1.3fr 1fr;
+  grid-template-rows: 1fr;
   column-gap: 0.75vw;
   align-items: center;
 }
@@ -1629,7 +1632,7 @@ grid-row-end: 3;
   /* border-bottom: 1px solid #05050500; */
 }
 
-.modernWarfareWrap:after {
+.modernWarfareWrap:after,.footerName:after {
   width: 100%;
   content: "";
   height: 1px;
@@ -1647,7 +1650,7 @@ grid-row-end: 3;
   left: 0;
 }
 
-.modernWarfareWrap:hover:after {
+.modernWarfareWrap:hover:after, .footerName:hover:after {
   -webkit-transition: all ease 0.5s;
   -moz-transition: all ease 0.5s;
   -ms-transition: all ease 0.5s;
@@ -1667,8 +1670,9 @@ grid-row-end: 3;
 }
 
 .footerName {
+  position: relative;
   grid-column: 1/-1;
-  border-bottom: 1px solid #05050500;
+
 }
 
 .footerName p {
@@ -1678,6 +1682,10 @@ grid-row-end: 3;
   text-align: center;
   font-size: 0.8vw;
   color: #ffffff;
+}
+
+.footerName p:hover{
+  color:#79d9ff
 }
 
 /* spinner */

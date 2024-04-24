@@ -8,11 +8,13 @@ import News from "./components/News.js";
 import Gallery from "./components/Gallery.js";
 import Login from "./components/Login.js";
 import Footer from "./components/Footer.js";
-import { ActiveUser } from "./components/ActiveUserContext.js";
+// import { ActiveUser } from "./components/ActiveUserContext.js";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import axios from "axios";
 import "core-js/stable";
 import "regenerator-runtime/runtime";
+
+export const ActiveUser = React.createContext();
 
 const App = () => {
   const [isSignedIn, changeSignedIn] = useState(false);
@@ -20,7 +22,7 @@ const App = () => {
   const [activeClicked, changeClicked] = useState(null);
   const [memberList, changeMemberList] = useState(null);
 
-  const newSignedInUser = useMemo(() => signedInUser, [signedInUser]);
+  // const newSignedInUser = useMemo(() => signedInUser, [signedInUser]);
 
   const toggleSignedIn = () => {
     changeSignedIn(!isSignedIn);
@@ -82,58 +84,64 @@ const App = () => {
   return (
     <Router>
       <div>
-        <ActiveUser.Provider
-          value={{
-            signedInUser,
-            changeSignedInUser,
-            activeClicked,
-            changeClicked,
-          }}
-        >
-          <Nav
-            newSignedInUser={newSignedInUser}
-            toggleSignedIn={toggleSignedIn}
+        <ActiveUser.Provider value={signedInUser}>
+          <Nav activeClicked={activeClicked} toggleSignedIn={toggleSignedIn} />
+        </ActiveUser.Provider>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Login
+                toggleSignedIn={toggleSignedIn}
+                changeBackground={changeBackground}
+                signedInUser={signedInUser}
+                changeSignedInUser={changeSignedInUser}
+                changeClicked={changeClicked}
+              />
+            }
           />
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <Login
-                  toggleSignedIn={toggleSignedIn}
-                  changeBackground={changeBackground}
-                />
-              }
-            />
-            <Route
-              path="/records"
-              element={
-                <Records
+          <Route
+            path="/records"
+            element={
+              <Records
+                changeBackground={changeBackground}
+                changeClicked={changeClicked}
+                getMemberList={getMemberList}
+                memberList={memberList}
+              />
+            }
+          />
+          <Route
+            path="/smackboard"
+            element={
+              <Smackboard
+                memberList={memberList}
+                changeBackground={changeBackground}
+                changeClicked={changeClicked}
+              />
+            }
+          />
+          <Route
+            path="/news"
+            element={
+              <News
+                changeBackground={changeBackground}
+                changeClicked={changeClicked}
+              />
+            }
+          />
+          <Route
+            path="/gallery"
+            element={
+              <ActiveUser.Provider value={signedInUser}>
+                <Gallery
                   changeBackground={changeBackground}
                   changeClicked={changeClicked}
-                  getMemberList={getMemberList}
-                  memberList={memberList}
                 />
-              }
-            />
-            <Route
-              path="/smackboard"
-              element={
-                <Smackboard
-                  memberList={memberList}
-                  changeBackground={changeBackground}
-                />
-              }
-            />
-            <Route
-              path="/news"
-              element={<News changeBackground={changeBackground} />}
-            />
-            <Route
-              path="/gallery"
-              element={<Gallery changeBackground={changeBackground} />}
-            />
-          </Routes>
-        </ActiveUser.Provider>
+              </ActiveUser.Provider>
+            }
+          />
+        </Routes>
       </div>
       <Footer />
     </Router>
