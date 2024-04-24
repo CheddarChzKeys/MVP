@@ -21,10 +21,13 @@ const io = require("socket.io-client");
 let socket = io();
 let updatedChats = [];
 
-function Chatbox({ changeBackground }) {
-  const { signedInUser, activeClicked, changeClicked, memberList } =
-    useContext(ActiveUser);
-
+function Chatbox({
+  signedInUser,
+  changeBackground,
+  activeClicked,
+  changeClicked,
+  memberList,
+}) {
   const [typedMessage, changeMessage] = useState("");
   const [typedVideoLink, changeTypedVideoLink] = useState("");
   const [videoPreview, changeVideoPreview] = useState(null);
@@ -233,24 +236,6 @@ function Chatbox({ changeBackground }) {
     return;
   };
 
-  // const handleImagePreview = (imageLink) => {
-  //   function checkImage(imageSrc) {
-  //     console.log("In checkImage function");
-  //     var img = new Image();
-  //     img.onload = () => {
-  //       console.log("in onload");
-  //       console.log(imageSrc);
-  //       changeVideoPreview(imageSrc);
-  //     };
-  //     img.onerror = () => {
-  //       console.log("in onerror");
-  //     };
-  //     img.src = imageSrc;
-  //   }
-
-  //   return checkImage(imageLink);
-  // };
-
   const handleVideoSubmit = (e) => {
     e.preventDefault();
     let videoID = typedVideoLink;
@@ -326,10 +311,6 @@ function Chatbox({ changeBackground }) {
       scrollToLastLoadedChat();
     });
   }, [chats]);
-
-  // useEffect(() => {
-  //   console.log("qeued image state:", qeuedImages);
-  // }, [qeuedImages]);
 
   return (
     <div className="mainComponent" onClick={closeAllModals}>

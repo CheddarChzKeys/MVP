@@ -40,8 +40,8 @@ html {
   /* we set transition to 'all' properies - but you can use it just for background image either - by default the time is set to 1 second, you can change it yourself*/
   transition: linear background-image 1s;
   /* if you don't use delay , background will disapear and transition will start from a white background - you have to set the transition-delay the same as transition time OR more , so there won't be any problems */
-  -webkit-transition-delay: 0; /* Safari */
-  transition-delay: 0;
+  -webkit-transition-delay: 1; /* Safari */
+  transition-delay: 1;
 }
 
 .generalHover:hover {

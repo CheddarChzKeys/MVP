@@ -9,8 +9,6 @@ import { CSSTransition } from "react-transition-group";
 import ytAPIKey from "../../../hidden/youtubeAPIv3.js";
 
 const Gallery = ({ changeBackground, changeClicked }) => {
-  // changeBackground("./Backgrounds/reaper.png");
-
   const [contentList, changeContentList] = useState([]);
 
   const [selectedItem, changeSelectedItem] = useState(null);
@@ -144,6 +142,7 @@ const Gallery = ({ changeBackground, changeClicked }) => {
 
   useEffect(() => {
     changeClicked("gallery");
+    changeBackground("./Backgrounds/reaper.png");
     getNewestGalleryContent();
   }, []);
 
