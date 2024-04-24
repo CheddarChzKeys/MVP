@@ -1,13 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import DropzoneComponent from "./galleryDropbox.js";
+import { ActiveUser } from "../index.js";
 import "animate.css";
 
-const AddGalleryContent = ({
-  getGalleryContent,
-  toggleAddContent,
-  signedInUser,
-}) => {
+const AddGalleryContent = ({ getGalleryContent, toggleAddContent }) => {
   const [imageField, changeImageField] = useState("");
   const [videoField, changeVideoField] = useState("");
   const [descriptionField, changeDescriptionField] = useState("");
@@ -15,6 +12,8 @@ const AddGalleryContent = ({
 
   const [qeuedImages, changeQeuedImages] = useState([]);
   const [previewImages, changePreviewImages] = useState([]);
+
+  const signedInUser = useContext(ActiveUser);
 
   const addGalleryItem = (newItem) => {
     return axios.post("/gallery/add", newItem).then((results) => {

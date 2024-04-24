@@ -4,10 +4,12 @@ import Records from "./Records.js";
 import Chat from "./Smackboard.js";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
-import { ActiveUser } from "./ActiveUserContext.js";
+import { ActiveUser } from "../index.js";
 
-function Nav({ toggleSignedIn, newSignedInUser }) {
-  const { signedInUser, activeClicked } = useContext(ActiveUser);
+function Nav({ toggleSignedIn, activeClicked }) {
+  const signedInUser = useContext(ActiveUser);
+  console.log("signedInUser: ", signedInUser);
+
   return (
     <div className="mainHeaderDiv gridBackground">
       <Link to="/">
@@ -19,7 +21,7 @@ function Nav({ toggleSignedIn, newSignedInUser }) {
             <Link to="/records">
               <div
                 className={
-                  activeClicked == "records" ? "navItemClicked" : "navItem"
+                  activeClicked === "records" ? "navItemClicked" : "navItem"
                 }
               >
                 RECORDS
@@ -30,7 +32,7 @@ function Nav({ toggleSignedIn, newSignedInUser }) {
             <Link to="/smackboard">
               <div
                 className={
-                  activeClicked == "smackboard" ? "navItemClicked" : "navItem"
+                  activeClicked === "smackboard" ? "navItemClicked" : "navItem"
                 }
               >
                 SMACKBOARD
@@ -66,7 +68,7 @@ function Nav({ toggleSignedIn, newSignedInUser }) {
             <>
               <div className="navItemBox">
                 <div className="navItemNoHover" id="noHover">
-                  {newSignedInUser.username}
+                  {signedInUser.username}
                 </div>
               </div>
               <div className="navItemBox">

@@ -3,10 +3,15 @@ import { useEffect, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import SignUp from "./SignUp.js";
 import { CSSTransition } from "react-transition-group";
-import { ActiveUser } from "./ActiveUserContext.js";
 const axios = require("axios").default;
 
-const Login = ({ changeBackground, toggleSignedIn }) => {
+const Login = ({
+  changeSignedInUser,
+  changeBackground,
+  toggleSignedIn,
+  signedInUser,
+  changeClicked,
+}) => {
   const [typedUsername, changeUsername] = useState("");
   const [typedPassword, changePassword] = useState("");
   const [loginMessage, changeMessage] = useState(" ");
@@ -15,15 +20,12 @@ const Login = ({ changeBackground, toggleSignedIn }) => {
   const [soldierSelectedURL, changeSoldierSelectedURL] = useState(null);
   const [soldierHighlightedURL, changeSoldierHighlightedURL] = useState(null);
 
-  const { signedInUser, changeSignedInUser, activeClicked, changeClicked } =
-    useContext(ActiveUser);
-
   const navigate = useNavigate();
 
   const handleLogin = (e) => {
     const loginObject = { username: typedUsername, password: typedPassword };
     axios.post("/users/login", loginObject).then((results) => {
-      console.log("RESULTS: ", results)
+      console.log("RESULTS: ", results);
       changeMessage(results.data.message);
       if (results.data.user) {
         changeSignedInUser(results.data.user);
@@ -97,7 +99,7 @@ const Login = ({ changeBackground, toggleSignedIn }) => {
     <div className="mainComponent">
       <div id="logoLogin">
         <CSSTransition
-          in={activeClicked === "signIn"}
+          in={"signIn" === "signIn"}
           timeout={1000}
           classNames="galleryListSlideRight"
         >

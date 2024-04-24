@@ -1,18 +1,15 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import AddContentModal from "./AddGalleryContent.js";
 import ImagePopUp from "./ImagePopUp.js";
 import { css } from "@emotion/react";
 import MoonLoader from "react-spinners/MoonLoader";
 import { CSSTransition } from "react-transition-group";
-import { ActiveUser } from "./ActiveUserContext.js";
+// import { ActiveUser } from "../index.js";
 import ytAPIKey from "../../../hidden/youtubeAPIv3.js";
 
-const Gallery = ({ changeBackground }) => {
-  const { signedInUser, changeClicked } = useContext(ActiveUser);
-
-  changeClicked("gallery");
-  changeBackground("./Backgrounds/reaper.png");
+const Gallery = ({ changeBackground, changeClicked }) => {
+  // changeBackground("./Backgrounds/reaper.png");
 
   const [contentList, changeContentList] = useState([]);
 
@@ -122,7 +119,6 @@ const Gallery = ({ changeBackground }) => {
 
   const handleItemSelect = async (clickedItem) => {
     let newSelectedItem = { ...clickedItem };
-    console.log(newSelectedItem);
     const ytDetails = await axios
       .get(
         `https://www.googleapis.com/youtube/v3/videos?id=${clickedItem.video}&key=${ytAPIKey}&part=snippet,statistics`
@@ -130,10 +126,8 @@ const Gallery = ({ changeBackground }) => {
       .then((result) => {
         return result.data.items[0];
       });
-    console.log("ytDetails: ", ytDetails);
     newSelectedItem.details = ytDetails;
     toggleShowVideoDetails(false);
-    console.log(newSelectedItem);
     changeSelectedItem(newSelectedItem);
     toggleSelectedAnimation(true);
     return;
@@ -149,6 +143,7 @@ const Gallery = ({ changeBackground }) => {
   };
 
   useEffect(() => {
+    changeClicked("gallery");
     getNewestGalleryContent();
   }, []);
 
@@ -296,12 +291,12 @@ const Gallery = ({ changeBackground }) => {
                       ></iframe>
                     </div>
                   )}
-                  <btn
+                  <div
                     className="expand pointerHover colorHover"
                     onClick={() => imageClick(selectedItem)}
                   >
                     expand
-                  </btn>
+                  </div>
                   <div className="itemDetails">
                     <div className="galleryUserWrapper">
                       <div className="galleryUserThumb">
@@ -326,19 +321,19 @@ const Gallery = ({ changeBackground }) => {
                       {selectedItem.details && (
                         <div className="videoDetails ">
                           {showVideoDetails ? (
-                            <btn
+                            <div
                               className="detailsLabel pointerHover"
                               onClick={handleShowVideoDetails}
                             >
                               Video Details &#x25BE;
-                            </btn>
+                            </div>
                           ) : (
-                            <btn
+                            <div
                               className="detailsLabel pointerHover"
                               onClick={handleShowVideoDetails}
                             >
                               Video Details &#x25B8;
-                            </btn>
+                            </div>
                           )}
                           {showVideoDetails && (
                             <>
@@ -383,7 +378,6 @@ const Gallery = ({ changeBackground }) => {
           unmountOnExit
         >
           <AddContentModal
-            signedInUser={signedInUser}
             getGalleryContent={getNewestGalleryContent}
             toggleAddContent={toggleAddContent}
           />
