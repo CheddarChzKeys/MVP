@@ -115,9 +115,11 @@ const App = () => {
             path="/smackboard"
             element={
               <Smackboard
+                signedInUser={signedInUser}
                 memberList={memberList}
                 changeBackground={changeBackground}
                 changeClicked={changeClicked}
+                activeClicked={activeClicked}
               />
             }
           />
@@ -126,6 +128,7 @@ const App = () => {
             element={
               <News
                 changeBackground={changeBackground}
+                activeClicked={activeClicked}
                 changeClicked={changeClicked}
               />
             }

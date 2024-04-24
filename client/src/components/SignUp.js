@@ -4,13 +4,13 @@ import "regenerator-runtime/runtime";
 import SoldierSelectScreen from "./SoldierSelectScreen.js";
 import { CSSTransition } from "react-transition-group";
 
-const SignUp = ({
+const SignUp = function ({
   toggleSignUp,
   toggleSlideTrans,
   soldierSelectedURL,
   changeSoldierSelectedURL,
   changeSoldierHighlightedURL,
-}) => {
+}) {
   const [typedUsername, changeUsername] = useState("");
   const [typedPassword, changePassword] = useState("");
   const [typedPassword2, changePassword2] = useState("");
