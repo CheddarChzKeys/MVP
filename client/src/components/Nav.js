@@ -8,7 +8,6 @@ import { ActiveUser } from "../index.js";
 
 function Nav({ toggleSignedIn, activeClicked }) {
   const signedInUser = useContext(ActiveUser);
-  console.log("signedInUser: ", signedInUser);
 
   return (
     <div className="mainHeaderDiv gridBackground">
