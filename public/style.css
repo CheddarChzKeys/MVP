@@ -27,8 +27,8 @@
 
 @keyframes color-change{
   0% {color:#efefef}
-  20% {color:#79d9ff}
-  30% {color:#efefef}
+  30% {color:#79d9ff}
+  60% {color:#efefef}
 }
 
 html {
@@ -193,11 +193,12 @@ html {
 .componentHeader {
   font-family: "modernWarfare";
   position: relative;
-  font-size: 2.5vw;
+  font-size: 2vw;
   color: rgb(255, 255, 255);
   border-bottom: 1px solid #79d9ff;
   white-space: nowrap;
-  margin-bottom: 0;
+  margin-top: 1em;
+  flex: 1;
 }
 
 .componentBox {
@@ -445,9 +446,9 @@ tr {
   gap: 1%;
 }
 
-.smackNewsHeader {
+/* .smackNewsHeader {
   flex: 4;
-}
+} */
 
 .smackNewsHeaderSpacer {
   flex: 1;
@@ -1145,8 +1146,8 @@ aside.emoji-picker-react {
 .article {
   /* border: solid 1px white; */
 
-  padding: 20px 20px 5px 20px;
-  margin: 0 0 15px 0;
+  padding: 1em;
+  margin: 0 0 0.5em 0;
   /* overflow: visible; */
   background: rgba(0, 2, 0, 0.137);
   background-image: url("./black-tile.png");
@@ -1255,7 +1256,7 @@ aside.emoji-picker-react {
   font-size: 2vw;
   color: rgb(255, 255, 255);
   white-space: nowrap;
-  margin-bottom: 0;
+  margin: 1em 0 0 0;
   flex: 1;
 }
 
@@ -1632,7 +1633,7 @@ grid-row-end: 3;
   /* border-bottom: 1px solid #05050500; */
 }
 
-.modernWarfareWrap:after,.footerName:after {
+.modernWarfareWrap:after{
   width: 100%;
   content: "";
   height: 1px;
@@ -1650,7 +1651,7 @@ grid-row-end: 3;
   left: 0;
 }
 
-.modernWarfareWrap:hover:after, .footerName:hover:after {
+.modernWarfareWrap:hover:after{
   -webkit-transition: all ease 0.5s;
   -moz-transition: all ease 0.5s;
   -ms-transition: all ease 0.5s;
@@ -1663,6 +1664,10 @@ grid-row-end: 3;
 .footerHover:hover {
   border-bottom: 1px solid #79d9ff;
   cursor: pointer;
+}
+
+.logoAnchor {
+  text-decoration: none;
 }
 
 .footerLogo {

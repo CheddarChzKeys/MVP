@@ -45,7 +45,8 @@ const Footer = () => {
         </div>
         <div className="footerName">
           <a
-            href="https://us.shop.battle.net/en-us/product/call-of-duty-warzone"
+            className="logoAnchor"
+            href="https://github.com/CheddarChzKeys"
             target="_blank"
           >
             <p>cheddarchzkeys</p>
