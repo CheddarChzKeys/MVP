@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 import Nav from "./components/Nav.js";
 import Records from "./components/Records.js";
 import Smackboard from "./components/Smackboard.js";
-import News from "./components/News.js";
+import News from "./components/news/News.js";
 import Gallery from "./components/Gallery.js";
 import Login from "./components/Login.js";
 import Footer from "./components/Footer.js";

@@ -21,7 +21,7 @@ const io = require("socket.io-client");
 let socket = io();
 let updatedChats = [];
 
-function Chatbox({
+const Chatbox = function ({
   signedInUser,
   changeBackground,
   activeClicked,
@@ -316,7 +316,7 @@ function Chatbox({
     <div className="mainComponent" onClick={closeAllModals}>
       <div id="smackboardComponent">
         <div className="headerWrapper">
-          <h1 className="componentHeader smackNewsHeader">Smackboard</h1>
+          <h1 className="componentHeader">Smackboard</h1>
         </div>
         <div className="smackNewsMain smackMain">
           <CSSTransition
@@ -573,6 +573,6 @@ function Chatbox({
       </div>
     </div>
   );
-}
+};
 
 export default Chatbox;
