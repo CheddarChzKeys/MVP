@@ -53,10 +53,7 @@ const itemView = function ({
                   className="ytPlayer"
                   id="galleryYTPlayer"
                   type="text/html"
-                  // width="400"
-                  // height="243"
                   src={`http://www.youtube.com/embed/${selectedItem.video}?autoplay=1&enablejsapi=1`}
-                  // allow="autoplay *"
                   frameBorder="0"
                   allowFullScreen="allowfullscreen"
                   mozallowfullscreen="mozallowfullscreen"

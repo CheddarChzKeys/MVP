@@ -1264,6 +1264,9 @@ aside.emoji-picker-react {
   flex: 1;
   text-align: right;
   animation: color-change 3s infinite;
+  margin: auto;
+  color: #ffffff;
+  font-family: "modernWarfare";
 }
 
 .galleryMain {
@@ -1271,7 +1274,7 @@ aside.emoji-picker-react {
   justify-content: space-between;
   gap: 1%;
 
-  margin: 15px 0 25px 0;
+  margin: 1em 0 0 0;
 }
 
 .galleryListWrapper {
@@ -1315,21 +1318,28 @@ aside.emoji-picker-react {
 
 .galleryLoadMoreWrapper {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   gap: 2%;
   font-family: "modernWarfare";
   color: #efefef;
-  margin:2% 0 0 0;
+  margin:0 0 0 0;
+  flex: 1.3;
 }
 
 .galleryLoadMore {
   font-size: 1.2vw;
 }
 
-#prevNextSeparator {
-  border-left: 2px solid white;
-  border-right: 2px solid white;
-  width:1%
+#galleryNavBar {
+  display:flex;
+  justify-content: space-between;
+  gap: 1%;
+}
+
+#addContentWrapper {
+  flex: 1;
+  display: flex;
+  font-family: modernWarfare;
 }
 
 .itemViewComponentWrapper {
@@ -1608,6 +1618,7 @@ grid-row-end: 3;
   justify-content: center;
   align-items: center;
   gap: 15px;
+  margin-top: 5em;
   /* border-top: 1px solid #79d9ff; */
 }
 
