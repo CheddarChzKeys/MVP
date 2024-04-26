@@ -141,7 +141,7 @@ const Gallery = ({ changeBackground, changeClicked }) => {
 
   useEffect(() => {
     changeClicked("gallery");
-    changeBackground("./Backgrounds/reaper.png");
+    changeBackground("./Backgrounds/roze.png");
     getNewestGalleryContent();
   }, []);
 
@@ -169,16 +169,38 @@ const Gallery = ({ changeBackground, changeClicked }) => {
       <div className="gallery">
         <div id="galleryHeaderWrapper" className="headerWrapper">
           <h1 className="galleryHeader">GALLERY </h1>
-          <h1
+          {/* <h1
             id="addContentButton"
             className="galleryHeader pointerHover colorHover"
             onClick={() => toggleAddContent()}
           >
             ADD CONTENT
-          </h1>
+          </h1> */}
         </div>
         <div className="galleryMain">
           <div className="galleryListWrapper">
+            {/* <div className="galleryLoadMoreWrapper">
+              <p
+                className={
+                  prevLoadedAll
+                    ? "galleryLoadMore defaultHover"
+                    : "galleryLoadMore colorHover pointerHover"
+                }
+                onClick={getPrevGalleryContent}
+              >
+                Prev
+              </p>
+              <p
+                className={
+                  nextLoadedAll
+                    ? "galleryLoadMore defaultHover"
+                    : "galleryLoadMore colorHover pointerHover"
+                }
+                onClick={getNextGalleryContent}
+              >
+                Next
+              </p>
+            </div> */}
             {loading ? (
               <MoonLoader
                 color="#79d9ff"
@@ -228,7 +250,7 @@ const Gallery = ({ changeBackground, changeClicked }) => {
               </CSSTransition>
             )}
 
-            <div className="galleryLoadMoreWrapper">
+            {/* <div className="galleryLoadMoreWrapper">
               <p
                 className={
                   prevLoadedAll
@@ -239,7 +261,6 @@ const Gallery = ({ changeBackground, changeClicked }) => {
               >
                 Prev
               </p>
-              <div id="prevNextSeparator"></div>
               <p
                 className={
                   nextLoadedAll
@@ -250,7 +271,7 @@ const Gallery = ({ changeBackground, changeClicked }) => {
               >
                 Next
               </p>
-            </div>
+            </div> */}
           </div>
           <ItemView
             selectedItem={selectedItem}
@@ -375,6 +396,39 @@ const Gallery = ({ changeBackground, changeClicked }) => {
               )}
             </CSSTransition>
           </div> */}
+        </div>
+        <div id="galleryNavBar">
+          <div className="galleryLoadMoreWrapper">
+            <p
+              className={
+                prevLoadedAll
+                  ? "galleryLoadMore defaultHover"
+                  : "galleryLoadMore colorHover pointerHover"
+              }
+              onClick={getPrevGalleryContent}
+            >
+              Prev
+            </p>
+            <p
+              className={
+                nextLoadedAll
+                  ? "galleryLoadMore defaultHover"
+                  : "galleryLoadMore colorHover pointerHover"
+              }
+              onClick={getNextGalleryContent}
+            >
+              Next
+            </p>
+          </div>
+          <div id="addContentWrapper">
+            <div
+              id="addContentButton"
+              className="galleryLoadMore pointerHover colorHover"
+              onClick={() => toggleAddContent()}
+            >
+              ADD CONTENT
+            </div>
+          </div>
         </div>
         {/* {showAddContent && ( */}
         <CSSTransition
