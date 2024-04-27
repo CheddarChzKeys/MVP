@@ -73,6 +73,7 @@ const AddGalleryContent = ({ getGalleryContent, toggleAddContent }) => {
         image: imageURL,
         video: newVideoID,
         description: descriptionField,
+        png: signedInUser ? signedInUser.png : "Operator1",
       };
 
       addGalleryItem(newItemObject).then((message) => {

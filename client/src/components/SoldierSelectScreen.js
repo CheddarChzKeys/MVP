@@ -46,7 +46,9 @@ const SoldierSelectScreen = ({
 
   return (
     <div id="soldierSelectWrapper">
-      <h3 id="soldierSelectHeading">Soldier Select</h3>
+      <p className="logInButtons" id="soldierSelectHeading">
+        Soldier Select
+      </p>
       <Carousel itemsToShow={1} showArrows={false} disableArrowsOnEnd={false}>
         <div className="soldierList">
           {imageList.map((imageURL) => {
@@ -77,19 +79,19 @@ const SoldierSelectScreen = ({
       </Carousel>
 
       {soldierSelectedURL ? (
-        <button
-          className="signInButton blueHover pointerHover"
+        <div
+          className="logInButtons blueHover pointerHover"
           onClick={handleNext}
         >
           Next
-        </button>
+        </div>
       ) : (
-        <button
-          className="signInButton blueHover pointerHover"
+        <div
+          className="logInButtons blueHover pointerHover"
           onClick={handleBack}
         >
           Back
-        </button>
+        </div>
       )}
     </div>
   );

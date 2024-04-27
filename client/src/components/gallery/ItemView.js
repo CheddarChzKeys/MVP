@@ -74,7 +74,7 @@ const itemView = function ({
                 <div className="galleryUserThumb">
                   <img
                     className="userThumbImage"
-                    src="https://mywarzoneappbucket.s3.us-west-1.amazonaws.com/Homegirl1_largeThumb.png"
+                    src={`https://mywarzoneappbucket.s3.us-west-1.amazonaws.com/${selectedItem.png}_largeThumb.png`}
                   />
                 </div>
                 <p id="source" className="usernameDate">
@@ -90,44 +90,46 @@ const itemView = function ({
                     {selectedItem.description}
                   </p>
                 )}
-                {selectedItem.details && (
-                  <div className="videoDetails ">
-                    {showVideoDetails ? (
-                      <div
-                        className="detailsLabel pointerHover"
-                        onClick={handleShowVideoDetails}
-                      >
-                        Video Details &#x25BE;
-                      </div>
-                    ) : (
-                      <div
-                        className="detailsLabel pointerHover"
-                        onClick={handleShowVideoDetails}
-                      >
-                        Video Details &#x25B8;
-                      </div>
-                    )}
-                    {showVideoDetails && (
-                      <>
-                        <p id="title" className="detailsDescriptionTitle">
-                          {selectedItem.details.snippet.title}
-                        </p>
-                        <p id="views" className="detailsDescriptionSmall">
-                          {selectedItem.details.statistics.viewCount} views
-                        </p>
-                        <p id="likes" className="detailsDescriptionSmall">
-                          {selectedItem.details.statistics.likeCount} likes
-                        </p>
-                        <p id="channel" className="detailsDescriptionTitle">
-                          {selectedItem.details.snippet.channelTitle}
-                        </p>
-                        <p className="detailsDescriptionSmall">
-                          {selectedItem.details.snippet.description}
-                        </p>
-                      </>
-                    )}
-                  </div>
-                )}
+                {
+                  /* {selectedItem.details && ( */
+                  // <div className="videoDetails ">
+                  //   {showVideoDetails ? (
+                  //     <div
+                  //       className="detailsLabel pointerHover"
+                  //       onClick={handleShowVideoDetails}
+                  //     >
+                  //       Video Details &#x25BE;
+                  //     </div>
+                  //   ) : (
+                  //     <div
+                  //       className="detailsLabel pointerHover"
+                  //       onClick={handleShowVideoDetails}
+                  //     >
+                  //       Video Details &#x25B8;
+                  //     </div>
+                  //   )}
+                  //   {showVideoDetails && (
+                  //     <>
+                  //       <p id="title" className="detailsDescriptionTitle">
+                  //         {selectedItem.details.snippet.title}
+                  //       </p>
+                  //       <p id="views" className="detailsDescriptionSmall">
+                  //         {selectedItem.details.statistics.viewCount} views
+                  //       </p>
+                  //       <p id="likes" className="detailsDescriptionSmall">
+                  //         {selectedItem.details.statistics.likeCount} likes
+                  //       </p>
+                  //       <p id="channel" className="detailsDescriptionTitle">
+                  //         {selectedItem.details.snippet.channelTitle}
+                  //       </p>
+                  //       <p className="detailsDescriptionSmall">
+                  //         {selectedItem.details.snippet.description}
+                  //       </p>
+                  //     </>
+                  //   )}
+                  // </div>
+                  // )
+                }
               </>
             </div>
           </div>
