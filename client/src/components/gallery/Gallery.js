@@ -455,6 +455,7 @@ const Gallery = ({ changeBackground, changeClicked }) => {
             toggleImagePopUp={toggleImagePopUp}
             changePopUpImage={changePopUpImage}
             changePopUpVideo={changePopUpVideo}
+            selectedItem={selectedItem}
           />
         </CSSTransition>
       </div>

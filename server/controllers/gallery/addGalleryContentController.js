@@ -5,7 +5,7 @@ const addGalleryContent = async (req, res) => {
   const newContentItem = req.body;
   try {
     const resultMessage = await addGalleryDbContent(newContentItem);
-    res.send(200, { message: resultMessage });
+    res.status(200).send({ message: resultMessage });
   } catch (err) {
     console.log(`Error: ${err}`);
     res.status(500);

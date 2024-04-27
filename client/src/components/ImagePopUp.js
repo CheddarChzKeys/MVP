@@ -1,10 +1,17 @@
 import React, { useEffect } from "react";
 
-function ImagePopUp(props) {
+function ImagePopUp({
+  toggleImagePopUp,
+  changePopUpImage,
+  changePopUpVideo,
+  popUpVideo,
+  popUpImage,
+  selectedItem,
+}) {
   const onClose = () => {
-    props.toggleImagePopUp(false);
-    props.changePopUpImage(null);
-    props.changePopUpVideo(null);
+    toggleImagePopUp(false);
+    changePopUpImage(null);
+    changePopUpVideo(null);
   };
 
   return (
@@ -13,7 +20,7 @@ function ImagePopUp(props) {
         <div className="fullImageWrapper" onClick={(e) => e.stopPropagation()}>
           <div
             className={
-              props.popUpImage ? "inner fullImageInner" : "inner fullVideoInner"
+              popUpImage ? "inner fullImageInner" : "inner fullVideoInner"
             }
           >
             <div className="buttonWrapper">
@@ -24,16 +31,14 @@ function ImagePopUp(props) {
                 X
               </button>
             </div>
-            {props.popUpImage && (
-              <img className="fullImage" src={props.popUpImage} />
-            )}
-            {props.popUpVideo && (
+            {popUpImage && <img className="fullImage" src={popUpImage} />}
+            {popUpVideo && (
               <iframe
                 className="ytPlayer"
                 id="popUpYTPlayer"
                 type="text/html" // width="400"
                 // height="243"
-                src={`http://www.youtube.com/embed/${props.popUpVideo}`}
+                src={`http://www.youtube.com/embed/${popUpVideo}`}
                 frameBorder="0"
                 allowFullScreen="allowfullscreen"
                 mozallowfullscreen="mozallowfullscreen"
@@ -44,6 +49,27 @@ function ImagePopUp(props) {
             )}
           </div>
         </div>
+        {popUpVideo && (
+          <div className="videoDetails" onClick={(e) => e.stopPropagation()}>
+            <>
+              <p id="title" className="detailsDescriptionTitle">
+                {selectedItem.details.snippet.title}
+              </p>
+              <p id="views" className="detailsDescriptionSmall">
+                {selectedItem.details.statistics.viewCount} views
+              </p>
+              <p id="likes" className="detailsDescriptionSmall">
+                {selectedItem.details.statistics.likeCount} likes
+              </p>
+              <p id="channel" className="detailsDescriptionTitle">
+                {selectedItem.details.snippet.channelTitle}
+              </p>
+              <p className="detailsDescriptionSmall">
+                {selectedItem.details.snippet.description}
+              </p>
+            </>
+          </div>
+        )}
       </div>
     </div>
   );
