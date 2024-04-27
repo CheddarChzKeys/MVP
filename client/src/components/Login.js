@@ -122,7 +122,7 @@ const Login = ({
               />
             ) : (
               <div id="loginDiv">
-                <h2>Log In</h2>
+                <p className="logInButtons">Log In</p>
                 <form onSubmit={(e) => handleLogin(e)}>
                   <input
                     className="textInput"
@@ -145,30 +145,29 @@ const Login = ({
                     <div />
                   ) : (
                     <input
-                      className="blueHover pointerHover"
-                      id="submit"
+                      className="logInButtons blueHover pointerHover"
                       type="submit"
                       value="submit"
                     ></input>
                   )}
                 </form>
                 {signedInUser ? (
-                  <h3
-                    className="blueHover"
+                  <div
+                    className="logInButtons blueHover"
                     onClick={() => {
                       toggleSignedIn();
                       changeMessage("");
                     }}
                   >
                     Sign Out
-                  </h3>
+                  </div>
                 ) : (
-                  <h3
-                    className="blueHover pointerHover"
+                  <div
+                    className="logInButtons blueHover pointerHover"
                     onClick={() => handleSignUp()}
                   >
                     Enlist
-                  </h3>
+                  </div>
                 )}
               </div>
             )}

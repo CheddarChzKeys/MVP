@@ -103,7 +103,7 @@ const SignUp = function ({
         <div id="signUpDiv">
           {isSignedUp ? (
             <>
-              <h2>New soldier enlisted</h2>
+              <p className="logInButtons">New soldier enlisted</p>
               <p>
                 Please{" "}
                 <a className="blueLink" href="/">
@@ -114,7 +114,7 @@ const SignUp = function ({
             </>
           ) : (
             <>
-              <h2>Enlist for Service</h2>
+              <p className="logInButtons">Enlist for Service</p>
               <form onSubmit={(e) => handleLogin(e)}>
                 <div>
                   <input
@@ -176,7 +176,7 @@ const SignUp = function ({
                 <div>
                   <div id="platformDiv">
                     <input
-                      className="textInput"
+                      className="checkbox"
                       id="psnCheck"
                       placeholder="Gamer Tag"
                       type="checkbox"
@@ -191,7 +191,7 @@ const SignUp = function ({
                     </div>
 
                     <input
-                      className="textInput"
+                      className="checkbox"
                       id="xblCheck"
                       type="checkbox"
                       name="xbl"
@@ -205,7 +205,7 @@ const SignUp = function ({
                     </div>
 
                     <input
-                      className="textInput"
+                      className="checkbox"
                       id="actiCheck"
                       type="checkbox"
                       name="acti"
@@ -227,16 +227,14 @@ const SignUp = function ({
                   {isVerified ? (
                     soldierSelectedURL ? (
                       <input
-                        className="blueHover pointerHover"
-                        id="submit"
+                        className="logInButtons blueHover pointerHover"
                         type="submit"
                         value="Enlist"
                         onClick={(e) => handleSignUp(e)}
                       ></input>
                     ) : (
                       <input
-                        className="blueHover pointerHover"
-                        id="submit"
+                        className="logInButtons blueHover pointerHover"
                         type="button"
                         value="Next"
                         onClick={handleNext}
@@ -244,8 +242,7 @@ const SignUp = function ({
                     )
                   ) : (
                     <input
-                      className="blueHover pointerHover"
-                      id="verify"
+                      className="logInButtons blueHover pointerHover"
                       type="button"
                       value="Verify"
                       onClick={(e) =>
@@ -253,12 +250,12 @@ const SignUp = function ({
                       }
                     ></input>
                   )}
-                  <button
-                    className="signInButton blueHover pointerHover"
+                  <div
+                    className="logInButtons blueHover pointerHover"
                     onClick={handleBack}
                   >
                     Back
-                  </button>
+                  </div>
                 </div>
               </form>
             </>
