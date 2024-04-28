@@ -6,7 +6,7 @@ import Records from "./components/Records.js";
 import Smackboard from "./components/Smackboard.js";
 import News from "./components/news/News.js";
 import Gallery from "./components/gallery/Gallery.js";
-import Login from "./components/Login.js";
+import Login from "./components/logIn/Login.js";
 import Footer from "./components/Footer.js";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import axios from "axios";
@@ -96,6 +96,7 @@ const App = () => {
                 signedInUser={signedInUser}
                 changeSignedInUser={changeSignedInUser}
                 changeClicked={changeClicked}
+                activeClicked={activeClicked}
               />
             }
           />
