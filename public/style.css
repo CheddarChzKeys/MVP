@@ -997,16 +997,13 @@ aside.emoji-picker-react {
 
 #logoLogin {
   width: 60%;
-  margin: 10vh 0 15vh 0;
   display: flex;
   align-items: center;
   position: relative;
-  min-height: 70vh;
+  margin: 5vw 0;
 }
 
 #mwLogo {
-  display: flex;
-  justify-content: center;
   flex: 1;
 }
 
@@ -1036,6 +1033,7 @@ aside.emoji-picker-react {
   color: #ffffff;
   background: rgba(70, 69, 69, 0.445);
   font-family: "modernWarfare";
+  min-height: 40vw;
 }
 
 #loginDiv form, #signUpDiv form {
@@ -1722,6 +1720,7 @@ grid-row-end: 3;
   width: 60%;
   padding: 2em;
   background: rgba(70, 69, 69, 0.445);
+  min-height: 40vw;
 }
 
 .soldierList {

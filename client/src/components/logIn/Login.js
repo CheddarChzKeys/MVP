@@ -6,11 +6,12 @@ import { CSSTransition } from "react-transition-group";
 const axios = require("axios").default;
 
 const Login = ({
-  changeSignedInUser,
-  changeBackground,
-  toggleSignedIn,
   signedInUser,
+  changeSignedInUser,
+  toggleSignedIn,
+  changeBackground,
   changeClicked,
+  activeClicked,
 }) => {
   const [typedUsername, changeUsername] = useState("");
   const [typedPassword, changePassword] = useState("");
@@ -99,7 +100,7 @@ const Login = ({
     <div className="mainComponent">
       <div id="logoLogin">
         <CSSTransition
-          in={"signIn" === "signIn"}
+          in={activeClicked === "signIn"}
           timeout={1000}
           classNames="galleryListSlideRight"
         >
@@ -122,7 +123,7 @@ const Login = ({
               />
             ) : (
               <div id="loginDiv">
-                <p className="logInButtons">Log In</p>
+                <p className="logInButtons">Welcome Soldier</p>
                 <form onSubmit={(e) => handleLogin(e)}>
                   <input
                     className="textInput"
@@ -147,7 +148,7 @@ const Login = ({
                     <input
                       className="logInButtons blueHover pointerHover"
                       type="submit"
-                      value="submit"
+                      value="Sign In"
                     ></input>
                   )}
                 </form>
