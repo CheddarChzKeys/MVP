@@ -5,7 +5,7 @@ import SignUp from "./SignUp.js";
 import { CSSTransition } from "react-transition-group";
 const axios = require("axios").default;
 
-const Login = ({
+const signIn = ({
   signedInUser,
   changeSignedInUser,
   toggleSignedIn,
@@ -49,10 +49,9 @@ const Login = ({
     change(e.target.value);
   };
 
-  const handleSignUp = () => {
+  const handleExit = () => {
     toggleSlideTrans(true);
-    toggleSignUp(!signUpVisible);
-
+    toggleSignUp(true);
     changeMessage("");
   };
 
@@ -113,48 +112,42 @@ const Login = ({
           onEntered={() => toggleSlideTrans(false)}
         >
           <div id="loginWrap">
-            {signUpVisible ? (
-              <SignUp
-                toggleSignUp={handleSignUp}
-                toggleSlideTrans={toggleSlideTrans}
-                soldierSelectedURL={soldierSelectedURL}
-                changeSoldierSelectedURL={changeSoldierSelectedURL}
-                changeSoldierHighlightedURL={changeSoldierHighlightedURL}
-              />
-            ) : (
+            {!signUpVisible && (
               <div id="loginDiv">
-                <p className="logInButtons">Welcome Soldier</p>
-                <form onSubmit={(e) => handleLogin(e)}>
-                  <input
-                    className="textInput"
-                    id="username"
-                    placeholder="username"
-                    type="text"
-                    onChange={(e) => handleChange(e, changeUsername)}
-                  ></input>
-                  <input
-                    className="textInput"
-                    id="password"
-                    placeholder="password"
-                    type="password"
-                    value={typedPassword}
-                    onChange={(e) => handleChange(e, changePassword)}
-                  ></input>
-                  <div className="loginResponse"> {loginMessage} &nbsp;</div>
-
-                  {signedInUser ? (
-                    <div />
-                  ) : (
+                {signedInUser ? (
+                  <p className="logInButtons">Welcome Back</p>
+                ) : (
+                  <p className="logInButtons">Welcome Soldier</p>
+                )}
+                {!signedInUser ? (
+                  <form onSubmit={(e) => handleLogin(e)}>
+                    <input
+                      className="textInput"
+                      id="username"
+                      placeholder="username"
+                      type="text"
+                      onChange={(e) => handleChange(e, changeUsername)}
+                    ></input>
+                    <input
+                      className="textInput"
+                      id="password"
+                      placeholder="password"
+                      type="password"
+                      onChange={(e) => handleChange(e, changePassword)}
+                    ></input>
+                    <div className="loginResponse"> {loginMessage} &nbsp;</div>
                     <input
                       className="logInButtons blueHover pointerHover"
                       type="submit"
                       value="Sign In"
                     ></input>
-                  )}
-                </form>
+                  </form>
+                ) : (
+                  <div className="blueLink">{signedInUser.username}</div>
+                )}
                 {signedInUser ? (
                   <div
-                    className="logInButtons blueHover"
+                    className="logInButtons blueHover pointerHover"
                     onClick={() => {
                       toggleSignedIn();
                       changeMessage("");
@@ -165,12 +158,21 @@ const Login = ({
                 ) : (
                   <div
                     className="logInButtons blueHover pointerHover"
-                    onClick={() => handleSignUp()}
+                    onClick={() => handleExit()}
                   >
                     Enlist
                   </div>
                 )}
               </div>
+            )}
+            {signUpVisible && (
+              <SignUp
+                toggleSignUp={toggleSignUp}
+                toggleSlideTrans={toggleSlideTrans}
+                soldierSelectedURL={soldierSelectedURL}
+                changeSoldierSelectedURL={changeSoldierSelectedURL}
+                changeSoldierHighlightedURL={changeSoldierHighlightedURL}
+              />
             )}
           </div>
         </CSSTransition>
@@ -179,4 +181,4 @@ const Login = ({
   );
 };
 
-export default Login;
+export default signIn;

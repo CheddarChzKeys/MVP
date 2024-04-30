@@ -80,39 +80,34 @@ const SignUp = function ({
   };
 
   const handleBack = () => {
-    toggleSignUp();
+    toggleSignUp(false);
+    toggleSlideTrans(true);
     changeSoldierSelectedURL(null);
   };
   const handleNext = () => {
     toggleSoldierSelect(true);
+
     toggleSlideTrans(true);
   };
 
   return (
     <>
-      {showSoldierSelect ? (
-        <SoldierSelectScreen
-          toggleSoldierSelect={toggleSoldierSelect}
-          soldierSelectedURL={soldierSelectedURL}
-          changeSoldierSelectedURL={changeSoldierSelectedURL}
-          changeSoldierHighlightedURL={changeSoldierHighlightedURL}
-          changeSoldierSelectResponse={changeSoldierSelectResponse}
-          toggleSlideTrans={toggleSlideTrans}
-        />
-      ) : (
+      {!showSoldierSelect && (
         <div id="signUpDiv">
-          {isSignedUp ? (
+          {isSignedUp && (
             <>
               <p className="logInButtons">New soldier enlisted</p>
-              <p>
-                Please{" "}
-                <a className="blueLink" href="/">
-                  sign in
-                </a>{" "}
-                to deploy into the warzone!
-              </p>
+              <p className="enlistedResponse">Please</p>
+              <a
+                className="enlistedResponse blueText pointerHover noWrap"
+                onClick={handleBack}
+              >
+                sign in
+              </a>
+              <p className="enlistedResponse">to deploy into the warzone!</p>
             </>
-          ) : (
+          )}
+          {!isSignedUp && (
             <>
               <p className="logInButtons">Enlist for Service</p>
               <form onSubmit={(e) => handleLogin(e)}>
@@ -261,6 +256,16 @@ const SignUp = function ({
             </>
           )}
         </div>
+      )}
+      {showSoldierSelect && (
+        <SoldierSelectScreen
+          toggleSoldierSelect={toggleSoldierSelect}
+          soldierSelectedURL={soldierSelectedURL}
+          changeSoldierSelectedURL={changeSoldierSelectedURL}
+          changeSoldierHighlightedURL={changeSoldierHighlightedURL}
+          changeSoldierSelectResponse={changeSoldierSelectResponse}
+          toggleSlideTrans={toggleSlideTrans}
+        />
       )}
     </>
   );
