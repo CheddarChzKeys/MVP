@@ -16,7 +16,6 @@ import "regenerator-runtime/runtime";
 export const ActiveUser = React.createContext();
 
 const App = () => {
-  const [isSignedIn, changeSignedIn] = useState(false);
   const [signedInUser, changeSignedInUser] = useState(null);
   const [activeClicked, changeClicked] = useState(null);
   const [memberList, changeMemberList] = useState(null);
@@ -24,7 +23,6 @@ const App = () => {
   // const newSignedInUser = useMemo(() => signedInUser, [signedInUser]);
 
   const toggleSignedIn = () => {
-    changeSignedIn(!isSignedIn);
     if (signedInUser) {
       localStorage.removeItem("accessToken");
       const deadRefreshToken = localStorage.getItem("refreshToken");
@@ -34,7 +32,6 @@ const App = () => {
       }
       changeSignedInUser(null);
     }
-    console.log("toggled Sign In");
   };
 
   const changeBackground = (imageURL) => {

@@ -24,32 +24,33 @@ const signIn = ({
   const navigate = useNavigate();
 
   const handleLogin = (e) => {
-    const loginObject = { username: typedUsername, password: typedPassword };
-    axios.post("/users/login", loginObject).then((results) => {
-      console.log("RESULTS: ", results);
-      changeMessage(results.data.message);
-      if (results.data.user) {
-        changeSignedInUser(results.data.user);
-        toggleSignedIn(true);
-        console.log("accessToken: ", results.data.accessToken);
-        console.log("refreshToken: ", results.data.refreshToken);
-        const accessToken = results.data.accessToken;
-        const refreshToken = results.data.refreshToken;
-        //retrieve and save JWT in local storage
-        localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("refreshToken", refreshToken);
-        navigate("/records");
-      }
-    });
-    changePassword("");
+    if (typedUsername === "" || typedPassword === "") {
+      changeMessage("Username and Password required")
+    } else {
+      const loginObject = { username: typedUsername, password: typedPassword };
+      axios.post("/users/login", loginObject).then((results) => {
+        if (results.data.message){
+        changeMessage(results.data.message);
+        } else if (results.data.user) {
+          //retrieve and save JWT in local storage
+          const accessToken = results.data.accessToken;
+          const refreshToken = results.data.refreshToken;
+          localStorage.setItem("accessToken", accessToken);
+          localStorage.setItem("refreshToken", refreshToken);
+          changeSignedInUser(results.data.user);
+          navigate("/records");
+        }
+      });
+    }
     e.preventDefault();
   };
 
   const handleChange = (e, change) => {
     change(e.target.value);
+    changeMessage("");
   };
 
-  const handleExit = () => {
+  const showSignUp = () => {
     toggleSlideTrans(true);
     toggleSignUp(true);
     changeMessage("");
@@ -158,7 +159,7 @@ const signIn = ({
                 ) : (
                   <div
                     className="logInButtons blueHover pointerHover"
-                    onClick={() => handleExit()}
+                    onClick={showSignUp}
                   >
                     Enlist
                   </div>

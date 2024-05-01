@@ -2,6 +2,7 @@ import React, { useState } from "react";
 const axios = require("axios").default;
 import "regenerator-runtime/runtime";
 import SoldierSelectScreen from "./SoldierSelectScreen.js";
+import Enlisted from "./Enlisted.js";
 import { CSSTransition } from "react-transition-group";
 
 const SignUp = function ({
@@ -21,22 +22,19 @@ const SignUp = function ({
   const [pwResponse, changePwResponse] = useState("");
   const [verifyResponse, changeVerifiedResponse] = useState("");
   const [soldierSelectResponse, changeSoldierSelectResponse] = useState("");
-  const [isSignedUp, toggleIsSignedUp] = useState(false);
+  const [showEnlisted, changeShowEnlisted] = useState(false);
 
   const [showSoldierSelect, toggleSoldierSelect] = useState(false);
 
-  const handleVerify = async (e, gamerTag, checkedPlatform) => {
+  const handleVerify = async (e) => {
     const verifyObject = {
       gamerTag: gamerTag,
       platform: checkedPlatform,
     };
-    console.log("verifyObject:", verifyObject);
     const results = await axios.post("/users/verifyGamerTag", verifyObject);
-    console.log("RESULTS: ", results);
     if (results.data === "success") {
       changeVerified(true);
       changeVerifiedResponse("Gamer Tag verified");
-      console.log("result is: ", results);
     } else {
       changeVerified(false);
       changeVerifiedResponse("Verification failed");
@@ -44,12 +42,7 @@ const SignUp = function ({
     e.preventDefault(true);
   };
 
-  const handleChecked = (platform) => {
-    checkedPlatform == platform
-      ? changePlatform(null)
-      : changePlatform(platform);
-  };
-
+  
   const handleSignUp = (e) => {
     if (typedPassword !== typedPassword2 || typedPassword.length < 1) {
       changePwResponse("Passwords do not match");
@@ -65,7 +58,7 @@ const SignUp = function ({
       };
       axios.post("/users/signUp", loginObject).then((results) => {
         if (results.data.message === "success") {
-          toggleIsSignedUp(true);
+          changeShowEnlisted(true);
           toggleSlideTrans(true);
         } else {
           changeUsernameResponse(results.data.message);
@@ -74,9 +67,17 @@ const SignUp = function ({
     }
     e.preventDefault();
   };
-
+  
   const handleChange = (e, change) => {
     change(e.target.value);
+  };
+
+  const handleChecked = (platform) => {
+    checkedPlatform === platform
+      ? changePlatform(null)
+      : changePlatform(platform);
+    changeVerified(false);
+    changeVerifiedResponse("");
   };
 
   const handleBack = () => {
@@ -84,178 +85,160 @@ const SignUp = function ({
     toggleSlideTrans(true);
     changeSoldierSelectedURL(null);
   };
+
   const handleNext = () => {
     toggleSoldierSelect(true);
-
     toggleSlideTrans(true);
   };
 
   return (
     <>
-      {!showSoldierSelect && (
+      {!showSoldierSelect && !showEnlisted &&(
         <div id="signUpDiv">
-          {isSignedUp && (
-            <>
-              <p className="logInButtons">New soldier enlisted</p>
-              <p className="enlistedResponse">Please</p>
-              <a
-                className="enlistedResponse blueText pointerHover noWrap"
+          <p className="logInButtons">Enlist for Service</p>
+          <form onSubmit={(e) => handleSignUp(e)}>
+            <div>
+              <input
+                className="textInput"
+                id="username"
+                placeholder="username"
+                type="text"
+                value={typedUsername}
+                onChange={(e) => {
+                  handleChange(e, changeUsername);
+                  changeUsernameResponse("");
+                }}
+              ></input>
+              <div className="loginResponse">
+                {usernameResponse}, &nbsp;
+              </div>
+            </div>
+
+            <div>
+              <input
+                className="textInput"
+                id="password"
+                placeholder="password"
+                type="password"
+                value={typedPassword}
+                onChange={(e) => {
+                  handleChange(e, changePassword);
+                  changePwResponse("");
+                }}
+              ></input>
+              <div className="loginResponse">&nbsp;</div>
+            </div>
+            <div>
+              <input
+                className="textInput"
+                id="password2"
+                placeholder="confirm password"
+                type="password"
+                value={typedPassword2}
+                onChange={(e) => {
+                  handleChange(e, changePassword2);
+                  changePwResponse("");
+                }}
+              ></input>
+              <div className="signUpResponse">{pwResponse}, &nbsp;</div>
+            </div>
+            <input
+              className="textInput"
+              id="gamerTag"
+              placeholder="gamer tag"
+              type="text"
+              value={gamerTag}
+              onChange={(e) => {
+                handleChange(e, changeGamerTag);
+                changeVerified(false);
+                changeVerifiedResponse("");
+              }}
+            ></input>
+            <div>
+              <div id="platformDiv">
+                <input
+                  className="checkbox"
+                  id="psnCheck"
+                  placeholder="Gamer Tag"
+                  type="checkbox"
+                  name="psn"
+                  checked={checkedPlatform === "psn" ? true : false}
+                  onChange={() => handleChecked("psn")}
+                  value="psn"
+                ></input>
+                <div className="checkboxLabel">
+                  <p>PSN</p>
+                </div>
+
+                <input
+                  className="checkbox"
+                  id="xblCheck"
+                  type="checkbox"
+                  name="xbl"
+                  checked={checkedPlatform === "xbl" ? true : false}
+                  onChange={() => handleChecked("xbl")}
+                  value="xbl"
+                ></input>
+                <div className="checkboxLabel">
+                  <p>XBL</p>
+                </div>
+
+                <input
+                  className="checkbox"
+                  id="actiCheck"
+                  type="checkbox"
+                  name="acti"
+                  checked={checkedPlatform === "acti" ? true : false}
+                  onChange={() => handleChecked("acti")}
+                  value="acti"
+                ></input>
+                <div className="checkboxLabel">
+                  <p>ACTI</p>
+                </div>
+              </div>
+              <div className="signUpResponse">{verifyResponse}, &nbsp;</div>
+              <div className="signUpResponse">
+                {soldierSelectResponse}, &nbsp;
+              </div>
+            </div>
+            <div className="loginButtonsWrapper">
+              {isVerified ? (
+                soldierSelectedURL ? (
+                  <input
+                    className="logInButtons blueHover pointerHover"
+                    type="submit"
+                    value="Enlist"
+                  ></input>
+                ) : (
+                  <input
+                    className="logInButtons blueHover pointerHover"
+                    type="button"
+                    value="Next"
+                    onClick={handleNext}
+                  ></input>
+                )
+              ) : (
+                <input
+                  className="logInButtons blueHover pointerHover"
+                  type="button"
+                  value="Verify"
+                  onClick={(e) =>
+                    handleVerify(e)
+                  }
+                ></input>
+              )}
+              <div
+                className="logInButtons blueHover pointerHover"
                 onClick={handleBack}
               >
-                sign in
-              </a>
-              <p className="enlistedResponse">to deploy into the warzone!</p>
-            </>
-          )}
-          {!isSignedUp && (
-            <>
-              <p className="logInButtons">Enlist for Service</p>
-              <form onSubmit={(e) => handleLogin(e)}>
-                <div>
-                  <input
-                    className="textInput"
-                    id="username"
-                    placeholder="username"
-                    type="text"
-                    value={typedUsername}
-                    onChange={(e) => {
-                      handleChange(e, changeUsername);
-                      changeUsernameResponse("");
-                    }}
-                  ></input>
-                  <div className="loginResponse">
-                    {usernameResponse}, &nbsp;
-                  </div>
-                </div>
-
-                <div>
-                  <input
-                    className="textInput"
-                    id="password"
-                    placeholder="password"
-                    type="password"
-                    value={typedPassword}
-                    onChange={(e) => {
-                      handleChange(e, changePassword);
-                      changePwResponse("");
-                    }}
-                  ></input>
-                  <div className="loginResponse">&nbsp;</div>
-                </div>
-                <div>
-                  <input
-                    className="textInput"
-                    id="password2"
-                    placeholder="confirm password"
-                    type="password"
-                    value={typedPassword2}
-                    onChange={(e) => {
-                      handleChange(e, changePassword2);
-                      changePwResponse("");
-                    }}
-                  ></input>
-                  <div className="signUpResponse">{pwResponse}, &nbsp;</div>
-                </div>
-                <input
-                  className="textInput"
-                  id="gamerTag"
-                  placeholder="gamer tag"
-                  type="text"
-                  value={gamerTag}
-                  onChange={(e) => {
-                    handleChange(e, changeGamerTag);
-                    changeVerified(false);
-                    // changeVerifiedResponse("");
-                  }}
-                ></input>
-                <div>
-                  <div id="platformDiv">
-                    <input
-                      className="checkbox"
-                      id="psnCheck"
-                      placeholder="Gamer Tag"
-                      type="checkbox"
-                      name="psn"
-                      checked={checkedPlatform == "psn" ? true : false}
-                      onChange={() => handleChecked("psn")}
-                      value="psn"
-                      // onChange={(e) => handleChange(e, changePassword)}
-                    ></input>
-                    <div className="checkboxLabel">
-                      <p>PSN</p>
-                    </div>
-
-                    <input
-                      className="checkbox"
-                      id="xblCheck"
-                      type="checkbox"
-                      name="xbl"
-                      checked={checkedPlatform == "xbl" ? true : false}
-                      onChange={() => handleChecked("xbl")}
-                      value="xbl"
-                      // onChange={(e) => handleChange(e, changePassword)}
-                    ></input>
-                    <div className="checkboxLabel">
-                      <p>XBL</p>
-                    </div>
-
-                    <input
-                      className="checkbox"
-                      id="actiCheck"
-                      type="checkbox"
-                      name="acti"
-                      checked={checkedPlatform == "acti" ? true : false}
-                      onChange={() => handleChecked("acti")}
-                      value="acti"
-                      // onChange={(e) => handleChange(e, changePassword)}
-                    ></input>
-                    <div className="checkboxLabel">
-                      <p>ACTI</p>
-                    </div>
-                  </div>
-                  <div className="signUpResponse">{verifyResponse}, &nbsp;</div>
-                  <div className="signUpResponse">
-                    {soldierSelectResponse}, &nbsp;
-                  </div>
-                </div>
-                <div className="loginButtonsWrapper">
-                  {isVerified ? (
-                    soldierSelectedURL ? (
-                      <input
-                        className="logInButtons blueHover pointerHover"
-                        type="submit"
-                        value="Enlist"
-                        onClick={(e) => handleSignUp(e)}
-                      ></input>
-                    ) : (
-                      <input
-                        className="logInButtons blueHover pointerHover"
-                        type="button"
-                        value="Next"
-                        onClick={handleNext}
-                      ></input>
-                    )
-                  ) : (
-                    <input
-                      className="logInButtons blueHover pointerHover"
-                      type="button"
-                      value="Verify"
-                      onClick={(e) =>
-                        handleVerify(e, gamerTag, checkedPlatform)
-                      }
-                    ></input>
-                  )}
-                  <div
-                    className="logInButtons blueHover pointerHover"
-                    onClick={handleBack}
-                  >
-                    Back
-                  </div>
-                </div>
-              </form>
-            </>
-          )}
+                Back
+              </div>
+            </div>
+          </form>
         </div>
+      )}
+      {!showSoldierSelect && showEnlisted && (
+        <Enlisted handleBack ={handleBack}/>
       )}
       {showSoldierSelect && (
         <SoldierSelectScreen
