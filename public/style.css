@@ -72,7 +72,7 @@ html {
 
 .gridBackground {
   background-image: url("./black-tile.png");
-  background-size: 1.5px;
+  background-size: 1.7px;
   background-color: rgba(0, 0, 0, 0.4);
 }
 
@@ -89,7 +89,7 @@ html {
   /* border-bottom: 1px solid #79d9ff; */
   font-family: "modernWarfare";
   font-size: 3vw;
-  margin:1.5vw 0;
+  margin:1.5vw 0 0.5vw 0;
 }
 
 .nav {
@@ -195,11 +195,10 @@ html {
 .componentHeader {
   font-family: "modernWarfare";
   position: relative;
-  font-size: 2vw;
+  font-size: 1.6vw;
   color: rgb(255, 255, 255);
   border-bottom: 1px solid #79d9ff;
   white-space: nowrap;
-  margin-top: 1em;
   flex: 1;
 }
 
@@ -439,7 +438,7 @@ tr {
 /* Smack Box */
 
 #smackboardComponent {
-  width: 80%;
+  width: 70%;
 }
 
 .headerWrapper {
@@ -501,22 +500,12 @@ div::-webkit-scrollbar-thumb:hover {
 
 #chat, #lastLoaded {
   background-image: url("./black-tile.png");
-  background-size: 1.5px;
+  background-size: 1.7px;
   display: flex;
   flex-direction: column;
-  padding: 10px;
-  margin: 0 0 1em 0;
+  padding: 0.5vw 1vw 0.3vw 1vw;
+  margin: 0 0 0.3em 0;
 }
-
-/* #chat:nth-child(even) {
-  background: rgba(0, 2, 0, 0.486);
-  background-size: 1.5px;
-}
-#chat:nth-child(odd) {
-  background: rgba(0, 2, 0, 0.137);
-  background-image: url("./black-tile.png");
-  background-size: 1.5px;
-} */
 
 .chatItem {
   border: 1px solid rgba(0, 0, 0, 0);
@@ -530,23 +519,23 @@ div::-webkit-scrollbar-thumb:hover {
 .chatName {
   font-family:"orbitron";
   color: #79d9ff;
-  font-size: 1.2rem;
+  font-size: 1vw;
   margin: 0 7px 3px 0;
 }
 
 .chatDate {
-  font-size: .9rem;
+  font-size: 0.7vw;
   color: rgb(151, 147, 147);
 }
 
 .chatContent {
-  margin: 10px 0 0 0;
+  margin: .5vw 0 0 0;
 }
 
 #chatMessage {
   color: #ffffff;
-  font-size: 1.2rem;
-  padding-top: 2px;
+  font-size: 1.2vw;
+  margin:0.3vw 0;
 }
 
 .ytOutterWrapper {
@@ -557,8 +546,8 @@ div::-webkit-scrollbar-thumb:hover {
   display: inline-block;
   overflow: visible;
   position: relative;
-  margin: 1em 0;
   padding-top: 56.25%;
+  margin-top:0.3vw;
   width: 100%;
 }
 
@@ -581,16 +570,14 @@ div::-webkit-scrollbar-thumb:hover {
 
 .nameDate {
   display: grid;
-  grid-template-columns: 3rem 20fr;
-  margin-bottom: 2px;
+  grid-template-columns: 1fr 30fr;
   column-gap: .75vw;
   align-items: flex-end;
 }
 
 .chatAvatarWrapper {
   grid-row-start: 1;
-  grid-row-end: 4;
-  border-radius: 50%;
+  grid-row-end: 3;
   background-color: white;
   overflow: hidden;
   display: flex;
@@ -599,7 +586,7 @@ div::-webkit-scrollbar-thumb:hover {
 }
 
 .chatAvatarImage {
-  width: 90%;
+  width: 100%;
 }
 
 #chatUsername {
@@ -621,7 +608,7 @@ div::-webkit-scrollbar-thumb:hover {
   flex: 6;
   border: none;
   background-image: url("./black-tile.png");
-  background-size: 1.5px;
+  background-size: 1.7px;
   background: rgba(0, 2, 0, 0);
   color: #ffffff;
   font-size: large;
@@ -663,7 +650,7 @@ div::-webkit-scrollbar-thumb:hover {
   height: 5vh;
   background-image: url(./black-tile.png);
   background-color: rgba(0, 2, 0, 0.575);
-  background-size: 1.5px;
+  background-size: 1.7px;
   color: white;
   font-size: 1em;
   border: none;
@@ -703,7 +690,7 @@ div::-webkit-scrollbar-thumb:hover {
   flex: 3;
   background-image: url(./black-tile.png);
   background-color: rgba(0, 2, 0, 0.575);
-  background-size: 1.5px;
+  background-size: 1.7px;
   color:rgb(151, 147, 147);
   margin: 1vh 0;
 }
@@ -744,7 +731,7 @@ div::-webkit-scrollbar-thumb:hover {
   margin-top: 0 !important;
   border: 1px solid #f1f1f1;
   border-radius: 5px !important;
-  background: rgb(255, 255, 255) !important;
+  background: rgb(2, 2, 2) !important;
   box-shadow: none !important;
   width: 230px !important;
   height: 320px !important;
@@ -755,7 +742,7 @@ div::-webkit-scrollbar-thumb:hover {
 }
 
 aside.emoji-picker-react {
-  background: rgba(117, 51, 51, 0);
+  background: rgb(5, 5, 5) !important;
   display: flex;
   flex-direction: column;
   height: 320px !important;
@@ -769,8 +756,21 @@ aside.emoji-picker-react {
   z-index: 999 !important;
   right: 0;
   bottom: 2.5em;
+  box-shadow: 3px 3px 5px #79d9ff !important;
+}
+.emoji-picker-react input.emoji-search{
+  background-image: url(./black-tile.png);
+  background-color: rgba(0, 2, 0, 0.575);
+  background-size: 1.7px;
+  color:rgb(255, 255, 255);
 }
 
+.emoji-picker-react .emoji-group:before {
+  background-image: url(./black-tile.png) !important;
+  background-color: rgba(0, 2, 0, 0.575) !important;
+  background-size: 1.7px !important;
+  color:rgb(255, 255, 255) !important;
+}
 .formDiv {
   width: 55%;
   display: flex;
@@ -804,7 +804,7 @@ aside.emoji-picker-react {
 
 .smackButton {
   background-image: url("./black-tile.png");
-  background-size: 1.5px;
+  background-size: 1.7px;
   background: rgba(0, 2, 0, 0);
   color: #ffffff;
   font-family: "modernWarfare";
@@ -880,7 +880,7 @@ aside.emoji-picker-react {
 
 .smackBannerImage {
   background-image: url("./black-tile.png");
-  background-size: 1.5px;
+  background-size: 1.7px;
   width: 100%;
   min-height: 100%;
 }
@@ -893,7 +893,7 @@ aside.emoji-picker-react {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.788);
   background-image: url("./black-tile.png");
-  background-size: 1.5px;
+  background-size: 1.7px;
   opacity: 0;
   display: flex;
 }
@@ -1167,7 +1167,7 @@ aside.emoji-picker-react {
   /* overflow: visible; */
   background: rgba(0, 2, 0, 0.137);
   background-image: url("./black-tile.png");
-  background-size: 1.5px;
+  background-size: 1.7px;
   border: 1px solid rgba(0, 0, 0, 0);
 
   transition: border-color ease 0.3s;
@@ -1569,7 +1569,7 @@ grid-row-end: 3;
 .addContentInput {
   display: block;
   background-image: url("./black-tile.png");
-  background-size: 1.5px;
+  background-size: 1.7px;
   background-color: rgba(0, 2, 0, 0.575);
   color: #ffffff;
   font-size: 1em;

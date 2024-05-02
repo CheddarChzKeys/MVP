@@ -23,12 +23,12 @@ const signIn = ({
 
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleSignIn = (e) => {
     if (typedUsername === "" || typedPassword === "") {
       changeMessage("Username and Password required")
     } else {
       const loginObject = { username: typedUsername, password: typedPassword };
-      axios.post("/users/login", loginObject).then((results) => {
+      axios.post("/users/signIn", loginObject).then((results) => {
         if (results.data.message){
         changeMessage(results.data.message);
         } else if (results.data.user) {
@@ -113,57 +113,52 @@ const signIn = ({
           onEntered={() => toggleSlideTrans(false)}
         >
           <div id="loginWrap">
-            {!signUpVisible && (
+            {!signUpVisible && !signedInUser && (
               <div id="loginDiv">
-                {signedInUser ? (
-                  <p className="logInButtons">Welcome Back</p>
-                ) : (
-                  <p className="logInButtons">Welcome Soldier</p>
-                )}
-                {!signedInUser ? (
-                  <form onSubmit={(e) => handleLogin(e)}>
-                    <input
-                      className="textInput"
-                      id="username"
-                      placeholder="username"
-                      type="text"
-                      onChange={(e) => handleChange(e, changeUsername)}
+                <p className="logInButtons">Welcome Soldier</p>
+                <form onSubmit={(e) => handleSignIn(e)}>
+                  <input
+                    className="textInput"
+                    id="username"
+                    placeholder="username"
+                    type="text"
+                    onChange={(e) => handleChange(e, changeUsername)}
                     ></input>
-                    <input
-                      className="textInput"
-                      id="password"
-                      placeholder="password"
-                      type="password"
-                      onChange={(e) => handleChange(e, changePassword)}
+                  <input
+                    className="textInput"
+                    id="password"
+                    placeholder="password"
+                    type="password"
+                    onChange={(e) => handleChange(e, changePassword)}
                     ></input>
-                    <div className="loginResponse"> {loginMessage} &nbsp;</div>
-                    <input
-                      className="logInButtons blueHover pointerHover"
-                      type="submit"
-                      value="Sign In"
-                    ></input>
-                  </form>
-                ) : (
-                  <div className="blueLink">{signedInUser.username}</div>
-                )}
-                {signedInUser ? (
-                  <div
+                  <div className="loginResponse"> {loginMessage} &nbsp;</div>
+                  <input
                     className="logInButtons blueHover pointerHover"
-                    onClick={() => {
-                      toggleSignedIn();
-                      changeMessage("");
-                    }}
+                    type="submit"
+                    value="Sign In"
+                    ></input>
+                </form>
+                <div
+                  className="logInButtons blueHover pointerHover"
+                  onClick={showSignUp}
                   >
-                    Sign Out
-                  </div>
-                ) : (
-                  <div
-                    className="logInButtons blueHover pointerHover"
-                    onClick={showSignUp}
-                  >
-                    Enlist
-                  </div>
-                )}
+                  Enlist
+                </div>
+              </div>
+            )}
+            {!signUpVisible && signedInUser &&(
+              <div id="loginDiv">
+                <p className="logInButtons">Welcome Back</p>
+                <div className="blueLink">{signedInUser.username}</div>
+                <div
+                  className="logInButtons blueHover pointerHover"
+                  onClick={() => {
+                    toggleSignedIn();
+                    changeMessage("");
+                  }}
+                >
+                  Sign Out
+                </div>
               </div>
             )}
             {signUpVisible && (

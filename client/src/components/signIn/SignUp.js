@@ -202,22 +202,22 @@ const SignUp = function ({
               </div>
             </div>
             <div className="loginButtonsWrapper">
-              {isVerified ? (
-                soldierSelectedURL ? (
-                  <input
-                    className="logInButtons blueHover pointerHover"
-                    type="submit"
-                    value="Enlist"
-                  ></input>
-                ) : (
-                  <input
-                    className="logInButtons blueHover pointerHover"
-                    type="button"
-                    value="Next"
-                    onClick={handleNext}
-                  ></input>
-                )
-              ) : (
+              {isVerified && soldierSelectedURL &&(
+                <input
+                  className="logInButtons blueHover pointerHover"
+                  type="submit"
+                  value="Enlist"
+                ></input>
+              )}
+              {isVerified && !soldierSelectedURL &&(
+                <input
+                  className="logInButtons blueHover pointerHover"
+                  type="button"
+                  value="Next"
+                  onClick={handleNext}
+                ></input>
+              )}
+              {!isVerified &&(
                 <input
                   className="logInButtons blueHover pointerHover"
                   type="button"

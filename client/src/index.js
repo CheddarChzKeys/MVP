@@ -3,7 +3,7 @@ import { useEffect, useState, useMemo, createContext } from "react";
 import ReactDOM from "react-dom";
 import Nav from "./components/Nav.js";
 import Records from "./components/Records.js";
-import Smackboard from "./components/Smackboard.js";
+import Smackboard from "./components/chat/Smackboard.js";
 import News from "./components/news/News.js";
 import Gallery from "./components/gallery/Gallery.js";
 import SignIn from "./components/signIn/SignIn.js";
@@ -28,7 +28,7 @@ const App = () => {
       const deadRefreshToken = localStorage.getItem("refreshToken");
       if (deadRefreshToken) {
         console.log("found dead refresh token");
-        axios.post("users/logOut", { deadRefreshToken });
+        axios.post("users/signOut", { deadRefreshToken });
       }
       changeSignedInUser(null);
     }
@@ -66,7 +66,6 @@ const App = () => {
             console.log("SETTING NEW ACCESS TOKEN: ", results.data);
             localStorage.setItem("accessToken", results.data.newAccessToken);
           }
-          changeSignedIn(true);
           console.log("SIGN IN SUCCESFULL: ", results.data);
           changeSignedInUser(results.data.user);
         });
