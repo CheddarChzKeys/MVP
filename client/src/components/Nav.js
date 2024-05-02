@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import Records from "./Records.js";
-import Chat from "./Smackboard.js";
+import Chat from "./chat/Smackboard.js";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { ActiveUser } from "../index.js";

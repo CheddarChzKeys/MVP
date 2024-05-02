@@ -3,17 +3,15 @@ import React, {
   useEffect,
   useRef,
   useCallback,
-  useContext,
 } from "react";
-import { ActiveUser } from "./ActiveUserContext.js";
 import Picker from "emoji-picker-react";
 import GifPicker from "react-giphy-picker";
 import DropzoneComponent from "./smackDropbox.js";
-import ImagePopUp from "./ImagePopUp.js";
+import ImagePopUp from "../ImagePopUp.js";
 import { css } from "@emotion/react";
 import MoonLoader from "react-spinners/MoonLoader";
 import { CSSTransition } from "react-transition-group";
-import ytAPIKey from "../../../hidden/youtubeAPIv3.js";
+import ytAPIKey from "../../../../hidden/youtubeAPIv3.js";
 
 const axios = require("axios").default;
 const io = require("socket.io-client");
@@ -26,7 +24,6 @@ const Chatbox = function ({
   changeBackground,
   activeClicked,
   changeClicked,
-  memberList,
 }) {
   const [typedMessage, changeMessage] = useState("");
   const [typedVideoLink, changeTypedVideoLink] = useState("");
@@ -126,7 +123,6 @@ const Chatbox = function ({
     const newTypedMessage =
       typedMessage.slice(0, selectionStart) +
       emojiObject.emoji +
-      " " +
       typedMessage.slice(selectionEnd);
     changeMessage(newTypedMessage);
   };
@@ -271,13 +267,15 @@ const Chatbox = function ({
   const convertedTimeStamp = (date) => {
     const timeStamp = getDateStamp(parseISOString(date));
     const timeStampArray = timeStamp.split(" ");
+    timeStampArray[0] = timeStampArray[0].slice(0,timeStampArray[0].length - 1)
     const timeArray = timeStampArray[1].split(":");
     const time = timeArray[0] + ":" + timeArray[1];
     timeStampArray[1] = time;
     if (getDateStamp(new Date()).split(", ")[0] == timeStamp.split(", ")[0]) {
       return `Today, ${timeStampArray[1] + timeStampArray[2]}`;
     } else {
-      return timeStampArray.join(" ");
+      console.log("CONVERTED TIMESTAMP ARRAY:", timeStampArray)
+      return timeStampArray.join("  ");
     }
   };
 
@@ -361,51 +359,51 @@ const Chatbox = function ({
                           <div className="chatDate">
                             {convertedTimeStamp(chat.date)}
                           </div>
-                          <div className="chatContent">
-                            <div id="chatMessage">{chat.message}</div>
-                            {chat.gif && (
-                              <img
-                                className="chatItem"
-                                id="chatGif"
-                                src={chat.gif.downsized}
-                                onClick={() => imageClick(chat.gif.original)}
-                              ></img>
-                            )}
-                            {chat.video && (
-                              <div className="ytOutterWrapper">
-                                <div id="ytPlayerWrapper" className="chatItem">
-                                  <iframe
-                                    className="ytPlayer"
-                                    id="galleryYTPlayer"
-                                    type="text/html"
-                                    src={`http://www.youtube.com/embed/${chat.video}`}
-                                    frameBorder="0"
-                                    allowFullScreen="allowfullscreen"
-                                    mozallowfullscreen="mozallowfullscreen"
-                                    msallowfullscreen="msallowfullscreen"
-                                    oallowfullscreen="oallowfullscreen"
-                                    webkitallowfullscreen="webkitallowfullscreen"
-                                  ></iframe>
-                                </div>
-                              </div>
-                            )}
-                            {chat.image && (
-                              <div id="chatImageWrapper">
-                                {chat.image.map((image) => {
-                                  return (
-                                    <img
-                                      className="chatItem"
-                                      id="chatImg"
-                                      src={image}
-                                      onClick={() => imageClick(image)}
-                                    ></img>
-                                  );
-                                })}
-                              </div>
-                            )}
-                          </div>
                         </div>
-                      </div>
+                        <div className="chatContent">
+                          <div id="chatMessage">{chat.message}</div>
+                          {chat.gif && (
+                            <img
+                              className="chatItem"
+                              id="chatGif"
+                              src={chat.gif.downsized}
+                              onClick={() => imageClick(chat.gif.original)}
+                            ></img>
+                          )}
+                          {chat.video && (
+                            <div className="ytOutterWrapper">
+                              <div id="ytPlayerWrapper" className="chatItem">
+                                <iframe
+                                  className="ytPlayer"
+                                  id="galleryYTPlayer"
+                                  type="text/html"
+                                  src={`http://www.youtube.com/embed/${chat.video}`}
+                                  frameBorder="0"
+                                  allowFullScreen="allowfullscreen"
+                                  mozallowfullscreen="mozallowfullscreen"
+                                  msallowfullscreen="msallowfullscreen"
+                                  oallowfullscreen="oallowfullscreen"
+                                  webkitallowfullscreen="webkitallowfullscreen"
+                                ></iframe>
+                              </div>
+                            </div>
+                          )}
+                          {chat.image && (
+                            <div id="chatImageWrapper">
+                              {chat.image.map((image) => {
+                                return (
+                                  <img
+                                    className="chatItem"
+                                    id="chatImg"
+                                    src={image}
+                                    onClick={() => imageClick(image)}
+                                  ></img>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+                        </div>
                     );
                   })}
                 </div>
@@ -476,11 +474,11 @@ const Chatbox = function ({
                   </div>
                 </div>
               </div>
-              <DropzoneComponent
+              {/* <DropzoneComponent
                 changeQeuedImages={changeQeuedImages}
                 previewImages={previewImages}
                 changePreviewImages={changePreviewImages}
-              />
+              /> */}
             </div>
           </CSSTransition>
           {/* <div className="bannerWrapper">
