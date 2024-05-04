@@ -499,8 +499,7 @@ div::-webkit-scrollbar-thumb:hover {
 }
 
 #chat, #lastLoaded {
-  background-image: url("./black-tile.png");
-  background-size: 1.7px;
+  background-color: rgba(36, 27, 27, 0.546);
   display: flex;
   flex-direction: column;
   padding: 0.5vw 1vw 0.3vw 1vw;
@@ -648,9 +647,7 @@ div::-webkit-scrollbar-thumb:hover {
 #ytLinkInput {
   display: inline-block;
   height: 5vh;
-  background-image: url(./black-tile.png);
-  background-color: rgba(0, 2, 0, 0.575);
-  background-size: 1.7px;
+  background-color: rgba(36, 27, 27, 0.546);
   color: white;
   font-size: 1em;
   border: none;
@@ -688,9 +685,7 @@ div::-webkit-scrollbar-thumb:hover {
   width: 100%;
   aspect-ratio:16/9;
   flex: 3;
-  background-image: url(./black-tile.png);
-  background-color: rgba(0, 2, 0, 0.575);
-  background-size: 1.7px;
+  background-color: rgba(36, 27, 27, 0.546);
   color:rgb(151, 147, 147);
   margin: 1vh 0;
 }
@@ -748,7 +743,7 @@ aside.emoji-picker-react {
   height: 320px !important;
   font-family: sans-serif;
   border: 1px solid #efefef;
-  border-radius: 5px;
+  border-radius: 0px !important;
   box-sizing: border-box;
   box-shadow: none !important;
   overflow: scroll !important;
@@ -756,7 +751,7 @@ aside.emoji-picker-react {
   z-index: 999 !important;
   right: 0;
   bottom: 2.5em;
-  box-shadow: 3px 3px 5px #79d9ff !important;
+  box-shadow: 1px 1px 5px #79d9ff !important;
 }
 .emoji-picker-react input.emoji-search{
   background-image: url(./black-tile.png);

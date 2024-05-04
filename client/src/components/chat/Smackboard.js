@@ -532,17 +532,6 @@ const Chatbox = function ({
           <div id="videoSubmitDiv">
             <div id="videoInput">
               <p className="modalHeading">Post A Video</p>
-              <div className="videoThumbWrapper">
-                {typedVideoLink && handleVideoPreview(typedVideoLink)}
-                {videoPreview ? (
-                  <img
-                    className="ytImagePreview"
-                    src={videoPreview.snippet.thumbnails.standard.url}
-                  ></img>
-                ) : (
-                  <h3>No video selected</h3>
-                )}
-              </div>
               <form
                 id="videoForm"
                 onSubmit={(e) => {
@@ -556,6 +545,25 @@ const Chatbox = function ({
                   placeholder="Insert YouTube link..."
                   value={typedVideoLink}
                   onChange={(e) => handleChange(e, changeTypedVideoLink)}
+                  onClick={(e) => e.stopPropagation()}
+                ></input>
+                <div className="videoThumbWrapper">
+                  {typedVideoLink && handleVideoPreview(typedVideoLink)}
+                  {videoPreview ? (
+                    <img
+                      className="ytImagePreview"
+                      src={videoPreview.snippet.thumbnails.standard.url}
+                    ></img>
+                  ) : (
+                    <h3>No video selected</h3>
+                  )}
+                </div>
+                <input
+                  id="ytLinkInput"
+                  type="text"
+                  placeholder="Type your message here..."
+                  // value={typedVideoLink}
+                  // onChange={(e) => handleChange(e, changeTypedVideoLink)}
                   onClick={(e) => e.stopPropagation()}
                 ></input>
                 <input
