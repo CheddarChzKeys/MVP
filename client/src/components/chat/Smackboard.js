@@ -11,7 +11,8 @@ import ImagePopUp from "../ImagePopUp.js";
 import { css } from "@emotion/react";
 import MoonLoader from "react-spinners/MoonLoader";
 import { CSSTransition } from "react-transition-group";
-import ytAPIKey from "../../../../hidden/youtubeAPIv3.js";
+import PostVideo from "./PostVideo.js";
+
 
 const axios = require("axios").default;
 const io = require("socket.io-client");
@@ -26,8 +27,6 @@ const Chatbox = function ({
   changeClicked,
 }) {
   const [typedMessage, changeMessage] = useState("");
-  const [typedVideoLink, changeTypedVideoLink] = useState("");
-  const [videoPreview, changeVideoPreview] = useState(null);
   const [submittedVideo, changeSubmittedVideo] = useState(null);
   const [showVideoModal, toggleVideoModal] = useState(false);
   const [keepVideoModal, toggleKeepVideoModal] = useState(false);
@@ -79,16 +78,6 @@ const Chatbox = function ({
     },
     [loading, loadedAll, chats]
   );
-
-  const addVideoInput = () => {
-    toggleVideoModal(true);
-  };
-
-  const hideVideoInput = () => {
-    if (!keepVideoModal) {
-      toggleVideoModal(false);
-    }
-  };
 
   const onClickVideoModal = (e) => {
     e.stopPropagation();
@@ -212,36 +201,6 @@ const Chatbox = function ({
         changeResponse("");
       }, 2500);
     }
-  };
-
-  const handleVideoPreview = (videoLink) => {
-    let videoID = videoLink;
-    const re =
-      /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/i;
-
-    const newVideoID = re.exec(videoID);
-
-    axios
-      .get(
-        `https://www.googleapis.com/youtube/v3/videos?id=${newVideoID}&key=${ytAPIKey}&part=snippet,statistics`
-      )
-      .then((result) => {
-        console.log("YOUTUBE RESULT", result.data.items[0]);
-        changeVideoPreview(result.data.items[0]);
-      });
-    return;
-  };
-
-  const handleVideoSubmit = (e) => {
-    e.preventDefault();
-    let videoID = typedVideoLink;
-    const re =
-      /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/i;
-
-    const newVideoID = re.exec(videoID);
-
-    changeSubmittedVideo(newVideoID[1]);
-    toggleVideoModal(false);
   };
 
   const scrollToBottom = () => {
@@ -422,46 +381,32 @@ const Chatbox = function ({
                   </form>
                 </div>
                 <div className="buttonsWrapper">
-                  <div className="smackButtonWrapper">
-                    <button
-                      className={`smackButton iconWrapper ${
-                        submittedVideo ? "videoSubmitted" : ""
-                      }`}
-                      type="button"
-                      onClick={(e) => onClickVideoModal(e)}
-                    >
+                <div className="smackButtonWrapper" onClick={(e) => onClickVideoModal(e)}>
                       <img
                         className="messageIcon"
                         src="./icons/videoIcon.png"
                       />
-                    </button>
                   </div>
-                  <div className="smackButtonWrapper">
-                    <button
-                      className="smackButton iconWrapper"
-                      type="button"
-                      onClick={(e) => toggleGif(e)}
-                    >
+                  <div className="smackButtonWrapper" onClick={(e) => onClickVideoModal(e)}>
+                      <img
+                        className="messageIcon"
+                        src="./icons/videoIcon.png"
+                      />
+                  </div>
+                  <div className="smackButtonWrapper" onClick={(e) => toggleGif(e)}>
                       <img className="messageIcon" src="./icons/gifIcon.png" />
-                    </button>
                     {showGifModal && (
                       <div id="gifPicker" onClick={(e) => e.stopPropagation()}>
                         <GifPicker id="emojiPicker" onSelected={onGifClick} />
                       </div>
                     )}
                   </div>
-                  <div className="smackButtonWrapper">
-                    <button
-                      className="smackButton iconWrapper"
-                      type="button"
-                      onMouseEnter={addEmoji}
-                      onMouseLeave={hideEmoji}
-                    >
+                  <div className="smackButtonWrapper" onMouseEnter={addEmoji}
+                      onMouseLeave={hideEmoji}>
                       <img
                         className="messageIcon"
                         src="./icons/emojiIcon.png"
                       />
-                    </button>
                     {showEmojiModal && (
                       <div
                         id="pickerDiv"
@@ -528,54 +473,54 @@ const Chatbox = function ({
           />
         </CSSTransition>
 
-        {showVideoModal && (
-          <div id="videoSubmitDiv">
-            <div id="videoInput">
-              <p className="modalHeading">Post A Video</p>
-              <form
-                id="videoForm"
-                onSubmit={(e) => {
-                  e.stopPropagation();
-                  handleVideoSubmit(e);
-                }}
-              >
-                <input
-                  id="ytLinkInput"
-                  type="text"
-                  placeholder="Insert YouTube link..."
-                  value={typedVideoLink}
-                  onChange={(e) => handleChange(e, changeTypedVideoLink)}
-                  onClick={(e) => e.stopPropagation()}
-                ></input>
-                <div className="videoThumbWrapper">
-                  {typedVideoLink && handleVideoPreview(typedVideoLink)}
-                  {videoPreview ? (
-                    <img
-                      className="ytImagePreview"
-                      src={videoPreview.snippet.thumbnails.standard.url}
-                    ></img>
-                  ) : (
-                    <h3>No video selected</h3>
-                  )}
-                </div>
-                <input
-                  id="ytLinkInput"
-                  type="text"
-                  placeholder="Type your message here..."
-                  // value={typedVideoLink}
-                  // onChange={(e) => handleChange(e, changeTypedVideoLink)}
-                  onClick={(e) => e.stopPropagation()}
-                ></input>
-                <input
-                  id="videoSubmit"
-                  type="submit"
-                  value="submit"
-                  onClick={(e) => e.stopPropagation()}
-                ></input>
-              </form>
-            </div>
-          </div>
-        )}
+        {showVideoModal && <PostVideo/>
+          // <div id="videoSubmitDiv">
+          //   <div id="videoInput">
+          //     <p className="modalHeading">Post A Video</p>
+          //     <form
+          //       id="videoForm"
+          //       onSubmit={(e) => {
+          //         e.stopPropagation();
+          //         handleVideoSubmit(e);
+          //       }}
+          //     >
+          //       <input
+          //         id="ytLinkInput"
+          //         type="text"
+          //         placeholder="Insert YouTube link..."
+          //         value={typedVideoLink}
+          //         onChange={(e) => handleChange(e, changeTypedVideoLink)}
+          //         onClick={(e) => e.stopPropagation()}
+          //       ></input>
+          //       <div className="videoThumbWrapper">
+          //         {typedVideoLink && handleVideoPreview(typedVideoLink)}
+          //         {videoPreview ? (
+          //           <img
+          //             className="ytImagePreview"
+          //             src={videoPreview.snippet.thumbnails.standard.url}
+          //           ></img>
+          //         ) : (
+          //           <h3>No video selected</h3>
+          //         )}
+          //       </div>
+          //       <input
+          //         id="ytLinkInput"
+          //         type="text"
+          //         placeholder="Type your message here..."
+          //         // value={typedVideoLink}
+          //         // onChange={(e) => handleChange(e, changeTypedVideoLink)}
+          //         onClick={(e) => e.stopPropagation()}
+          //       ></input>
+          //       <input
+          //         id="videoSubmit"
+          //         type="submit"
+          //         value="submit"
+          //         onClick={(e) => e.stopPropagation()}
+          //       ></input>
+          //     </form>
+          //   </div>
+          // </div>
+        }
       </div>
     </div>
   );

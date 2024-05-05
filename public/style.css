@@ -634,7 +634,7 @@ div::-webkit-scrollbar-thumb:hover {
 }
 
 .ytImagePreview{
-  width: 100%;
+  width: 75%;
 }
 
 #videoForm {
@@ -687,7 +687,6 @@ div::-webkit-scrollbar-thumb:hover {
   flex: 3;
   background-color: rgba(36, 27, 27, 0.546);
   color:rgb(151, 147, 147);
-  margin: 1vh 0;
 }
 
 #videoSubmit {
@@ -772,8 +771,7 @@ aside.emoji-picker-react {
 }
 
 .buttonsWrapper {
-  width: 12%;
-  min-width: 125px;
+  width: 18%;
   justify-content: flex-end;
   display: flex;
 }
@@ -781,16 +779,14 @@ aside.emoji-picker-react {
 .smackButtonWrapper {
   position: relative;
   display: flex;
-  align-content: center;
+  align-items: center;
   justify-content: center;
+  border-bottom: 1px solid #f8f9fa00;
 }
 
-.iconWrapper {
-  border-bottom: 2px solid #f8f9fa00;
-}
-
-.iconWrapper:hover {
-  border-bottom: 2px solid #f8f9fa;
+.smackButtonWrapper:hover {
+  border-bottom: 1px solid #f8f9fa;
+  cursor:pointer;
 }
 
 .iconWrapperBlue {
@@ -810,7 +806,7 @@ aside.emoji-picker-react {
 }
 
 .messageIcon {
-  width: 90%;
+  width: 60%;
 }
 
 .smackButton:hover {
@@ -1369,9 +1365,6 @@ aside.emoji-picker-react {
   left: 0;
   display: flex;
   flex-direction: column;
-}
-
-.imageViewWrapper {
 }
 
 .videoViewWrapper {
