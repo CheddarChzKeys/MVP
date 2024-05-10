@@ -88,23 +88,23 @@ const Chatbox = function ({
     toggleKeepVideoModal(false);
     toggleVideoModal(false);
     toggleGifModal(false);
-  };
-
-  const addEmoji = () => {
-    toggleEmojiModal(true);
-  };
-
-  const hideEmoji = () => {
     toggleEmojiModal(false);
   };
 
   const toggleGif = (e) => {
     e.stopPropagation();
     toggleGifModal(!showGifModal);
+    if (showEmojiModal) {
+      toggleEmojiModal(false);
+    }
   };
 
-  const hideGif = () => {
-    toggleGifModal(false);
+  const toggleEmoji = (e) => {
+    e.stopPropagation();
+    toggleEmojiModal(!showEmojiModal);
+    if (showGifModal) {
+      toggleGifModal(false);
+    }
   };
 
   const onEmojiClick = (event, emojiObject) => {
@@ -275,7 +275,6 @@ const Chatbox = function ({
         <div className="headerWrapper">
           <h1 className="componentHeader">Smackboard</h1>
         </div>
-        <div className="smackNewsMain smackMain">
           <CSSTransition
             in={activeClicked === "smackboard"}
             timeout={1000}
@@ -367,8 +366,40 @@ const Chatbox = function ({
                   })}
                 </div>
               )}
-              <div id="chatResponse">{submitResponse}, &nbsp;</div>
+              <div id="chatResponse">{submitResponse}
+
+              {showGifModal && (
+                      <div id="gifPicker" onClick={(e) => e.stopPropagation()}>
+                        <GifPicker id="emojiPicker" onSelected={onGifClick} />
+                      </div>
+                    )}
+                                        {showEmojiModal && (
+                      <div
+                        id="pickerDiv" onClick={(e) => e.stopPropagation()}
+                      >
+                        <Picker id="emojiPicker" onEmojiClick={onEmojiClick} />
+                      </div>
+                    )}
+                    </div>
               <div id="messageSubmit">
+              {submittedVideo && <div id="attachmentPreview">
+                  <div id = "attachmentVideoPreview">
+                  {submittedVideo &&
+                    <iframe
+                    className="ytPlayer"
+                    id="previewYTPlayer"
+                    type="text/html"
+                    src={`http://www.youtube.com/embed/${submittedVideo}`}
+                    frameBorder="0"
+                    allowFullScreen="allowfullscreen"
+                    mozallowfullscreen="mozallowfullscreen"
+                    msallowfullscreen="msallowfullscreen"
+                    oallowfullscreen="oallowfullscreen"
+                    webkitallowfullscreen="webkitallowfullscreen"
+                  ></iframe>
+                  }
+                  </div>
+                </div>}
                 <div className="formDiv">
                   <form id="createMessage" onSubmit={(e) => handleSubmit(e)}>
                     <input
@@ -379,8 +410,31 @@ const Chatbox = function ({
                       onChange={(e) => handleChange(e, changeMessage)}
                     ></input>
                   </form>
-                </div>
                 <div className="buttonsWrapper">
+                <div className="smackButtonWrapper" 
+                      onClick={(e)=> toggleEmoji(e)}>
+                      <img
+                        className="messageIcon"
+                        src="./icons/emojiIcon.png"
+                      />
+                    {/* {showEmojiModal && (
+                      <div
+                        id="pickerDiv"
+                        onMouseEnter={addEmoji}
+                        onMouseLeave={hideEmoji}
+                      >
+                        <Picker id="emojiPicker" onEmojiClick={onEmojiClick} />
+                      </div>
+                    )} */}
+                  </div>
+                  <div className="smackButtonWrapper" onClick={(e) => toggleGif(e)}>
+                      <img className="messageIcon" src="./icons/gifIcon.png" />
+                    {/* {showGifModal && (
+                      <div id="gifPicker" onClick={(e) => e.stopPropagation()}>
+                        <GifPicker id="emojiPicker" onSelected={onGifClick} />
+                      </div>
+                    )} */}
+                  </div>
                 <div className="smackButtonWrapper" onClick={(e) => onClickVideoModal(e)}>
                       <img
                         className="messageIcon"
@@ -393,31 +447,13 @@ const Chatbox = function ({
                         src="./icons/videoIcon.png"
                       />
                   </div>
-                  <div className="smackButtonWrapper" onClick={(e) => toggleGif(e)}>
-                      <img className="messageIcon" src="./icons/gifIcon.png" />
-                    {showGifModal && (
+                </div>
+                </div>
+                {/* {showGifModal && (
                       <div id="gifPicker" onClick={(e) => e.stopPropagation()}>
                         <GifPicker id="emojiPicker" onSelected={onGifClick} />
                       </div>
-                    )}
-                  </div>
-                  <div className="smackButtonWrapper" onMouseEnter={addEmoji}
-                      onMouseLeave={hideEmoji}>
-                      <img
-                        className="messageIcon"
-                        src="./icons/emojiIcon.png"
-                      />
-                    {showEmojiModal && (
-                      <div
-                        id="pickerDiv"
-                        onMouseEnter={addEmoji}
-                        onMouseLeave={hideEmoji}
-                      >
-                        <Picker id="emojiPicker" onEmojiClick={onEmojiClick} />
-                      </div>
-                    )}
-                  </div>
-                </div>
+                    )} */}
               </div>
               {/* <DropzoneComponent
                 changeQeuedImages={changeQeuedImages}
@@ -455,7 +491,6 @@ const Chatbox = function ({
               </a>
             </div>
           </div> */}
-        </div>
 
         <CSSTransition
           in={showImagePopUp}
@@ -473,7 +508,7 @@ const Chatbox = function ({
           />
         </CSSTransition>
 
-        {showVideoModal && <PostVideo/>
+        {showVideoModal && <PostVideo changeSubmittedVideo={changeSubmittedVideo} toggleVideoModal={toggleVideoModal}/>
           // <div id="videoSubmitDiv">
           //   <div id="videoInput">
           //     <p className="modalHeading">Post A Video</p>
