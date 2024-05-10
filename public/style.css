@@ -189,7 +189,7 @@ html {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin: 0px 0px 1vh 0px;
+  margin: 1rem 0px;
 }
 
 .componentHeader {
@@ -447,36 +447,19 @@ tr {
   gap: 1%;
 }
 
-/* .smackNewsHeader {
-  flex: 4;
-} */
-
 .smackNewsHeaderSpacer {
   flex: 1;
 }
 
-.smackNewsMain {
-  display: flex;
-  justify-content: space-between;
-  gap: 1%;
-}
-
-.smackNewsMain {
-  height: 80vh;
-}
-
 .smackboardWrapper {
-  flex: 4;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 
 #chatbox {
   position: relative;
-
-  height: 83%;
   overflow-y: auto;
+  height: 800px;
 }
 
 div::-webkit-scrollbar {
@@ -502,8 +485,8 @@ div::-webkit-scrollbar-thumb:hover {
   background-color: rgba(36, 27, 27, 0.546);
   display: flex;
   flex-direction: column;
-  padding: 0.5vw 1vw 0.3vw 1vw;
-  margin: 0 0 0.3em 0;
+  padding: 0.5rem 1rem 0 1rem;
+  margin: 0 0 0.3rem 0;
 }
 
 .chatItem {
@@ -518,23 +501,23 @@ div::-webkit-scrollbar-thumb:hover {
 .chatName {
   font-family:"orbitron";
   color: #79d9ff;
-  font-size: 1vw;
+  font-size: 0.7rem;
   margin: 0 7px 3px 0;
 }
 
 .chatDate {
-  font-size: 0.7vw;
+  font-size: 0.6rem;
   color: rgb(151, 147, 147);
 }
 
 .chatContent {
-  margin: .5vw 0 0 0;
+  margin: .3rem 0;
 }
 
 #chatMessage {
   color: #ffffff;
-  font-size: 1.2vw;
-  margin:0.3vw 0;
+  font-size: 0.9rem;
+  margin:0.3rem 0;
 }
 
 .ytOutterWrapper {
@@ -546,7 +529,7 @@ div::-webkit-scrollbar-thumb:hover {
   overflow: visible;
   position: relative;
   padding-top: 56.25%;
-  margin-top:0.3vw;
+  margin-top:0.3rem;
   width: 100%;
 }
 
@@ -556,21 +539,27 @@ div::-webkit-scrollbar-thumb:hover {
 
 #chatGif {
   width: 40%;
-  padding-top: 2px;
+  padding-top: 0.3rem;
+}
+
+#gifPicker{
+  position:absolute;
+  bottom:0;
+  right:0;
+  width: 40%;
 }
 
 #chatImageWrapper {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  /* align-items: left; */
   gap: 1em;
   margin: 1em 0;
 }
 
 .nameDate {
   display: grid;
-  grid-template-columns: 1fr 30fr;
-  column-gap: .75vw;
+  grid-template-columns: 1.8rem auto;
+  column-gap: 0.5rem;
   align-items: flex-end;
 }
 
@@ -594,11 +583,10 @@ div::-webkit-scrollbar-thumb:hover {
 
 #messageSubmit {
   display: flex;
+  flex-direction: column;
   position: relative;
   align-content: center;
-  justify-content: space-between;
-  padding: 10px;
-  height: 3em;
+  padding: 0.3rem;
   background: rgba(70, 69, 69, 0.445);
   border: 2px solid #79d9ff;
 }
@@ -610,8 +598,24 @@ div::-webkit-scrollbar-thumb:hover {
   background-size: 1.7px;
   background: rgba(0, 2, 0, 0);
   color: #ffffff;
-  font-size: large;
+  font-size: 0.9rem;
   outline: none;
+}
+
+#attachmentPreview{
+  display: flex;
+  justify-content:space-between;
+}
+
+#attachmentVideoPreview{
+  width: 30%;
+  display:flex;
+  justify-content: start;
+  padding: 0.5rem;
+}
+
+#previewYTPlayer{
+  width: 99.9%;
 }
 
 #createMessage {
@@ -621,7 +625,8 @@ div::-webkit-scrollbar-thumb:hover {
 }
 
 #videoInput {
-  width: 30vw;
+  position: fixed;
+  width: 30%;
   height: fit-content;
   background-color: rgb(3, 3, 3);
   padding: 10px;
@@ -670,7 +675,7 @@ div::-webkit-scrollbar-thumb:hover {
   display: flex;
   justify-content: center;
   background-color: #000000d3;
-  align-items: center;
+  z-index: 101;
 }
 
 .modalHeading {
@@ -707,22 +712,11 @@ div::-webkit-scrollbar-thumb:hover {
   cursor:pointer;
 }
 
-.sc-htoDjs {
-  position: absolute !important;
-  bottom: 2.5em;
-  right: 0;
-  width: auto;
-}
-
-.dftVQk {
-  width: 60% !important;
-}
-
-.fGONoI {
+/* .fGONoI {
   opacity: 1;
   /* -webkit-transition: opacity 300ms linear;
   transition: opacity 300ms linear; */
-  margin-top: 0 !important;
+  /* margin-top: 0 !important;
   border: 1px solid #f1f1f1;
   border-radius: 5px !important;
   background: rgb(2, 2, 2) !important;
@@ -732,26 +726,26 @@ div::-webkit-scrollbar-thumb:hover {
   overflow-y: scroll;
   overflow-x: visible !important;
   z-index: 999 !important;
-  padding-top: 1rem;
-}
+  padding-top: 1rem; */
+/* } */
 
 aside.emoji-picker-react {
   background: rgb(5, 5, 5) !important;
   display: flex;
   flex-direction: column;
-  height: 320px !important;
-  font-family: sans-serif;
-  border: 1px solid #efefef;
+  width: 35% !important; 
+  height: 380px !important;
+  font-family:default !important;
+  border: 1px solid #79d9ff !important;
+  border-bottom:none !important;
   border-radius: 0px !important;
   box-sizing: border-box;
   box-shadow: none !important;
   overflow: scroll !important;
   position: absolute !important;
-  z-index: 999 !important;
+  z-index: 5 !important;
   right: 0;
-  bottom: 2.5em;
-  box-shadow: 1px 1px 5px #79d9ff !important;
-}
+  bottom: 0;}
 .emoji-picker-react input.emoji-search{
   background-image: url(./black-tile.png);
   background-color: rgba(0, 2, 0, 0.575);
@@ -760,13 +754,15 @@ aside.emoji-picker-react {
 }
 
 .emoji-picker-react .emoji-group:before {
+  font-size: 0.7rem !important;
   background-image: url(./black-tile.png) !important;
   background-color: rgba(0, 2, 0, 0.575) !important;
   background-size: 1.7px !important;
   color:rgb(255, 255, 255) !important;
+  padding: 0 0.6rem !important;
 }
+
 .formDiv {
-  width: 55%;
   display: flex;
 }
 
@@ -781,11 +777,11 @@ aside.emoji-picker-react {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-bottom: 1px solid #f8f9fa00;
+  border-bottom: 2px solid #f8f9fa00;
 }
 
 .smackButtonWrapper:hover {
-  border-bottom: 1px solid #f8f9fa;
+  border-bottom: 2px solid #79d9ff;
   cursor:pointer;
 }
 
@@ -806,7 +802,8 @@ aside.emoji-picker-react {
 }
 
 .messageIcon {
-  width: 60%;
+  width: 70%;
+  margin: 0.5rem;
 }
 
 .smackButton:hover {
@@ -820,6 +817,7 @@ aside.emoji-picker-react {
 }
 
 #chatResponse {
+  position:relative;
   font-family: "modernWarfare";
   color: #79d9ff;
   padding: 5px 10px;
@@ -1037,7 +1035,7 @@ aside.emoji-picker-react {
 .logInButtons {
   font-size: 1.8vw;
   text-align: start;
-  padding: 0.5em 0;
+  padding: 0.5rem 0;
   font-family: "modernWarfare";
   color:#ffffff;
   background: rgba(70, 69, 69, 0);
@@ -1071,7 +1069,7 @@ aside.emoji-picker-react {
   border: none;
   border-bottom: 1px solid #79d9ff;
   outline: none;
-  font-size: 1.8vw;
+  font-size: 1.2rem;
   width: 100%;
 }
 
@@ -1195,14 +1193,14 @@ aside.emoji-picker-react {
 }
 
 .content {
-  font-size: 1vw;
+  font-size: 0.8rem;
   color: white;
 }
 
 .sourceDate {
   flex-basis: 33%;
-  margin-bottom: 2px;
-  font-size: 1.1vw;
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
   color: rgb(151, 147, 147);
   transition: color ease 0.5s;
 }
@@ -1222,9 +1220,9 @@ aside.emoji-picker-react {
 
 .seeFullArticle {
   flex-basis: 33%;
-  margin-bottom: 2px;
+  margin-bottom: 0.5rem;
   text-align: center;
-  font-size: 1.1vw;
+  font-size: 0.8rem;
   color: rgba(0, 0, 0, 0);
   transition: color ease 0.5s;
 }
@@ -1400,8 +1398,8 @@ aside.emoji-picker-react {
 .expand {
   color: #efefef;
   font-family: "modernWarfare";
-  font-size: 1.2vw;
-  margin: 1em auto;
+  font-size: 0.8rem;
+  margin: 0.5rem auto;
   text-align: center;
 }
 
@@ -1416,13 +1414,12 @@ aside.emoji-picker-react {
 } */
 .galleryUserWrapper {
   display: grid;
-  grid-template-columns: 1fr 8fr;
-  column-gap: 0.2vw;
+  grid-template-columns: 2em auto;
+  column-gap: 0.6em;
 }
 
 .galleryUserThumb{
 display:flex;
-width: 3vw;
 background-color: #ffffff;
 grid-row-start: 1;
 grid-row-end: 3;
@@ -1435,7 +1432,7 @@ grid-row-end: 3;
 
 .usernameDate {
   font-family:"orbitron";
-  font-size: 1.5vw;
+  font-size: 0.8rem;
   color: #ffffff;
   margin-top: 0;
   margin-bottom: 0;
@@ -1443,14 +1440,14 @@ grid-row-end: 3;
 
 .detailsDate {
   font-family: "orbitron";
-  font-size: 1vw;
+  font-size: 0.6rem;
   margin:0;
 }
 
 .detailsDescription {
-  font-size: 1.3vw;
+  font-size: 0.9rem;
   color: white;
-  margin: 1.5em 0;
+  margin: 1rem 0 0 0;
   /* text-decoration: none; */
 
   /* text-align: left; */
@@ -1620,7 +1617,6 @@ grid-row-end: 3;
   justify-content: center;
   align-items: center;
   gap: 15px;
-  margin-top: 4em;
   /* border-top: 1px solid #79d9ff; */
 }
 

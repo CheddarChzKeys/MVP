@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import ytAPIKey from "../../../../hidden/youtubeAPIv3.js";
 import axios from "axios";
 
-const postVideo = () => {
+const postVideo = ({changeSubmittedVideo,toggleVideoModal}) => {
     const [typedVideoLink, changeTypedVideoLink] = useState("");
     const [videoPreview, changeVideoPreview] = useState(null);
 
@@ -68,10 +68,6 @@ const postVideo = () => {
                     <p>No video selected</p>
                     )}
                 </div>
-                <input id="ytLinkInput" type="text" placeholder="Type your message here..." onClick={(e) => e.stopPropagation()}
-                // value={typedVideoLink}
-                // onChange={(e) => handleChange(e, changeTypedVideoLink)}
-                />
                 <input
                 id="videoSubmit" type="submit" value="submit" onClick={(e) => e.stopPropagation()}
                 />
