@@ -534,11 +534,12 @@ div::-webkit-scrollbar-thumb:hover {
 }
 
 #chatImg {
-  max-width: 100%;
+  width: 100%
+  /* max-width: 100%; */
 }
 
 #chatGif {
-  width: 40%;
+  width: 25%;
   padding-top: 0.3rem;
 }
 
@@ -551,7 +552,7 @@ div::-webkit-scrollbar-thumb:hover {
 
 #chatImageWrapper {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 1em;
   margin: 1em 0;
 }
@@ -586,7 +587,6 @@ div::-webkit-scrollbar-thumb:hover {
   flex-direction: column;
   position: relative;
   align-content: center;
-  padding: 0.3rem;
   background: rgba(70, 69, 69, 0.445);
   border: 2px solid #79d9ff;
 }
@@ -603,6 +603,7 @@ div::-webkit-scrollbar-thumb:hover {
 }
 
 #attachmentPreview{
+  position:relative;
   display: flex;
   justify-content:space-between;
 }
@@ -611,7 +612,7 @@ div::-webkit-scrollbar-thumb:hover {
   width: 30%;
   display:flex;
   justify-content: start;
-  padding: 0.5rem;
+  padding: 0.5rem 0.5rem 0 0.5rem;
 }
 
 #previewYTPlayer{
@@ -620,14 +621,16 @@ div::-webkit-scrollbar-thumb:hover {
 
 #createMessage {
   display: flex;
-  color: #ffffff;
   flex: 5;
+  color: #ffffff;
+  padding: 0.5rem;
 }
 
 #videoInput {
   position: fixed;
   width: 30%;
   height: fit-content;
+  min-height:250px;
   background-color: rgb(3, 3, 3);
   padding: 10px;
   color: #ffffff;
@@ -651,13 +654,13 @@ div::-webkit-scrollbar-thumb:hover {
 
 #ytLinkInput {
   display: inline-block;
-  height: 5vh;
+  height: 2rem;
   background-color: rgba(36, 27, 27, 0.546);
   color: white;
-  font-size: 1em;
+  font-size: 0.8rem;
   border: none;
-  margin: 1vh 0;
-  padding: 0 10px;
+  margin: 0.5rem 0;
+  padding: 0 0.6rem;
   border: 1px solid rgba(0, 0, 0, 0)
 }
 
@@ -679,8 +682,7 @@ div::-webkit-scrollbar-thumb:hover {
 }
 
 .modalHeading {
-  margin: 1vh 0;
-  font-size: 1.35rem;
+  font-size: 1.1rem;
 }
 
 .videoThumbWrapper{
@@ -688,28 +690,37 @@ div::-webkit-scrollbar-thumb:hover {
   align-items:center;
   justify-content:center;
   width: 100%;
-  aspect-ratio:16/9;
-  flex: 3;
+  aspect-ratio: 16/9;
+  font-size: 0.8rem;
   background-color: rgba(36, 27, 27, 0.546);
   color:rgb(151, 147, 147);
+  margin: 0.5rem 0;
 }
 
-#videoSubmit {
+#videoSubmit{
   display: inline-block;
   font-family: "modernWarfare";
   background-color: rgba(70, 69, 69, 0.445);
-  width: 15vw;
+  width: 50%;
   color: white;
-  height: 5vh;
+  height: 2rem;
   align-self:center;
-  font-size: 1vw;
-  margin: 1vh 0;
+  font-size: 0.7rem;
+  margin: 0.5rem 0;
 }
 
-#videoSubmit:hover {
-  text-shadow: 0px 0px 10px #79d9ff;
+#videoSubmit:hover, #imageSubmit:hover {
   color: #79d9ff;
   cursor:pointer;
+}
+
+#chatPostPreviewYTPlayer{
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 99.9%;
+  height: 99.9%;
 }
 
 /* .fGONoI {
@@ -730,14 +741,13 @@ div::-webkit-scrollbar-thumb:hover {
 /* } */
 
 aside.emoji-picker-react {
-  background: rgb(5, 5, 5) !important;
+  background: rgba(70, 69, 69, 0.445) !important;
   display: flex;
   flex-direction: column;
   width: 35% !important; 
   height: 380px !important;
   font-family:default !important;
-  border: 1px solid #79d9ff !important;
-  border-bottom:none !important;
+  border: 2px solid #79d9ff !important;
   border-radius: 0px !important;
   box-sizing: border-box;
   box-shadow: none !important;
@@ -770,6 +780,7 @@ aside.emoji-picker-react {
   width: 18%;
   justify-content: flex-end;
   display: flex;
+  padding:0.5rem;
 }
 
 .smackButtonWrapper {
@@ -828,17 +839,18 @@ aside.emoji-picker-react {
   justify-content: left;
   align-items: center;
   width: 100%;
+  max-height:250px;
+  overflow:auto;
 }
 
 #previewDiv {
   flex: 1;
   display: flex;
   justify-content: center;
-  margin-bottom: 1em;
 }
 
 #previewImage {
-  max-width: 10em;
+  width:90%;
 }
 
 .bannerWrapper {
@@ -909,10 +921,10 @@ aside.emoji-picker-react {
   top: 0;
   left: 0;
   width: 100%;
+  height: fit-content;
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   z-index: 2;
 
@@ -924,7 +936,7 @@ aside.emoji-picker-react {
   display: block;
   top: 0;
   right: 0;
-  width: 2vw;
+  width: 2rem;
   z-index: 99;
   /* height: 10px; */
 }
@@ -938,26 +950,22 @@ aside.emoji-picker-react {
 }
 
 .fullImageWrapper {
-  width: 70%;
-  max-height: 90%;
-  height: auto;
-  overflow-y: scroll;
+  width: 60%;
   display: flex;
   justify-content: center;
-  margin: 2em 0 0.5em 0;
+  margin: 2em 0;
 }
 
 .inner {
-  width: 100%;
   text-align: center;
-
   position: relative;
+  width: 100%;
 }
 
-.fullImageInner {
+/* .fullImageInner {
   min-height: 75vh;
   overflow-y:auto;
-}
+} */
 
 .fullVideoInner {
   padding-top: 56.25%;
@@ -969,8 +977,7 @@ aside.emoji-picker-react {
 }
 
 .fullImage {
-  min-width: 80%;
-  max-width: 100%;
+ width: 100%;
 }
 
 /*Dropzone*/
@@ -984,6 +991,46 @@ aside.emoji-picker-react {
   color: #79d9ff;
 }
 
+#dropzoneText{
+  font-size:0.8rem;
+}
+
+#imageSubmit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "modernWarfare";
+  background-color: rgba(70, 69, 69, 0.445);
+  width: 50%;
+  color: white;
+  height: 2rem;
+  align-self:center;
+  font-size: 0.7rem;
+  margin: 0.5rem 0;
+  box-sizing: border-box;
+  border-width: 2px;
+  border-style: outset;
+  border-color: buttonborder;
+  border-image: initial;
+}
+
+#qeuedImagesPreview{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  justify-content: center;
+  align-items:center;
+  width:fit-content;
+  padding: 0.5rem 0.5rem 0 0.5rem;
+}
+
+.qeuedImagesWrapper {
+  position:relative;
+  display:flex;
+}
+
+.qeuedImage{
+  width: 90%
+}
 /*Login Splash*/
 
 #logoLogin {
@@ -1371,6 +1418,11 @@ aside.emoji-picker-react {
   padding-top: 56.25%;
 }
 
+.imageViewWrapper {
+  max-height:230px;
+  overflow: auto;
+}
+
 #galleryYTPlayer {
   position: absolute;
   top: 0;
@@ -1501,14 +1553,16 @@ grid-row-end: 3;
 
 /*Add Gallery Content Component */
 .addBackdrop {
-  background-color: #000000d3;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   z-index: 2;
-  height: 100vh;
+  display: flex;
+  justify-content: center;
+  overflow: auto;
+  background-color: #000000d3;
 }
 
 .addGalleryContent {

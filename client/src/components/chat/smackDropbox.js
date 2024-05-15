@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useEffect, useState } from "react";
+import React, { useCallback, useMemo, useEffect } from "react";
 const axios = require("axios").default;
 import { useDropzone } from "react-dropzone";
 
@@ -6,13 +6,14 @@ const baseStyle = {
   position: "relative",
   display: "flex",
   flexDirection: "column",
+  justifyContent: "space-between",
   alignItems: "center",
-  padding: "20px",
+  padding: "0.5rem",
   borderWidth: 2,
-  margin: "1em 0 0 0",
+  margin: "0",
   borderStyle: "solid",
   backgroundColor: "rgba(70, 69, 69, 0.445)",
-  // color: "#bdbdbd",
+  color: "rgb(151, 147, 147)",
   // transition: "border .3s ease-in-out",
   fontFamily: "modernWarfare",
 };
@@ -39,7 +40,7 @@ function DropzoneComponent(props) {
       )
     );
     console.log(acceptedFiles);
-    props.changeQeuedImages(acceptedFiles);
+    // props.changeQeuedImages(acceptedFiles);
   }, []);
 
   const {
@@ -82,7 +83,9 @@ function DropzoneComponent(props) {
       <div className="dropzone" {...getRootProps({ style })}>
         <div id="previewThumbs">{thumbs}</div>
         <input {...getInputProps()} />
-        <div>drop images here.</div>
+        {props.previewImages.length === 0 &&
+        <p id="dropzoneText">drop images here</p>
+        }
       </div>
     </div>
   );

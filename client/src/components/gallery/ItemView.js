@@ -20,10 +20,6 @@ const itemView = function ({
     toggleImagePopUp(true);
   };
 
-  const handleShowVideoDetails = () => {
-    toggleShowVideoDetails(!showVideoDetails);
-  };
-
   useEffect(() => {
     toggleShowVideoDetails(false);
   }, [selectedItem]);
