@@ -6,12 +6,12 @@ import React, {
 } from "react";
 import Picker from "emoji-picker-react";
 import GifPicker from "react-giphy-picker";
-import DropzoneComponent from "./smackDropbox.js";
 import ImagePopUp from "../ImagePopUp.js";
 import { css } from "@emotion/react";
 import MoonLoader from "react-spinners/MoonLoader";
 import { CSSTransition } from "react-transition-group";
 import PostVideo from "./PostVideo.js";
+import PostImages from "./PostImages";
 
 
 const axios = require("axios").default;
@@ -27,16 +27,15 @@ const Chatbox = function ({
   changeClicked,
 }) {
   const [typedMessage, changeMessage] = useState("");
-  const [submittedVideo, changeSubmittedVideo] = useState(null);
   const [showVideoModal, toggleVideoModal] = useState(false);
-  const [keepVideoModal, toggleKeepVideoModal] = useState(false);
   const [showEmojiModal, toggleEmojiModal] = useState(false);
   const [showGifModal, toggleGifModal] = useState(false);
+  const [showImagesModal, toggleImagesModal] = useState(false);
   const [submitResponse, changeResponse] = useState("");
+  const [submittedVideo, changeSubmittedVideo] = useState(null);
+  const [qeuedGif, changeQeuedGif] = useState(null);
   const [qeuedImages, changeQeuedImages] = useState([]);
-  const [previewImages, changePreviewImages] = useState([]);
   const [popUpImage, changePopUpImage] = useState(null);
-  const [popUpVideo, changePopUpVideo] = useState(null);
   const [showImagePopUp, toggleImagePopUp] = useState(false);
   const [loading, changeLoading] = useState(true);
 
@@ -52,7 +51,6 @@ const Chatbox = function ({
   const inputRef = useRef(null);
   const chatBoxRef = useRef();
   const observer = useRef();
-  const didMountRef = useRef(false);
   const lastLoadedChat = useRef(null);
 
   const firstChatRef = useCallback(
@@ -84,9 +82,14 @@ const Chatbox = function ({
     toggleVideoModal(!showVideoModal);
   };
 
+  const onClickImagesModal = (e) => {
+    e.stopPropagation();
+    toggleImagesModal(!showImagesModal);
+  }
+
   const closeAllModals = () => {
-    toggleKeepVideoModal(false);
     toggleVideoModal(false);
+    toggleImagesModal(false);
     toggleGifModal(false);
     toggleEmojiModal(false);
   };
@@ -117,20 +120,9 @@ const Chatbox = function ({
   };
 
   const onGifClick = (gif) => {
-    if (signedInUser) {
-      const username = signedInUser.username;
-      const png = signedInUser.png;
-      socket.emit("sendMessage", {
-        username,
-        gif: { downsized: gif.downsized.url, original: gif.original.url },
-        png,
-      });
-    } else {
-      changeResponse("Please sign in");
-      const messageFlash = setTimeout(() => {
-        changeResponse("");
-      }, 2500);
-    }
+    changeQeuedGif(gif);
+    changeQeuedImages([]);
+    changeSubmittedVideo(null);
     toggleGifModal(false);
   };
 
@@ -150,7 +142,6 @@ const Chatbox = function ({
   const handleSubmit = (e) => {
     e.preventDefault();
     if (signedInUser) {
-      changePreviewImages([]);
       changeResponse("creating post");
       const username = signedInUser.username;
       const png = signedInUser.png;
@@ -179,26 +170,30 @@ const Chatbox = function ({
         if (imageURLs.length < 1) {
           imageURLs = null;
         }
+
         socket.emit("sendMessage", {
           username,
           typedMessage,
           imageURLs,
           submittedVideo,
+          gif: qeuedGif ? { downsized: qeuedGif.downsized.url, original: qeuedGif.original.url } : null,
           png,
         });
         changeMessage("");
         changeQeuedImages([]);
+        changeQeuedGif(null);
         changeSubmittedVideo(null);
-        changeTypedVideoLink("");
         changeResponse("post complete");
-        const messageFlash = setTimeout(() => {
+        setTimeout(() => {
           changeResponse("");
+          console.log("SET TIMEOUT")
         }, 2500);
       });
     } else {
       changeResponse("Please sign in");
-      const messageFlash = setTimeout(() => {
+      setTimeout(() => {
         changeResponse("");
+        console.log("SET TIMEOUT")
       }, 2500);
     }
   };
@@ -367,24 +362,23 @@ const Chatbox = function ({
                 </div>
               )}
               <div id="chatResponse">{submitResponse}
-
-              {showGifModal && (
-                      <div id="gifPicker" onClick={(e) => e.stopPropagation()}>
-                        <GifPicker id="emojiPicker" onSelected={onGifClick} />
-                      </div>
-                    )}
-                                        {showEmojiModal && (
-                      <div
-                        id="pickerDiv" onClick={(e) => e.stopPropagation()}
-                      >
-                        <Picker id="emojiPicker" onEmojiClick={onEmojiClick} />
-                      </div>
-                    )}
-                    </div>
+                {showGifModal && !submittedVideo && !qeuedImages &&(
+                  <div id="gifPicker" onClick={(e) => e.stopPropagation()}>
+                    <GifPicker id="emojiPicker" onSelected={onGifClick} />
+                  </div>
+                )}
+                {showEmojiModal && !submittedVideo && !qeuedImages && (
+                  <div
+                    id="pickerDiv" onClick={(e) => e.stopPropagation()}
+                  >
+                    <Picker id="emojiPicker" onEmojiClick={onEmojiClick} />
+                  </div>
+                )}
+              </div>
               <div id="messageSubmit">
-              {submittedVideo && <div id="attachmentPreview">
+              <div id="attachmentPreview">
+                {submittedVideo && 
                   <div id = "attachmentVideoPreview">
-                  {submittedVideo &&
                     <iframe
                     className="ytPlayer"
                     id="previewYTPlayer"
@@ -396,10 +390,38 @@ const Chatbox = function ({
                     msallowfullscreen="msallowfullscreen"
                     oallowfullscreen="oallowfullscreen"
                     webkitallowfullscreen="webkitallowfullscreen"
-                  ></iframe>
-                  }
+                    />
                   </div>
-                </div>}
+                }
+                {qeuedImages.length > 0 &&
+                  <div id="qeuedImagesPreview">
+                    {qeuedImages.map((image)=> 
+                    <div className="qeuedImagesWrapper">
+                      <img className= "qeuedImage" src={image.preview}></img>
+                    </div>
+                    )}
+                  </div>
+                }
+                {qeuedGif && 
+                  <div id="qeuedImagesPreview">
+                    <div className="qeuedImagesWrapper">
+                      <img className= "qeuedImage" src={qeuedGif.downsized.url}></img>
+                    </div>
+                  </div>
+                }
+                {showGifModal && (
+                  <div id="gifPicker" onClick={(e) => e.stopPropagation()}>
+                    <GifPicker id="emojiPicker" onSelected={onGifClick} />
+                  </div>
+                )}
+                {showEmojiModal && (
+                  <div
+                    id="pickerDiv" onClick={(e) => e.stopPropagation()}
+                  >
+                    <Picker id="emojiPicker" onEmojiClick={onEmojiClick} />
+                  </div>
+                )}
+                </div>
                 <div className="formDiv">
                   <form id="createMessage" onSubmit={(e) => handleSubmit(e)}>
                     <input
@@ -417,23 +439,9 @@ const Chatbox = function ({
                         className="messageIcon"
                         src="./icons/emojiIcon.png"
                       />
-                    {/* {showEmojiModal && (
-                      <div
-                        id="pickerDiv"
-                        onMouseEnter={addEmoji}
-                        onMouseLeave={hideEmoji}
-                      >
-                        <Picker id="emojiPicker" onEmojiClick={onEmojiClick} />
-                      </div>
-                    )} */}
                   </div>
                   <div className="smackButtonWrapper" onClick={(e) => toggleGif(e)}>
                       <img className="messageIcon" src="./icons/gifIcon.png" />
-                    {/* {showGifModal && (
-                      <div id="gifPicker" onClick={(e) => e.stopPropagation()}>
-                        <GifPicker id="emojiPicker" onSelected={onGifClick} />
-                      </div>
-                    )} */}
                   </div>
                 <div className="smackButtonWrapper" onClick={(e) => onClickVideoModal(e)}>
                       <img
@@ -441,7 +449,7 @@ const Chatbox = function ({
                         src="./icons/videoIcon.png"
                       />
                   </div>
-                  <div className="smackButtonWrapper" onClick={(e) => onClickVideoModal(e)}>
+                  <div className="smackButtonWrapper" onClick={(e) => onClickImagesModal(e)}>
                       <img
                         className="messageIcon"
                         src="./icons/videoIcon.png"
@@ -449,116 +457,21 @@ const Chatbox = function ({
                   </div>
                 </div>
                 </div>
-                {/* {showGifModal && (
-                      <div id="gifPicker" onClick={(e) => e.stopPropagation()}>
-                        <GifPicker id="emojiPicker" onSelected={onGifClick} />
-                      </div>
-                    )} */}
               </div>
               {/* <DropzoneComponent
                 changeQeuedImages={changeQeuedImages}
                 previewImages={previewImages}
                 changePreviewImages={changePreviewImages}
               /> */}
+
+              {showVideoModal && <PostVideo changeSubmittedVideo={changeSubmittedVideo} toggleVideoModal={toggleVideoModal} changeQeuedImages={changeQeuedImages} changeQeuedGif={changeQeuedGif}/>}
+              {showImagesModal && <PostImages changeQeuedImages={changeQeuedImages} toggleImagesModal={toggleImagesModal} changeSubmittedVideo={changeSubmittedVideo} changeQeuedGif={changeQeuedGif}/>}
+              {showImagePopUp && <ImagePopUp popUpImage={popUpImage} changePopUpImage={changePopUpImage} toggleImagePopUp={toggleImagePopUp}/>}
             </div>
           </CSSTransition>
-          {/* <div className="bannerWrapper">
-            <div id="bannerImageWrapper1" className="bannerImageWrapper">
-              <img
-                className="smackBannerImage"
-                src="./Images/wzDiscordDraft1.png"
-              ></img>
-              <a href="https://discord.gg/CPWSbZef9D" target="_blank">
-                <div className="bannerMask">
-                  <div className="maskImageWrapper">
-                    <img
-                      className="maskImage"
-                      src="./Images/wzDiscordMask.png"
-                    ></img>
-                  </div>
-                </div>
-              </a>
-            </div>
-            <div id="bannerImageWrapper2" className="bannerImageWrapper">
-              <a
-                href="https://www.npmjs.com/package/call-of-duty-api"
-                target="_blank"
-              >
-                <img
-                  className="smackBannerImage"
-                  src="./Images/cod_Api_Banner.png"
-                ></img>
-              </a>
-            </div>
-          </div> */}
-
-        <CSSTransition
-          in={showImagePopUp}
-          timeout={1000}
-          classNames="addGalleryContentMod"
-          unmountOnExit
-        >
-          <ImagePopUp
-            popUpImage={popUpImage}
-            popUpVideo={popUpVideo}
-            showImagePopUp={showImagePopUp}
-            toggleImagePopUp={toggleImagePopUp}
-            changePopUpImage={changePopUpImage}
-            changePopUpVideo={changePopUpVideo}
-          />
-        </CSSTransition>
-
-        {showVideoModal && <PostVideo changeSubmittedVideo={changeSubmittedVideo} toggleVideoModal={toggleVideoModal}/>
-          // <div id="videoSubmitDiv">
-          //   <div id="videoInput">
-          //     <p className="modalHeading">Post A Video</p>
-          //     <form
-          //       id="videoForm"
-          //       onSubmit={(e) => {
-          //         e.stopPropagation();
-          //         handleVideoSubmit(e);
-          //       }}
-          //     >
-          //       <input
-          //         id="ytLinkInput"
-          //         type="text"
-          //         placeholder="Insert YouTube link..."
-          //         value={typedVideoLink}
-          //         onChange={(e) => handleChange(e, changeTypedVideoLink)}
-          //         onClick={(e) => e.stopPropagation()}
-          //       ></input>
-          //       <div className="videoThumbWrapper">
-          //         {typedVideoLink && handleVideoPreview(typedVideoLink)}
-          //         {videoPreview ? (
-          //           <img
-          //             className="ytImagePreview"
-          //             src={videoPreview.snippet.thumbnails.standard.url}
-          //           ></img>
-          //         ) : (
-          //           <h3>No video selected</h3>
-          //         )}
-          //       </div>
-          //       <input
-          //         id="ytLinkInput"
-          //         type="text"
-          //         placeholder="Type your message here..."
-          //         // value={typedVideoLink}
-          //         // onChange={(e) => handleChange(e, changeTypedVideoLink)}
-          //         onClick={(e) => e.stopPropagation()}
-          //       ></input>
-          //       <input
-          //         id="videoSubmit"
-          //         type="submit"
-          //         value="submit"
-          //         onClick={(e) => e.stopPropagation()}
-          //       ></input>
-          //     </form>
-          //   </div>
-          // </div>
-        }
       </div>
     </div>
-  );
+  )
 };
 
 export default Chatbox;

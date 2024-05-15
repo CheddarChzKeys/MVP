@@ -10,8 +10,11 @@ function ImagePopUp({
 }) {
   const onClose = () => {
     toggleImagePopUp(false);
-    changePopUpImage(null);
+    if (popUpImage){
+      changePopUpImage(null);
+    } else {
     changePopUpVideo(null);
+    }
   };
 
   return (

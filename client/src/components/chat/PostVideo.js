@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import ytAPIKey from "../../../../hidden/youtubeAPIv3.js";
 import axios from "axios";
 
-const postVideo = ({changeSubmittedVideo,toggleVideoModal}) => {
+const postVideo = ({changeSubmittedVideo,toggleVideoModal, changeQeuedImages, changeQeuedGif}) => {
     const [typedVideoLink, changeTypedVideoLink] = useState("");
     const [videoPreview, changeVideoPreview] = useState(null);
 
@@ -15,6 +15,8 @@ const postVideo = ({changeSubmittedVideo,toggleVideoModal}) => {
         const newVideoID = re.exec(videoID);
 
         changeSubmittedVideo(newVideoID[1]);
+        changeQeuedImages([]);
+        changeQeuedGif(null);
         toggleVideoModal(false);
     };
 
@@ -31,7 +33,7 @@ const postVideo = ({changeSubmittedVideo,toggleVideoModal}) => {
           )
           .then((result) => {
             console.log("YOUTUBE RESULT", result.data.items[0]);
-            changeVideoPreview(result.data.items[0]);
+            changeVideoPreview(result.data.items[0].id);
           });
         return;
       };
@@ -41,8 +43,8 @@ const postVideo = ({changeSubmittedVideo,toggleVideoModal}) => {
       };
 
     return(
-        <div id="videoSubmitDiv">
-            <div id="videoInput">
+        <div id="videoSubmitDiv" >
+            <div id="videoInput" onClick={(e) => e.stopPropagation()}>
             <p className="modalHeading">Post A Video</p>
             <form id="videoForm" onSubmit={(e) => {
                 e.stopPropagation();
@@ -55,15 +57,22 @@ const postVideo = ({changeSubmittedVideo,toggleVideoModal}) => {
                 placeholder="Insert YouTube link..."
                 value={typedVideoLink}
                 onChange={(e) => handleChange(e, changeTypedVideoLink)}
-                onClick={(e) => e.stopPropagation()}
                 />
                 <div className="videoThumbWrapper">
                 {typedVideoLink && handleVideoPreview(typedVideoLink)}
                     {videoPreview ? (
-                    <img
-                        className="ytImagePreview"
-                        src={videoPreview.snippet.thumbnails.standard.url}
-                    />
+                        <iframe
+                        className="ytPlayer"
+                        id="chatPostPreviewYTPlayer"
+                        type="text/html"
+                        src={`http://www.youtube.com/embed/${videoPreview}`}
+                        frameBorder="0"
+                        allowFullScreen="allowfullscreen"
+                        mozallowfullscreen="mozallowfullscreen"
+                        msallowfullscreen="msallowfullscreen"
+                        oallowfullscreen="oallowfullscreen"
+                        webkitallowfullscreen="webkitallowfullscreen"
+                      ></iframe>
                     ) : (
                     <p>No video selected</p>
                     )}
