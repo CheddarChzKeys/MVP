@@ -1,15 +1,21 @@
 import React, {useState} from "react";
 import DropzoneComponent from "./SmackDropbox.js";
 
-const postImages = ({changeQeuedImages, toggleImagesModal, changeSubmittedVideo, changeQeuedGif}) => {
+const postImages = ({changeQeuedImages, toggleImagesModal, changeSubmittedVideo, changeQeuedGif, cleanUpQeuedPreviews={cleanUpQeuedPreviews}}) => {
     const [previewImages, changePreviewImages] = useState([]);
 
     const qeueImages = (e) =>{
-      e.stopPropagation();
+      cleanUpQeuedPreviews();
+      previewImages.map((file) =>
+        Object.assign(file, {
+          qeuePreview: URL.createObjectURL(file),
+        })
+      )
       changeQeuedImages(previewImages);
       changeSubmittedVideo(null);
       changeQeuedGif(null);
       toggleImagesModal(false);
+      e.stopPropagation();
     };
 
     return(

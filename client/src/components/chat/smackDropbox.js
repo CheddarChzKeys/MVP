@@ -32,6 +32,7 @@ const rejectStyle = {
 
 function DropzoneComponent(props) {
   const onDrop = useCallback((acceptedFiles) => {
+    console.log("ACCEPTEDFILES:", acceptedFiles)
     props.changePreviewImages(
       acceptedFiles.map((file) =>
         Object.assign(file, {
@@ -40,7 +41,6 @@ function DropzoneComponent(props) {
       )
     );
     console.log(acceptedFiles);
-    // props.changeQeuedImages(acceptedFiles);
   }, []);
 
   const {

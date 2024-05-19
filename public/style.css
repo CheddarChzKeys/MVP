@@ -539,7 +539,7 @@ div::-webkit-scrollbar-thumb:hover {
 }
 
 #chatGif {
-  width: 25%;
+  width: 100%;
   padding-top: 0.3rem;
 }
 
@@ -550,9 +550,9 @@ div::-webkit-scrollbar-thumb:hover {
   width: 40%;
 }
 
-#chatImageWrapper {
+.chatImageWrapper {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1em;
   margin: 1em 0;
 }
@@ -609,10 +609,30 @@ div::-webkit-scrollbar-thumb:hover {
 }
 
 #attachmentVideoPreview{
+  position: relative;
   width: 30%;
   display:flex;
   justify-content: start;
   padding: 0.5rem 0.5rem 0 0.5rem;
+  margin-top:6px;
+}
+
+.previewRemove{
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items:center;
+  top: 1px;
+  right: 0;
+  z-index: 99;
+  font-family: "modernWarfare";
+  font-size: 0.7rem;
+  width: 0.9rem;
+  background-color: #030303;
+  color:#ffffff;
+  transition: color ease 0.5s;
+  border-style: outset;
+  border-color: buttonborder;
 }
 
 #previewYTPlayer{
@@ -702,6 +722,7 @@ div::-webkit-scrollbar-thumb:hover {
   font-family: "modernWarfare";
   background-color: rgba(70, 69, 69, 0.445);
   width: 50%;
+  min-width: fit-content;
   color: white;
   height: 2rem;
   align-self:center;
@@ -931,12 +952,14 @@ aside.emoji-picker-react {
   background-color: #050505de;
 }
 
-.buttonWrapper {
+.buttonWrapper{
   position: absolute;
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items:center;
   top: 0;
   right: 0;
-  width: 2rem;
+  width: 27px;
   z-index: 99;
   /* height: 10px; */
 }
@@ -947,6 +970,7 @@ aside.emoji-picker-react {
   z-index: 3;
   color: white;
   background-color: #030303;
+  font-family:"modernWarfare";
 }
 
 .fullImageWrapper {
@@ -1002,6 +1026,7 @@ aside.emoji-picker-react {
   font-family: "modernWarfare";
   background-color: rgba(70, 69, 69, 0.445);
   width: 50%;
+  min-width:fit-content;
   color: white;
   height: 2rem;
   align-self:center;
@@ -1016,20 +1041,21 @@ aside.emoji-picker-react {
 
 #qeuedImagesPreview{
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   justify-content: center;
-  align-items:center;
+  align-items:start;
   width:fit-content;
-  padding: 0.5rem 0.5rem 0 0.5rem;
+  margin-top:6px;
 }
 
 .qeuedImagesWrapper {
   position:relative;
   display:flex;
+  padding: 0.5rem 0.5rem 0 0.5rem;
 }
 
 .qeuedImage{
-  width: 90%
+  width: 100%
 }
 /*Login Splash*/
 
@@ -1820,14 +1846,14 @@ grid-row-end: 3;
 /*Transitions*/
 
 .smackboardAnimation-enter {
-  opacity: 0;
+  opacity: 1;
   transform: translateY(-25%)
 }
 
 .smackboardAnimation-enter-active{
   opacity: 1;
   transform: translateY(0%);
-  transition: transform 700ms, opacity 1000ms;
+  transition: transform 700ms, opacity 2000ms;
 }
 
 .addGalleryContentMod-enter {
