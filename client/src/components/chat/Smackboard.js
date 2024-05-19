@@ -2,25 +2,22 @@ import React, {
   useState,
   useEffect,
   useRef,
-  useCallback,
 } from "react";
+import Chatbox from "./Chatbox";
 import Picker from "emoji-picker-react";
 import GifPicker from "react-giphy-picker";
 import ImagePopUp from "../ImagePopUp.js";
-import { css } from "@emotion/react";
-import MoonLoader from "react-spinners/MoonLoader";
 import { CSSTransition } from "react-transition-group";
 import PostVideo from "./PostVideo.js";
 import PostImages from "./PostImages";
-
+import QeuedImagesPreview from "./QeuedImagesPreview.js";
 
 const axios = require("axios").default;
 const io = require("socket.io-client");
 
 let socket = io();
-let updatedChats = [];
 
-const Chatbox = function ({
+const Chat = function ({
   signedInUser,
   changeBackground,
   activeClicked,
@@ -39,43 +36,7 @@ const Chatbox = function ({
   const [showImagePopUp, toggleImagePopUp] = useState(false);
   const [loading, changeLoading] = useState(true);
 
-  const [chats, updateChats] = useState([]);
-  const [loadedAll, changeLoadedAll] = useState(true);
-  const [newChatsCount, changeNewChatsCount] = useState(0);
-
-  const override = css`
-    align-items: center;
-    margin: auto auto;
-  `;
-
   const inputRef = useRef(null);
-  const chatBoxRef = useRef();
-  const observer = useRef();
-  const lastLoadedChat = useRef(null);
-
-  const firstChatRef = useCallback(
-    (node) => {
-      if (loading) {
-        return;
-      } else {
-        if (observer.current) {
-          observer.current.disconnect();
-        }
-        observer.current = new IntersectionObserver((entries) => {
-          if (entries[0].isIntersecting && !loadedAll && chats.length > 0) {
-            console.log("node is intersecting");
-            changeLoading(true);
-            changeLoadedAll(true);
-            socket.emit("getMoreChats", chats[0]._id);
-          }
-        });
-        if (node) {
-          observer.current.observe(node);
-        }
-      }
-    },
-    [loading, loadedAll, chats]
-  );
 
   const onClickVideoModal = (e) => {
     e.stopPropagation();
@@ -130,14 +91,12 @@ const Chatbox = function ({
     field(e.target.value);
   };
 
-  const getDateStamp = (today) => {
-    return today.toLocaleString();
-  };
-
-  const parseISOString = (s) => {
-    var b = s.split(/\D+/);
-    return new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6]));
-  };
+  const cleanUpQeuedPreviews = () => {
+    qeuedImages.map((image)=> {
+      console.log("CLEANUP");
+      URL.revokeObjectURL(image.qeuePreview)
+    })
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -197,72 +156,21 @@ const Chatbox = function ({
       }, 2500);
     }
   };
-
-  const scrollToBottom = () => {
-    const timeout1 = setTimeout(() => {
-      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
-    }, 500);
-  };
-
-  const scrollToLastLoadedChat = () => {
-    const timeout1 = setTimeout(() => {
-      lastLoadedChat.current.scrollIntoView({
-        block: "center",
-        inline: "nearest",
-      });
-    }, 1);
-  };
-
-  const imageClick = (image) => {
-    changePopUpImage(image);
-    toggleImagePopUp(true);
-  };
-
-  const convertedTimeStamp = (date) => {
-    const timeStamp = getDateStamp(parseISOString(date));
-    const timeStampArray = timeStamp.split(" ");
-    timeStampArray[0] = timeStampArray[0].slice(0,timeStampArray[0].length - 1)
-    const timeArray = timeStampArray[1].split(":");
-    const time = timeArray[0] + ":" + timeArray[1];
-    timeStampArray[1] = time;
-    if (getDateStamp(new Date()).split(", ")[0] == timeStamp.split(", ")[0]) {
-      return `Today, ${timeStampArray[1] + timeStampArray[2]}`;
-    } else {
-      console.log("CONVERTED TIMESTAMP ARRAY:", timeStampArray)
-      return timeStampArray.join("  ");
-    }
+  
+  const removeImageIndex = (index) => {
+    console.log("SPLICE INDEX: ", index);
+    console.log("QEUEDIMAGES: ", qeuedImages);
+    URL.revokeObjectURL(qeuedImages[index].qeuePreview);
+    console.log("CLEANUP");
+    changeQeuedImages(qeuedImages.slice(0, index).concat(qeuedImages.slice(index+1)));
+    console.log("QEUEDIMAGES2: ", qeuedImages);
   };
 
   useEffect(() => {
     changeClicked("smackboard");
     changeBackground("./Backgrounds/season6.png");
-    socket.on("allChats", (data) => {
-      const reversedChats = data.result.slice().reverse();
-      // changeLoadedAll(data.loadedAll);
-      updateChats(reversedChats);
-      const loadedAllTimeout = setTimeout(() => {
-        changeLoadedAll(data.loadedAll);
-      }, 2000);
-      scrollToBottom();
-      changeLoading(false);
-    });
     socket.emit("getAllChats");
   }, []);
-
-  useEffect(() => {
-    socket.on("addOlderChats", (data) => {
-      changeLoading(true);
-      const reversedChats = data.result.slice().reverse();
-      updatedChats = reversedChats.concat(chats);
-      const loadedAllTimeout = setTimeout(() => {
-        changeLoadedAll(data.loadedAll);
-      }, 2000);
-      changeNewChatsCount(data.result.length);
-      updateChats(updatedChats);
-      changeLoading(false);
-      scrollToLastLoadedChat();
-    });
-  }, [chats]);
 
   return (
     <div className="mainComponent" onClick={closeAllModals}>
@@ -277,90 +185,7 @@ const Chatbox = function ({
             unmountOnExit
           >
             <div className="smackboardWrapper">
-              {loading ? (
-                <MoonLoader
-                  color="#79d9ff"
-                  loading={loading}
-                  css={override}
-                  size="100px"
-                />
-              ) : (
-                <div id="chatbox" ref={chatBoxRef}>
-                  {!loadedAll && (
-                    <div
-                      ref={firstChatRef}
-                      className="galleryLoadMoreWrapper colorHover pointerHover"
-                    >
-                      <p className="galleryLoadMore">Load More</p>
-                    </div>
-                  )}
-                  {chats.map((chat, index) => {
-                    return (
-                      <div
-                        key={chat._id}
-                        ref={index === newChatsCount ? lastLoadedChat : null}
-                        id="chat"
-                      >
-                        <div className="nameDate">
-                          <div className="chatAvatarWrapper">
-                            <img
-                              className="chatAvatarImage"
-                              src={`https://mywarzoneappbucket.s3.us-west-1.amazonaws.com/${chat.png}_largeThumb.png`}
-                            />
-                          </div>
-                          <div className="chatName">{chat.name}</div>
-                          <div className="chatDate">
-                            {convertedTimeStamp(chat.date)}
-                          </div>
-                        </div>
-                        <div className="chatContent">
-                          <div id="chatMessage">{chat.message}</div>
-                          {chat.gif && (
-                            <img
-                              className="chatItem"
-                              id="chatGif"
-                              src={chat.gif.downsized}
-                              onClick={() => imageClick(chat.gif.original)}
-                            ></img>
-                          )}
-                          {chat.video && (
-                            <div className="ytOutterWrapper">
-                              <div id="ytPlayerWrapper" className="chatItem">
-                                <iframe
-                                  className="ytPlayer"
-                                  id="galleryYTPlayer"
-                                  type="text/html"
-                                  src={`http://www.youtube.com/embed/${chat.video}`}
-                                  frameBorder="0"
-                                  allowFullScreen="allowfullscreen"
-                                  mozallowfullscreen="mozallowfullscreen"
-                                  msallowfullscreen="msallowfullscreen"
-                                  oallowfullscreen="oallowfullscreen"
-                                  webkitallowfullscreen="webkitallowfullscreen"
-                                ></iframe>
-                              </div>
-                            </div>
-                          )}
-                          {chat.image && (
-                            <div id="chatImageWrapper">
-                              {chat.image.map((image) => {
-                                return (
-                                  <img
-                                    className="chatItem"
-                                    id="chatImg"
-                                    src={image}
-                                    onClick={() => imageClick(image)}
-                                  ></img>
-                                );
-                              })}
-                            </div>
-                          )}
-                        </div>
-                        </div>
-                    );
-                  })}
-                </div>
-              )}
+                <Chatbox loading={loading} changeLoading={changeLoading} changePopUpImage={changePopUpImage} socket={socket} toggleImagePopUp={toggleImagePopUp}/>
               <div id="chatResponse">{submitResponse}
                 {showGifModal && !submittedVideo && !qeuedImages &&(
                   <div id="gifPicker" onClick={(e) => e.stopPropagation()}>
@@ -390,22 +215,22 @@ const Chatbox = function ({
                     msallowfullscreen="msallowfullscreen"
                     oallowfullscreen="oallowfullscreen"
                     webkitallowfullscreen="webkitallowfullscreen"
-                    />
+                  />
+                    <div className = "previewRemove pointerHover blueHover" onClick = {() => changeSubmittedVideo(null)}>
+                      <span>X</span>
+                    </div>
                   </div>
                 }
                 {qeuedImages.length > 0 &&
-                  <div id="qeuedImagesPreview">
-                    {qeuedImages.map((image)=> 
-                    <div className="qeuedImagesWrapper">
-                      <img className= "qeuedImage" src={image.preview}></img>
-                    </div>
-                    )}
-                  </div>
+                  <QeuedImagesPreview qeuedImages={qeuedImages} removeImageIndex={removeImageIndex} cleanUpQeuedPreviews={cleanUpQeuedPreviews}/>
                 }
                 {qeuedGif && 
                   <div id="qeuedImagesPreview">
                     <div className="qeuedImagesWrapper">
                       <img className= "qeuedImage" src={qeuedGif.downsized.url}></img>
+                      <div className = "previewRemove pointerHover blueHover" onClick = {() => changeQeuedGif(null)}>
+                        <span>X</span>
+                      </div>
                     </div>
                   </div>
                 }
@@ -458,14 +283,8 @@ const Chatbox = function ({
                 </div>
                 </div>
               </div>
-              {/* <DropzoneComponent
-                changeQeuedImages={changeQeuedImages}
-                previewImages={previewImages}
-                changePreviewImages={changePreviewImages}
-              /> */}
-
               {showVideoModal && <PostVideo changeSubmittedVideo={changeSubmittedVideo} toggleVideoModal={toggleVideoModal} changeQeuedImages={changeQeuedImages} changeQeuedGif={changeQeuedGif}/>}
-              {showImagesModal && <PostImages changeQeuedImages={changeQeuedImages} toggleImagesModal={toggleImagesModal} changeSubmittedVideo={changeSubmittedVideo} changeQeuedGif={changeQeuedGif}/>}
+              {showImagesModal && <PostImages changeQeuedImages={changeQeuedImages} toggleImagesModal={toggleImagesModal} changeSubmittedVideo={changeSubmittedVideo} changeQeuedGif={changeQeuedGif} cleanUpQeuedPreviews={cleanUpQeuedPreviews}/>}
               {showImagePopUp && <ImagePopUp popUpImage={popUpImage} changePopUpImage={changePopUpImage} toggleImagePopUp={toggleImagePopUp}/>}
             </div>
           </CSSTransition>
@@ -474,4 +293,4 @@ const Chatbox = function ({
   )
 };
 
-export default Chatbox;
+export default Chat;
