@@ -26,9 +26,17 @@ const postImages = ({changeQeuedImages, toggleImagesModal, changeSubmittedVideo,
                 previewImages={previewImages}
                 changePreviewImages={changePreviewImages}
                 />
+                {previewImages.length > 0 ? 
                 <div id="imageSubmit" onClick={(e) => qeueImages(e)}>
                   <span>Submit</span>
                 </div>
+                :
+                <div
+                id="imageSubmit" onClick={() => toggleImagesModal(false)}
+                >
+                  <span>Cancel</span>
+                </div>
+                }
             </div>
         </div>  
     )

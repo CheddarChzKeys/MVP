@@ -249,13 +249,14 @@ const Chat = function ({
                 </div>
                 <div className="formDiv">
                   <form id="createMessage" onSubmit={(e) => handleSubmit(e)}>
-                    <input
+                    <textarea
                       id="typedMessage"
                       ref={inputRef}
                       placeholder="Type your message here..."
                       value={typedMessage}
                       onChange={(e) => handleChange(e, changeMessage)}
-                    ></input>
+                      rows="1"
+                    ></textarea>
                   </form>
                 <div className="buttonsWrapper">
                 <div className="smackButtonWrapper" 
@@ -277,7 +278,7 @@ const Chat = function ({
                   <div className="smackButtonWrapper" onClick={(e) => onClickImagesModal(e)}>
                       <img
                         className="messageIcon"
-                        src="./icons/videoIcon.png"
+                        src="./icons/imagesIcon.png"
                       />
                   </div>
                 </div>
