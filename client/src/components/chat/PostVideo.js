@@ -39,6 +39,7 @@ const postVideo = ({changeSubmittedVideo,toggleVideoModal, changeQeuedImages, ch
       };
 
       const handleChange = (e, field) => {
+        changeVideoPreview(null);
         field(e.target.value);
       };
 
@@ -77,9 +78,14 @@ const postVideo = ({changeSubmittedVideo,toggleVideoModal, changeQeuedImages, ch
                     <p>No video selected</p>
                     )}
                 </div>
+                {videoPreview ? 
                 <input
                 id="videoSubmit" type="submit" value="submit" onClick={(e) => e.stopPropagation()}
+                />:
+                <input
+                id="videoSubmit" value="cancel" onClick={() => toggleVideoModal(false)}
                 />
+                }
             </form>
             </div>
         </div>  

@@ -472,12 +472,12 @@ div::-webkit-scrollbar-track {
 }
 
 /* Handle */
-div::-webkit-scrollbar-thumb {
+div::-webkit-scrollbar-thumb, textarea::-webkit-scrollbar-thumb {
   background: #79d9ff;
 }
 
 /* Handle on hover */
-div::-webkit-scrollbar-thumb:hover {
+div::-webkit-scrollbar-thumb:hover, textarea::-webkit-scrollbar-thumb:hover{
   background: #79d9ff;
 }
 
@@ -521,6 +521,7 @@ div::-webkit-scrollbar-thumb:hover {
 }
 
 .ytOutterWrapper {
+  margin: 0.3rem 0;
   width: 50%;
 }
 
@@ -540,7 +541,6 @@ div::-webkit-scrollbar-thumb:hover {
 
 #chatGif {
   width: 100%;
-  padding-top: 0.3rem;
 }
 
 #gifPicker{
@@ -554,7 +554,7 @@ div::-webkit-scrollbar-thumb:hover {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1em;
-  margin: 1em 0;
+  margin: 0.3rem 0;
 }
 
 .nameDate {
@@ -598,8 +598,12 @@ div::-webkit-scrollbar-thumb:hover {
   background-size: 1.7px;
   background: rgba(0, 2, 0, 0);
   color: #ffffff;
-  font-size: 0.9rem;
+  font-family: none;
+  font-size: 1rem;
   outline: none;
+  resize:vertical;
+  padding:0;
+
 }
 
 #attachmentPreview{
@@ -642,8 +646,9 @@ div::-webkit-scrollbar-thumb:hover {
 #createMessage {
   display: flex;
   flex: 5;
-  color: #ffffff;
   padding: 0.5rem;
+  align-items:center;
+  color: #ffffff;
 }
 
 #videoInput {
@@ -703,6 +708,7 @@ div::-webkit-scrollbar-thumb:hover {
 
 .modalHeading {
   font-size: 1.1rem;
+  text-align: center;
 }
 
 .videoThumbWrapper{
@@ -722,8 +728,10 @@ div::-webkit-scrollbar-thumb:hover {
   font-family: "modernWarfare";
   background-color: rgba(70, 69, 69, 0.445);
   width: 50%;
+  border-style:outset;
   min-width: fit-content;
   color: white;
+  text-align:center;
   height: 2rem;
   align-self:center;
   font-size: 0.7rem;
@@ -744,25 +752,8 @@ div::-webkit-scrollbar-thumb:hover {
   height: 99.9%;
 }
 
-/* .fGONoI {
-  opacity: 1;
-  /* -webkit-transition: opacity 300ms linear;
-  transition: opacity 300ms linear; */
-  /* margin-top: 0 !important;
-  border: 1px solid #f1f1f1;
-  border-radius: 5px !important;
-  background: rgb(2, 2, 2) !important;
-  box-shadow: none !important;
-  width: 230px !important;
-  height: 320px !important;
-  overflow-y: scroll;
-  overflow-x: visible !important;
-  z-index: 999 !important;
-  padding-top: 1rem; */
-/* } */
-
 aside.emoji-picker-react {
-  background: rgba(70, 69, 69, 0.445) !important;
+  background:rgb(21 21 21 / 71%)!important;
   display: flex;
   flex-direction: column;
   width: 35% !important; 
@@ -800,7 +791,9 @@ aside.emoji-picker-react {
 .buttonsWrapper {
   width: 18%;
   justify-content: flex-end;
+  align-items: start;
   display: flex;
+  flex: 1;
   padding:0.5rem;
 }
 
