@@ -108,7 +108,6 @@ html {
 }
 
 .navItem,
-.navItemNoHover,
 .navItemClicked {
   display: flex;
   flex: 1;
@@ -126,9 +125,8 @@ html {
   color: #ffffff;
 }
 
-#noHover {
-  color: #ffffff;
-  cursor: default;
+#navUsername {
+  color: #79d9ff;
 }
 .navItemBox a {
   text-decoration: none;

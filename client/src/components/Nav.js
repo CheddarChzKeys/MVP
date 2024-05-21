@@ -1,13 +1,18 @@
 import React, { useState } from "react";
-import ReactDOM from "react-dom";
-import Records from "./Records.js";
-import Chat from "./chat/Smackboard.js";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { ActiveUser } from "../index.js";
 
 function Nav({ toggleSignedIn, activeClicked }) {
   const signedInUser = useContext(ActiveUser);
+  const navigate = useNavigate();
+
+  const handleNavSignOut = ()=>{
+    toggleSignedIn()
+    if (activeClicked === "userHome") {
+      navigate("/")
+    }
+  }
 
   return (
     <div className="mainHeaderDiv gridBackground">
@@ -65,16 +70,16 @@ function Nav({ toggleSignedIn, activeClicked }) {
         <div className="userNavMenu">
           {signedInUser ? (
             <>
-              <div className="navItemBox">
-                <div className="navItemNoHover" id="noHover">
+              <Link className = "navItemBox" to={`/${signedInUser.username}`}>
+                <div className="navItem pointerHover" id="navUsername">
                   {signedInUser.username}
                 </div>
-              </div>
+              </Link>
               <div className="navItemBox">
                 <div
                   className="navItem pointerHover"
                   id="userSignOut"
-                  onClick={toggleSignedIn}
+                  onClick={handleNavSignOut}
                 >
                   SIGN OUT
                 </div>
@@ -87,7 +92,7 @@ function Nav({ toggleSignedIn, activeClicked }) {
                 <Link to="/">
                   <div
                     className={
-                      activeClicked == "signIn" ? "navItemClicked" : "navItem"
+                      activeClicked === "signIn" ? "navItemClicked" : "navItem"
                     }
                     id="navSignIn"
                   >
