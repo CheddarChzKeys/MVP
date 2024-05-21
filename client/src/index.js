@@ -7,6 +7,7 @@ import Smackboard from "./components/chat/Smackboard.js";
 import News from "./components/news/News.js";
 import Gallery from "./components/gallery/Gallery.js";
 import SignIn from "./components/signIn/SignIn.js";
+import UserHome from "./components/user/UserHome.js";
 import Footer from "./components/Footer.js";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import axios from "axios";
@@ -93,6 +94,15 @@ const App = () => {
                 changeSignedInUser={changeSignedInUser}
                 changeClicked={changeClicked}
                 activeClicked={activeClicked}
+              />
+            }
+          />
+          <Route
+            path={signedInUser ? `/${signedInUser.username}`: "/error"}
+            element={
+              <UserHome
+                signedInUser={signedInUser}
+                changeClicked={changeClicked}
               />
             }
           />
